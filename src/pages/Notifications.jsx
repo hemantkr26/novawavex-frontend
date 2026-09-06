@@ -213,6 +213,59 @@ const Notifications = () => {
 
 
   // =========================================
+  // PARSE BACKEND TIMESTAMP
+  // =========================================
+
+  const parseBackendTimestamp =
+    (timestamp) => {
+
+      if (!timestamp) {
+
+        return null;
+
+      }
+
+
+      if (typeof timestamp !== "string") {
+
+        const date =
+          new Date(timestamp);
+
+
+        return Number.isNaN(
+          date.getTime()
+        )
+          ? null
+          : date;
+
+      }
+
+
+      const normalizedTimestamp =
+        timestamp.endsWith("Z") ||
+        /[+-]\d{2}:\d{2}$/.test(
+          timestamp
+        )
+          ? timestamp
+          : `${timestamp}Z`;
+
+
+      const date =
+        new Date(
+          normalizedTimestamp
+        );
+
+
+      return Number.isNaN(
+        date.getTime()
+      )
+        ? null
+        : date;
+
+    };
+
+
+  // =========================================
   // FORMAT TIME
   // =========================================
 
@@ -227,14 +280,12 @@ const Notifications = () => {
 
 
       const date =
-        new Date(timestamp);
+        parseBackendTimestamp(
+          timestamp
+        );
 
 
-      if (
-        Number.isNaN(
-          date.getTime()
-        )
-      ) {
+      if (!date) {
 
         return "Recently";
 
@@ -1551,6 +1602,7 @@ const Notifications = () => {
           color: #4b5563;
 
           font-size: 12px;
+
           font-weight: 600;
         }
 
