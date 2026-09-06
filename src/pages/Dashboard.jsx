@@ -208,6 +208,62 @@ const Dashboard = () => {
 
   /*
    * =========================================
+   * TIMESTAMP PARSING
+   * =========================================
+   *
+   * Backend currently returns LocalDateTime
+   * values without timezone information.
+   *
+   * Example:
+   *
+   * 2026-09-06T09:04:13.134209
+   *
+   * Render runs in UTC, so these timestamps
+   * represent UTC time.
+   *
+   * Append "Z" so JavaScript interprets the
+   * timestamp as UTC and automatically converts
+   * it to the user's local timezone.
+   */
+
+  const parseBackendTimestamp = (
+    timestamp
+  ) => {
+    if (!timestamp) {
+      return null;
+    }
+
+    if (
+      typeof timestamp !== "string"
+    ) {
+      const date = new Date(timestamp);
+
+      return Number.isNaN(
+        date.getTime()
+      )
+        ? null
+        : date;
+    }
+
+    const normalizedTimestamp =
+      timestamp.endsWith("Z") ||
+      /[+-]\d{2}:\d{2}$/.test(timestamp)
+        ? timestamp
+        : `${timestamp}Z`;
+
+    const date = new Date(
+      normalizedTimestamp
+    );
+
+    return Number.isNaN(
+      date.getTime()
+    )
+      ? null
+      : date;
+  };
+
+  /*
+   * =========================================
    * RECENT ACTIVITY TIME
    * =========================================
    */
@@ -219,9 +275,10 @@ const Dashboard = () => {
       return "Recently";
     }
 
-    const date = new Date(timestamp);
+    const date =
+      parseBackendTimestamp(timestamp);
 
-    if (Number.isNaN(date.getTime())) {
+    if (!date) {
       return "Recently";
     }
 
@@ -286,17 +343,17 @@ const Dashboard = () => {
 
   const recentWorkflows = [...workflows]
     .sort((a, b) => {
-      const dateA = new Date(
-        a.updatedAt ||
-          a.createdAt ||
-          0
-      ).getTime();
+      const dateA =
+        parseBackendTimestamp(
+          a.updatedAt ||
+            a.createdAt
+        )?.getTime() || 0;
 
-      const dateB = new Date(
-        b.updatedAt ||
-          b.createdAt ||
-          0
-      ).getTime();
+      const dateB =
+        parseBackendTimestamp(
+          b.updatedAt ||
+            b.createdAt
+        )?.getTime() || 0;
 
       return dateB - dateA;
     })
@@ -310,17 +367,19 @@ const Dashboard = () => {
 
   const recentExecutions = [...executions]
     .sort((a, b) => {
-      const dateA = new Date(
-        a.updatedAt ||
-          a.createdAt ||
-          0
-      ).getTime();
+      const dateA =
+        parseBackendTimestamp(
+          a.updatedAt ||
+            a.createdAt ||
+            a.startedAt
+        )?.getTime() || 0;
 
-      const dateB = new Date(
-        b.updatedAt ||
-          b.createdAt ||
-          0
-      ).getTime();
+      const dateB =
+        parseBackendTimestamp(
+          b.updatedAt ||
+            b.createdAt ||
+            b.startedAt
+        )?.getTime() || 0;
 
       return dateB - dateA;
     })
@@ -342,7 +401,7 @@ const Dashboard = () => {
 
   const latestWorkflowDate =
     latestWorkflowTimestamp
-      ? new Date(
+      ? parseBackendTimestamp(
           latestWorkflowTimestamp
         )
       : null;
@@ -356,7 +415,7 @@ const Dashboard = () => {
 
   const latestExecutionDate =
     latestExecutionTimestamp
-      ? new Date(
+      ? parseBackendTimestamp(
           latestExecutionTimestamp
         )
       : null;
@@ -487,19 +546,19 @@ const Dashboard = () => {
   const universeLatestExecution =
     [...executions]
       .sort((a, b) => {
-        const dateA = new Date(
-          a.updatedAt ||
-            a.createdAt ||
-            a.startedAt ||
-            0
-        ).getTime();
+        const dateA =
+          parseBackendTimestamp(
+            a.updatedAt ||
+              a.createdAt ||
+              a.startedAt
+          )?.getTime() || 0;
 
-        const dateB = new Date(
-          b.updatedAt ||
-            b.createdAt ||
-            b.startedAt ||
-            0
-        ).getTime();
+        const dateB =
+          parseBackendTimestamp(
+            b.updatedAt ||
+              b.createdAt ||
+              b.startedAt
+          )?.getTime() || 0;
 
         return dateB - dateA;
       })[0] || null;
