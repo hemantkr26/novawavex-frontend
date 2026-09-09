@@ -232,13 +232,13 @@ The frontend stores the authenticated session information and uses the JWT when 
 ### 1. Clone the repository
 
 ```bash
-git clone <YOUR-FRONTEND-REPOSITORY-URL>
+git clone https://github.com/hemantkr26/novawavex-frontend.git
 ```
 
 ### 2. Navigate to the project
 
 ```bash
-cd <YOUR-FRONTEND-FOLDER>
+cd novawavex-frontend
 ```
 
 ### 3. Install dependencies
