@@ -18,6 +18,8 @@ import {
   Loader2,
   Pencil,
   Save,
+  Trash2,
+  AlertTriangle,
 } from "lucide-react";
 
 import { useAuth } from "../context/AuthContext";
@@ -30,6 +32,7 @@ const Profile = () => {
   const {
     user,
     isAuthenticated,
+    logout,
   } = useAuth();
 
 
@@ -60,14 +63,6 @@ const Profile = () => {
   /*
    * =========================================
    * COMPONENT MOUNT STATE
-   * =========================================
-   *
-   * Prevents state updates after the component
-   * has been unmounted.
-   *
-   * This is especially useful when React
-   * StrictMode runs effects more than once
-   * during development.
    * =========================================
    */
 
@@ -161,6 +156,24 @@ const Profile = () => {
 
   /*
    * =========================================
+   * ACCOUNT DELETION STATE
+   * =========================================
+   */
+
+  const [
+    deletingAccount,
+    setDeletingAccount,
+  ] = useState(false);
+
+
+  const [
+    deleteError,
+    setDeleteError,
+  ] = useState("");
+
+
+  /*
+   * =========================================
    * FILE INPUT REF
    * =========================================
    */
@@ -180,9 +193,7 @@ const Profile = () => {
     isMountedRef.current = true;
 
     return () => {
-
       isMountedRef.current = false;
-
     };
 
   }, []);
@@ -191,24 +202,6 @@ const Profile = () => {
   /*
    * =========================================
    * LOAD CURRENT USER
-   * =========================================
-   *
-   * IMPORTANT:
-   *
-   * This effect depends ONLY on authentication
-   * state.
-   *
-   * It does NOT depend on profile state.
-   *
-   * Therefore:
-   *
-   * setProfile(...)
-   *     ↓
-   * re-render
-   *     ↓
-   * does NOT call getCurrentUser() again.
-   *
-   * This prevents a profile-loading loop.
    * =========================================
    */
 
@@ -221,31 +214,30 @@ const Profile = () => {
 
       if (!isAuthenticated) {
 
-        if (!cancelled &&
-            isMountedRef.current) {
+        if (
+          !cancelled &&
+          isMountedRef.current
+        ) {
 
           setProfile(null);
-
           setError("");
-
           setLoading(false);
 
         }
 
         return;
-
       }
 
 
       try {
 
-        if (!cancelled &&
-            isMountedRef.current) {
+        if (
+          !cancelled &&
+          isMountedRef.current
+        ) {
 
           setLoading(true);
-
           setError("");
-
           setProfileImageError(false);
 
         }
@@ -254,12 +246,6 @@ const Profile = () => {
         const data =
           await userService.getCurrentUser();
 
-
-        /*
-         * Ignore the response if the component
-         * has already been unmounted or the
-         * effect has been cancelled.
-         */
 
         if (
           cancelled ||
@@ -271,14 +257,9 @@ const Profile = () => {
         }
 
 
-        /*
-         * Only update profile with the backend
-         * response.
-         */
-
         setProfile(data);
-
         setError("");
+
 
       } catch (err) {
 
@@ -302,6 +283,7 @@ const Profile = () => {
           "Unable to load your profile information."
         );
 
+
       } finally {
 
         if (
@@ -321,14 +303,6 @@ const Profile = () => {
     loadProfile();
 
 
-    /*
-     * Cleanup:
-     *
-     * If React removes the component or
-     * authentication changes before the request
-     * finishes, ignore the old request result.
-     */
-
     return () => {
 
       cancelled = true;
@@ -343,12 +317,6 @@ const Profile = () => {
   /*
    * =========================================
    * USER DATA
-   * =========================================
-   *
-   * Backend profile is preferred.
-   *
-   * AuthContext user is used as fallback while
-   * the profile is unavailable.
    * =========================================
    */
 
@@ -487,7 +455,6 @@ const Profile = () => {
   const openFileSelector = () => {
 
     setImageMessage("");
-
     setImageError("");
 
     if (fileInputRef.current) {
@@ -521,9 +488,7 @@ const Profile = () => {
 
 
     setImageMessage("");
-
     setImageError("");
-
     setProfileImageError(false);
 
 
@@ -632,13 +597,9 @@ const Profile = () => {
   const cancelImageSelection = () => {
 
     setSelectedImage(null);
-
     setImagePreview(null);
-
     setImageMessage("");
-
     setImageError("");
-
     setProfileImageError(false);
 
 
@@ -702,9 +663,7 @@ const Profile = () => {
       setUploadingImage(true);
 
       setImageMessage("");
-
       setImageError("");
-
       setProfileImageError(false);
 
 
@@ -721,24 +680,13 @@ const Profile = () => {
       }
 
 
-      /*
-       * Backend response becomes the
-       * current profile state.
-       */
-
       setProfile(
         updatedProfile
       );
 
 
-      /*
-       * Clear selection.
-       */
-
       setSelectedImage(null);
-
       setImagePreview(null);
-
       setProfileImageError(false);
 
 
@@ -752,6 +700,7 @@ const Profile = () => {
       setImageMessage(
         "Profile image updated successfully."
       );
+
 
     } catch (err) {
 
@@ -781,6 +730,7 @@ const Profile = () => {
           : "Unable to update your profile image."
       );
 
+
     } finally {
 
       if (isMountedRef.current) {
@@ -808,10 +758,9 @@ const Profile = () => {
         : ""
     );
 
+
     setNameMessage("");
-
     setNameError("");
-
     setEditingName(true);
 
   };
@@ -833,11 +782,8 @@ const Profile = () => {
 
 
     setEditedName("");
-
     setNameMessage("");
-
     setNameError("");
-
     setEditingName(false);
 
   };
@@ -858,7 +804,6 @@ const Profile = () => {
     );
 
     setNameMessage("");
-
     setNameError("");
 
   };
@@ -876,10 +821,6 @@ const Profile = () => {
       editedName.trim();
 
 
-    /*
-     * Validate empty name
-     */
-
     if (!trimmedName) {
 
       setNameError(
@@ -890,10 +831,6 @@ const Profile = () => {
 
     }
 
-
-    /*
-     * Validate minimum length
-     */
 
     if (
       trimmedName.length < 2
@@ -908,10 +845,6 @@ const Profile = () => {
     }
 
 
-    /*
-     * Prevent duplicate requests
-     */
-
     if (savingName) {
 
       return;
@@ -924,13 +857,8 @@ const Profile = () => {
       setSavingName(true);
 
       setNameMessage("");
-
       setNameError("");
 
-
-      /*
-       * REAL BACKEND UPDATE
-       */
 
       const updatedProfile =
         await userService.updateCurrentUserName(
@@ -945,32 +873,19 @@ const Profile = () => {
       }
 
 
-      /*
-       * Backend response becomes the
-       * current profile state.
-       */
-
       setProfile(
         updatedProfile
       );
 
 
-      /*
-       * Close editor.
-       */
-
       setEditingName(false);
-
       setEditedName("");
 
-
-      /*
-       * Success message.
-       */
 
       setNameMessage(
         "Name updated successfully."
       );
+
 
     } catch (err) {
 
@@ -1000,11 +915,145 @@ const Profile = () => {
           : "Unable to update your name."
       );
 
+
     } finally {
 
       if (isMountedRef.current) {
 
         setSavingName(false);
+
+      }
+
+    }
+
+  };
+
+
+  /*
+   * =========================================
+   * DELETE ACCOUNT
+   * =========================================
+   *
+   * Backend endpoint:
+   *
+   * DELETE /api/users/me
+   *
+   * After successful deletion:
+   *
+   * 1. Tell AuthContext to logout.
+   * 2. Redirect to login.
+   *
+   * =========================================
+   */
+
+  const handleDeleteAccount = async () => {
+
+    if (deletingAccount) {
+
+      return;
+
+    }
+
+
+    setDeleteError("");
+
+
+    /*
+     * First confirmation
+     */
+
+    const firstConfirmation =
+      window.confirm(
+        "Delete your NovaWavex account?\n\nThis action permanently removes your account and cannot be undone."
+      );
+
+
+    if (!firstConfirmation) {
+
+      return;
+
+    }
+
+
+    /*
+     * Second confirmation
+     */
+
+    const secondConfirmation =
+      window.confirm(
+        `Final confirmation:\n\nDelete the account associated with ${email}?\n\nThis cannot be undone.`
+      );
+
+
+    if (!secondConfirmation) {
+
+      return;
+
+    }
+
+
+    try {
+
+      setDeletingAccount(true);
+      setDeleteError("");
+
+
+      /*
+       * REAL BACKEND DELETE
+       */
+
+      await userService.deleteCurrentUser();
+
+
+      /*
+       * Use the existing AuthContext logout()
+       * instead of manually clearing storage.
+       *
+       * This keeps:
+       *
+       * - isAuthenticated
+       * - user
+       * - JWT storage
+       *
+       * synchronized with the rest of
+       * the application.
+       */
+
+      logout();
+
+
+      /*
+       * Redirect to login.
+       */
+
+      window.location.href =
+        "/login";
+
+
+    } catch (err) {
+
+      console.error(
+        "Failed to delete account:",
+        err
+      );
+
+
+      const backendMessage =
+        err?.response?.data?.message ||
+        err?.response?.data ||
+        "";
+
+
+      if (isMountedRef.current) {
+
+        setDeleteError(
+          typeof backendMessage === "string" &&
+          backendMessage.trim()
+            ? backendMessage
+            : "Unable to delete your account. Please try again."
+        );
+
+        setDeletingAccount(false);
 
       }
 
@@ -1115,6 +1164,7 @@ const Profile = () => {
 
     <div className="profile-page">
 
+
       {/* =====================================
           PAGE HEADER
           ===================================== */}
@@ -1189,8 +1239,6 @@ const Profile = () => {
             )}
 
 
-            {/* CAMERA BUTTON */}
-
             <button
               type="button"
               className="profile-avatar-camera"
@@ -1203,8 +1251,6 @@ const Profile = () => {
 
             </button>
 
-
-            {/* HIDDEN FILE INPUT */}
 
             <input
               ref={fileInputRef}
@@ -1220,9 +1266,11 @@ const Profile = () => {
           <div className="profile-card-identity">
 
             <h2>
+
               {fullName !== "Not available"
                 ? fullName
                 : "NovaWavex User"}
+
             </h2>
 
             <p>
@@ -1503,10 +1551,6 @@ const Profile = () => {
             </div>
 
 
-            {/* =================================
-                NAME ERROR
-                ================================= */}
-
             {nameError && (
 
               <div className="profile-name-error">
@@ -1564,7 +1608,9 @@ const Profile = () => {
                     : "profile-role"
                 }
               >
+
                 {roleLabel}
+
               </strong>
 
             </div>
@@ -1606,8 +1652,6 @@ const Profile = () => {
           <div className="profile-information">
 
 
-            {/* Account Status */}
-
             <div className="profile-information-item">
 
               <div className="profile-information-label">
@@ -1631,8 +1675,6 @@ const Profile = () => {
             </div>
 
 
-            {/* Authentication */}
-
             <div className="profile-information-item">
 
               <div className="profile-information-label">
@@ -1652,8 +1694,6 @@ const Profile = () => {
             </div>
 
 
-            {/* Account ID */}
-
             <div className="profile-information-item">
 
               <div className="profile-information-label">
@@ -1672,8 +1712,6 @@ const Profile = () => {
 
             </div>
 
-
-            {/* Session Type */}
 
             <div className="profile-information-item">
 
@@ -1735,6 +1773,104 @@ const Profile = () => {
 
         </div>
 
+
+        {/* ===================================
+            DANGER ZONE
+            =================================== */}
+
+        <div className="profile-danger-zone">
+
+          <div className="profile-danger-header">
+
+            <div className="profile-danger-icon">
+
+              <AlertTriangle size={17} />
+
+            </div>
+
+
+            <div>
+
+              <span className="profile-danger-eyebrow">
+                DANGER ZONE
+              </span>
+
+              <h3>
+                Delete Account
+              </h3>
+
+              <p>
+                Permanently remove your NovaWavex account and
+                end your current access.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div className="profile-danger-content">
+
+            <div className="profile-danger-copy">
+
+              <strong>
+                Permanently delete your account
+              </strong>
+
+              <span>
+                This action cannot be undone. You will be
+                signed out immediately after the account is deleted.
+              </span>
+
+            </div>
+
+
+            <button
+              type="button"
+              className="profile-delete-button"
+              onClick={handleDeleteAccount}
+              disabled={deletingAccount}
+            >
+
+              {deletingAccount ? (
+
+                <Loader2
+                  size={14}
+                  className="profile-loading-spinner"
+                />
+
+              ) : (
+
+                <Trash2 size={14} />
+
+              )}
+
+              {deletingAccount
+                ? "Deleting..."
+                : "Delete Account"}
+
+            </button>
+
+          </div>
+
+
+          {deleteError && (
+
+            <div className="profile-delete-error">
+
+              <AlertTriangle size={14} />
+
+              <span>
+                {deleteError}
+              </span>
+
+            </div>
+
+          )}
+
+        </div>
+
+
       </div>
 
 
@@ -1752,9 +1888,11 @@ const Profile = () => {
           box-sizing: border-box;
         }
 
+
         .profile-page-header {
           margin-bottom: 24px;
         }
+
 
         .profile-eyebrow {
           display: inline-block;
@@ -1765,6 +1903,7 @@ const Profile = () => {
           letter-spacing: 1.4px;
         }
 
+
         .profile-page-header h1 {
           margin: 0;
           color: #172033;
@@ -1773,12 +1912,14 @@ const Profile = () => {
           font-weight: 750;
         }
 
+
         .profile-page-header p {
           margin: 7px 0 0;
           color: #68758a;
           font-size: 12px;
           line-height: 1.5;
         }
+
 
         .profile-card {
           width: 100%;
@@ -1790,6 +1931,7 @@ const Profile = () => {
           box-shadow: 0 5px 18px rgba(25, 40, 70, 0.045);
         }
 
+
         .profile-card-header {
           min-height: 108px;
           display: flex;
@@ -1798,12 +1940,14 @@ const Profile = () => {
           position: relative;
         }
 
+
         .profile-avatar-wrapper {
           width: 58px;
           height: 58px;
           flex-shrink: 0;
           position: relative;
         }
+
 
         .profile-avatar-large {
           width: 58px;
@@ -1821,6 +1965,7 @@ const Profile = () => {
           letter-spacing: 0.4px;
         }
 
+
         .profile-avatar-image {
           width: 58px;
           height: 58px;
@@ -1830,6 +1975,7 @@ const Profile = () => {
           border: 1px solid #dce7ff;
           background: #eef4ff;
         }
+
 
         .profile-avatar-camera {
           position: absolute;
@@ -1849,18 +1995,22 @@ const Profile = () => {
           box-shadow: 0 2px 6px rgba(30, 50, 90, 0.18);
         }
 
+
         .profile-avatar-camera:hover {
           background: #3f6fe8;
         }
+
 
         .profile-avatar-camera:disabled {
           opacity: 0.6;
           cursor: not-allowed;
         }
 
+
         .profile-image-input {
           display: none;
         }
+
 
         .profile-image-actions {
           margin: 0 0 16px;
@@ -1874,12 +2024,14 @@ const Profile = () => {
           background: #f8faff;
         }
 
+
         .profile-image-selected {
           min-width: 0;
           display: flex;
           flex-direction: column;
           gap: 3px;
         }
+
 
         .profile-image-selected span {
           overflow: hidden;
@@ -1890,10 +2042,12 @@ const Profile = () => {
           font-weight: 650;
         }
 
+
         .profile-image-selected small {
           color: #7a8699;
           font-size: 9px;
         }
+
 
         .profile-image-buttons {
           display: flex;
@@ -1901,6 +2055,7 @@ const Profile = () => {
           gap: 7px;
           flex-shrink: 0;
         }
+
 
         .profile-image-cancel,
         .profile-image-upload {
@@ -1916,15 +2071,18 @@ const Profile = () => {
           cursor: pointer;
         }
 
+
         .profile-image-cancel {
           border: 1px solid #e1e6ee;
           color: #68758a;
           background: #ffffff;
         }
 
+
         .profile-image-cancel:hover {
           background: #f5f7fa;
         }
+
 
         .profile-image-upload {
           border: 1px solid #4f7df3;
@@ -1932,15 +2090,18 @@ const Profile = () => {
           background: #4f7df3;
         }
 
+
         .profile-image-upload:hover {
           background: #3f6fe8;
         }
+
 
         .profile-image-upload:disabled,
         .profile-image-cancel:disabled {
           opacity: 0.6;
           cursor: not-allowed;
         }
+
 
         .profile-image-success {
           margin-bottom: 15px;
@@ -1956,6 +2117,7 @@ const Profile = () => {
           font-weight: 650;
         }
 
+
         .profile-image-error {
           margin-bottom: 15px;
           padding: 9px 11px;
@@ -1967,12 +2129,14 @@ const Profile = () => {
           line-height: 1.4;
         }
 
+
         .profile-card-identity {
           min-width: 0;
           display: flex;
           flex-direction: column;
           gap: 5px;
         }
+
 
         .profile-card-identity h2 {
           margin: 0;
@@ -1981,6 +2145,7 @@ const Profile = () => {
           font-weight: 750;
         }
 
+
         .profile-card-identity p {
           margin: 0;
           color: #68758a;
@@ -1988,9 +2153,11 @@ const Profile = () => {
           word-break: break-word;
         }
 
+
         .profile-header-status {
           margin-left: auto;
         }
+
 
         .profile-status {
           display: inline-flex;
@@ -2007,19 +2174,23 @@ const Profile = () => {
           white-space: nowrap;
         }
 
+
         .profile-divider {
           height: 1px;
           width: 100%;
           background: #edf0f5;
         }
 
+
         .profile-section {
           padding: 23px 0 8px;
         }
 
+
         .profile-section + .profile-section {
           margin-top: 5px;
         }
+
 
         .profile-section-heading {
           display: flex;
@@ -2027,6 +2198,7 @@ const Profile = () => {
           gap: 11px;
           margin-bottom: 13px;
         }
+
 
         .profile-section-icon {
           width: 32px;
@@ -2040,12 +2212,14 @@ const Profile = () => {
           background: #eef4ff;
         }
 
+
         .profile-section-heading h3 {
           margin: 0;
           color: #25324a;
           font-size: 13px;
           font-weight: 750;
         }
+
 
         .profile-section-heading p {
           margin: 3px 0 0;
@@ -2054,6 +2228,7 @@ const Profile = () => {
           line-height: 1.4;
         }
 
+
         .profile-information {
           width: 100%;
           border: 1px solid #e9edf3;
@@ -2061,6 +2236,7 @@ const Profile = () => {
           overflow: hidden;
           background: #fafbfd;
         }
+
 
         .profile-information-item {
           min-height: 52px;
@@ -2073,9 +2249,11 @@ const Profile = () => {
           border-bottom: 1px solid #edf0f5;
         }
 
+
         .profile-information-item:last-child {
           border-bottom: 0;
         }
+
 
         .profile-information-label {
           min-width: 0;
@@ -2086,10 +2264,12 @@ const Profile = () => {
           font-size: 11px;
         }
 
+
         .profile-information-label svg {
           flex-shrink: 0;
           color: #6489ed;
         }
+
 
         .profile-information-item strong {
           max-width: 55%;
@@ -2100,6 +2280,7 @@ const Profile = () => {
           word-break: break-word;
         }
 
+
         .profile-name-display {
           display: flex;
           align-items: center;
@@ -2108,9 +2289,11 @@ const Profile = () => {
           max-width: 70%;
         }
 
+
         .profile-name-display strong {
           max-width: 100%;
         }
+
 
         .profile-name-edit {
           min-height: 26px;
@@ -2129,10 +2312,12 @@ const Profile = () => {
           flex-shrink: 0;
         }
 
+
         .profile-name-edit:hover {
           background: #eef4ff;
           border-color: #cddcff;
         }
+
 
         .profile-name-editor {
           max-width: 70%;
@@ -2141,6 +2326,7 @@ const Profile = () => {
           justify-content: flex-end;
           gap: 6px;
         }
+
 
         .profile-name-input {
           width: 210px;
@@ -2156,10 +2342,12 @@ const Profile = () => {
           font-weight: 550;
         }
 
+
         .profile-name-input:focus {
           border-color: #4f7df3;
           box-shadow: 0 0 0 2px rgba(79, 125, 243, 0.10);
         }
+
 
         .profile-name-save {
           min-height: 31px;
@@ -2178,15 +2366,18 @@ const Profile = () => {
           flex-shrink: 0;
         }
 
+
         .profile-name-save:hover {
           background: #3f6fe8;
         }
+
 
         .profile-name-save:disabled,
         .profile-name-cancel:disabled {
           opacity: 0.6;
           cursor: not-allowed;
         }
+
 
         .profile-name-cancel {
           width: 31px;
@@ -2203,9 +2394,11 @@ const Profile = () => {
           flex-shrink: 0;
         }
 
+
         .profile-name-cancel:hover {
           background: #f5f7fa;
         }
+
 
         .profile-name-error {
           padding: 7px 13px;
@@ -2215,6 +2408,7 @@ const Profile = () => {
           font-size: 9px;
           line-height: 1.4;
         }
+
 
         .profile-role {
           display: inline-flex;
@@ -2228,10 +2422,12 @@ const Profile = () => {
           font-weight: 750 !important;
         }
 
+
         .profile-role.admin {
           color: #4f6fc4 !important;
           background: #eef4ff;
         }
+
 
         .profile-security {
           margin-top: 18px;
@@ -2243,6 +2439,7 @@ const Profile = () => {
           border-radius: 10px;
           background: #f4fbf7;
         }
+
 
         .profile-security-icon {
           width: 31px;
@@ -2256,6 +2453,7 @@ const Profile = () => {
           background: #e5f7ed;
         }
 
+
         .profile-security-content {
           min-width: 0;
           flex: 1;
@@ -2264,17 +2462,20 @@ const Profile = () => {
           gap: 3px;
         }
 
+
         .profile-security-content strong {
           color: #18794e;
           font-size: 11px;
           font-weight: 750;
         }
 
+
         .profile-security-content span {
           color: #658172;
           font-size: 10px;
           line-height: 1.45;
         }
+
 
         .profile-security-status {
           display: inline-flex;
@@ -2285,6 +2486,156 @@ const Profile = () => {
           font-weight: 750;
           white-space: nowrap;
         }
+
+
+        /* =====================================
+           DANGER ZONE
+           ===================================== */
+
+        .profile-danger-zone {
+          margin-top: 22px;
+          padding: 16px;
+          border: 1px solid #f0d9d9;
+          border-radius: 11px;
+          background: linear-gradient(
+            180deg,
+            #fffafa 0%,
+            #fff7f7 100%
+          );
+        }
+
+
+        .profile-danger-header {
+          display: flex;
+          align-items: flex-start;
+          gap: 11px;
+        }
+
+
+        .profile-danger-icon {
+          width: 32px;
+          height: 32px;
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 8px;
+          color: #c65353;
+          background: #fdeaea;
+          border: 1px solid #f5d6d6;
+        }
+
+
+        .profile-danger-eyebrow {
+          display: block;
+          margin-bottom: 3px;
+          color: #b44747;
+          font-size: 9px;
+          font-weight: 850;
+          letter-spacing: 1.25px;
+        }
+
+
+        .profile-danger-header h3 {
+          margin: 0;
+          color: #7f3030;
+          font-size: 13px;
+          font-weight: 800;
+        }
+
+
+        .profile-danger-header p {
+          margin: 4px 0 0;
+          color: #9a6868;
+          font-size: 10px;
+          line-height: 1.45;
+        }
+
+
+        .profile-danger-content {
+          margin-top: 14px;
+          padding-top: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 18px;
+          border-top: 1px solid #f2dddd;
+        }
+
+
+        .profile-danger-copy {
+          min-width: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+
+
+        .profile-danger-copy strong {
+          color: #6f3434;
+          font-size: 10px;
+          font-weight: 750;
+        }
+
+
+        .profile-danger-copy span {
+          color: #9a6868;
+          font-size: 9px;
+          line-height: 1.45;
+        }
+
+
+        .profile-delete-button {
+          min-height: 32px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          flex-shrink: 0;
+          padding: 0 12px;
+          border: 1px solid #d65b5b;
+          border-radius: 7px;
+          color: #ffffff;
+          background: #c94d4d;
+          font-size: 10px;
+          font-weight: 750;
+          cursor: pointer;
+          box-shadow: 0 2px 5px rgba(180, 60, 60, 0.12);
+        }
+
+
+        .profile-delete-button:hover {
+          background: #b94141;
+          border-color: #b94141;
+        }
+
+
+        .profile-delete-button:disabled {
+          opacity: 0.65;
+          cursor: not-allowed;
+        }
+
+
+        .profile-delete-error {
+          margin-top: 12px;
+          padding: 9px 10px;
+          display: flex;
+          align-items: center;
+          gap: 7px;
+          border: 1px solid #f0d0d0;
+          border-radius: 7px;
+          color: #a43e3e;
+          background: #fff1f1;
+          font-size: 9px;
+          font-weight: 650;
+          line-height: 1.4;
+        }
+
+
+        .profile-delete-error svg {
+          flex-shrink: 0;
+        }
+
 
         .profile-loading {
           min-height: 120px;
@@ -2299,11 +2650,14 @@ const Profile = () => {
           font-size: 11px;
         }
 
+
         .profile-loading-spinner {
           animation: profile-spin 0.9s linear infinite;
         }
 
+
         @keyframes profile-spin {
+
           from {
             transform: rotate(0deg);
           }
@@ -2311,7 +2665,9 @@ const Profile = () => {
           to {
             transform: rotate(360deg);
           }
+
         }
+
 
         .profile-error {
           padding: 16px;
@@ -2322,25 +2678,41 @@ const Profile = () => {
           font-size: 11px;
         }
 
+
         @media (max-width: 760px) {
 
           .profile-page {
             padding: 22px 18px 36px;
           }
 
+
           .profile-card {
             padding: 0 17px 18px;
           }
+
 
           .profile-card-header {
             min-height: 96px;
           }
 
+
           .profile-header-status {
             display: none;
           }
 
+
+          .profile-danger-content {
+            align-items: stretch;
+            flex-direction: column;
+          }
+
+
+          .profile-delete-button {
+            width: 100%;
+          }
+
         }
+
 
         @media (max-width: 520px) {
 
@@ -2348,24 +2720,29 @@ const Profile = () => {
             font-size: 24px;
           }
 
+
           .profile-card-header {
             align-items: flex-start;
             padding: 19px 0;
           }
+
 
           .profile-image-actions {
             align-items: stretch;
             flex-direction: column;
           }
 
+
           .profile-image-buttons {
             width: 100%;
           }
+
 
           .profile-image-cancel,
           .profile-image-upload {
             flex: 1;
           }
+
 
           .profile-information-item {
             align-items: flex-start;
@@ -2374,11 +2751,13 @@ const Profile = () => {
             padding: 10px 12px;
           }
 
+
           .profile-information-item strong {
             max-width: 100%;
             padding-left: 24px;
             text-align: left;
           }
+
 
           .profile-name-display {
             width: 100%;
@@ -2386,6 +2765,7 @@ const Profile = () => {
             justify-content: flex-start;
             padding-left: 24px;
           }
+
 
           .profile-name-editor {
             width: 100%;
@@ -2395,22 +2775,31 @@ const Profile = () => {
             flex-wrap: wrap;
           }
 
+
           .profile-name-input {
             width: 100%;
             flex: 1;
             min-width: 160px;
           }
 
+
           .profile-name-error {
             padding-left: 36px;
           }
+
 
           .profile-security {
             align-items: flex-start;
           }
 
+
           .profile-security-status {
             display: none;
+          }
+
+
+          .profile-danger-zone {
+            padding: 14px;
           }
 
         }

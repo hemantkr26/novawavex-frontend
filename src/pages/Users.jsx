@@ -14,6 +14,7 @@ const Users = () => {
 
   const [error, setError] = useState(null);
 
+
   /*
    * =========================================
    * LOAD USERS
@@ -23,9 +24,7 @@ const Users = () => {
   const loadUsers = async () => {
     try {
       setLoading(true);
-
       setError(null);
-
       setForbidden(false);
 
       const data = await userService.getAllUsers();
@@ -44,11 +43,6 @@ const Users = () => {
         err
       );
 
-      /*
-       * 403 = Authenticated but
-       * not authorized as ADMIN
-       */
-
       if (
         err.response?.status === 403
       ) {
@@ -64,6 +58,7 @@ const Users = () => {
     }
   };
 
+
   /*
    * =========================================
    * INITIAL LOAD
@@ -74,6 +69,7 @@ const Users = () => {
     loadUsers();
   }, []);
 
+
   /*
    * =========================================
    * OPEN USER DETAILS
@@ -83,6 +79,13 @@ const Users = () => {
   const openUserDetails = (id) => {
     navigate(`/users/${id}`);
   };
+
+
+  /*
+   * =========================================
+   * RENDER
+   * =========================================
+   */
 
   return (
     <div className="users-page">
@@ -185,6 +188,10 @@ const Users = () => {
                     Role
                   </th>
 
+                  <th>
+                    Status
+                  </th>
+
                 </tr>
 
               </thead>
@@ -249,6 +256,25 @@ const Users = () => {
                       >
                         {user.role ||
                           "USER"}
+                      </span>
+
+                    </td>
+
+
+                    {/* Status */}
+
+                    <td>
+
+                      <span
+                        className={
+                          user.enabled === false
+                            ? "user-role"
+                            : "user-role admin"
+                        }
+                      >
+                        {user.enabled === false
+                          ? "DISABLED"
+                          : "ACTIVE"}
                       </span>
 
                     </td>
