@@ -45,38 +45,35 @@ const TopNav = () => {
 
   const [profileOpen, setProfileOpen] = useState(false);
 
+  const profileButtonRef = useRef(null);
+
   // =========================================
   // SEARCH STATE
   // =========================================
 
   const [searchOpen, setSearchOpen] = useState(false);
-
   const [searchTerm, setSearchTerm] = useState("");
-
   const [workflows, setWorkflows] = useState([]);
-
   const [searchLoading, setSearchLoading] = useState(false);
 
   const searchRef = useRef(null);
+  const searchButtonRef = useRef(null);
 
   // =========================================
   // NOTIFICATION STATE
   // =========================================
 
   const [notifications, setNotifications] = useState([]);
-
   const [unreadCount, setUnreadCount] = useState(0);
-
   const [notificationLoading, setNotificationLoading] =
     useState(false);
-
   const [notificationError, setNotificationError] =
     useState(null);
-
   const [notificationOpen, setNotificationOpen] =
     useState(false);
 
   const notificationRef = useRef(null);
+  const notificationButtonRef = useRef(null);
 
   // =========================================
   // SYSTEM HEALTH STATE
@@ -143,8 +140,9 @@ const TopNav = () => {
       return (
         <img
           src={profileImage}
-          alt={profileName}
+          alt=""
           className={`${className} profile-avatar-image`}
+          aria-hidden="true"
           onError={(event) => {
             event.currentTarget.style.display =
               "none";
@@ -154,7 +152,10 @@ const TopNav = () => {
     }
 
     return (
-      <div className={className}>
+      <div
+        className={className}
+        aria-hidden="true"
+      >
         {profileInitials}
       </div>
     );
@@ -307,7 +308,6 @@ const TopNav = () => {
 
     try {
       setNotificationError(null);
-
       setNotificationLoading(true);
 
       const data =
@@ -427,6 +427,63 @@ const TopNav = () => {
   }, [notificationOpen]);
 
   // =========================================
+  // CLOSE OVERLAYS ON ESCAPE
+  // =========================================
+
+  useEffect(() => {
+    const handleGlobalKeyDown = (event) => {
+      if (event.key !== "Escape") {
+        return;
+      }
+
+      if (searchOpen) {
+        setSearchOpen(false);
+        setSearchTerm("");
+
+        requestAnimationFrame(() => {
+          searchButtonRef.current?.focus();
+        });
+
+        return;
+      }
+
+      if (notificationOpen) {
+        setNotificationOpen(false);
+
+        requestAnimationFrame(() => {
+          notificationButtonRef.current?.focus();
+        });
+
+        return;
+      }
+
+      if (profileOpen) {
+        setProfileOpen(false);
+
+        requestAnimationFrame(() => {
+          profileButtonRef.current?.focus();
+        });
+      }
+    };
+
+    document.addEventListener(
+      "keydown",
+      handleGlobalKeyDown
+    );
+
+    return () => {
+      document.removeEventListener(
+        "keydown",
+        handleGlobalKeyDown
+      );
+    };
+  }, [
+    searchOpen,
+    notificationOpen,
+    profileOpen,
+  ]);
+
+  // =========================================
   // CLOSE NOTIFICATION PANEL ON NAVIGATION
   // =========================================
 
@@ -499,7 +556,6 @@ const TopNav = () => {
     );
 
     setProfileOpen(false);
-
     setNotificationOpen(false);
   };
 
@@ -531,6 +587,10 @@ const TopNav = () => {
   ) => {
     if (event.key === "Escape") {
       closeSearch();
+
+      requestAnimationFrame(() => {
+        searchButtonRef.current?.focus();
+      });
     }
   };
 
@@ -563,7 +623,6 @@ const TopNav = () => {
     );
 
     setProfileOpen(false);
-
     setSearchOpen(false);
 
     if (willOpen) {
@@ -654,7 +713,6 @@ const TopNav = () => {
 
   const parseBackendTimestamp =
     (timestamp) => {
-
       if (!timestamp) {
         return null;
       }
@@ -835,6 +893,36 @@ const TopNav = () => {
     };
 
   // =========================================
+  // NOTIFICATION KEYBOARD HANDLER
+  // =========================================
+
+  const handleNotificationKeyDown = (
+    event,
+    notification
+  ) => {
+    // Do not trigger the notification when
+    // the keyboard event originated from the
+    // nested delete button.
+    if (
+      event.target.closest &&
+      event.target.closest("button")
+    ) {
+      return;
+    }
+
+    if (
+      event.key === "Enter" ||
+      event.key === " "
+    ) {
+      event.preventDefault();
+
+      handleNotificationOpen(
+        notification
+      );
+    }
+  };
+
+  // =========================================
   // MARK ALL AS READ
   // =========================================
 
@@ -926,6 +1014,35 @@ const TopNav = () => {
     };
 
   // =========================================
+  // PROFILE TOGGLE
+  // =========================================
+
+  const handleProfileClick = () => {
+    setProfileOpen(
+      (previous) => !previous
+    );
+
+    setSearchOpen(false);
+    setNotificationOpen(false);
+  };
+
+  // =========================================
+  // PROFILE KEYBOARD
+  // =========================================
+
+  const handleProfileKeyDown = (
+    event
+  ) => {
+    if (event.key === "Escape") {
+      setProfileOpen(false);
+
+      requestAnimationFrame(() => {
+        profileButtonRef.current?.focus();
+      });
+    }
+  };
+
+  // =========================================
   // NOTIFICATION DISPLAY LIST
   // =========================================
 
@@ -934,7 +1051,10 @@ const TopNav = () => {
 
   return (
     <>
-      <header className="top-nav">
+      <header
+        className="top-nav"
+        aria-label="NovaWavex application header"
+      >
 
         {/* =========================================
             BRAND
@@ -942,7 +1062,10 @@ const TopNav = () => {
 
         <div className="brand">
 
-          <div className="brand-symbol">
+          <div
+            className="brand-symbol"
+            aria-hidden="true"
+          >
             <Command size={20} />
           </div>
 
@@ -965,50 +1088,61 @@ const TopNav = () => {
             NAVIGATION
             ========================================= */}
 
-        <nav className="top-navigation">
+        <nav
+          className="top-navigation"
+          aria-label="Primary navigation"
+        >
 
           <NavLink
             to="/dashboard"
-            className={({ isActive }) =>
-              isActive
+            end
+            className={
+              location.pathname === "/dashboard"
                 ? "top-nav-link active"
                 : "top-nav-link"
             }
+            aria-label="Command Center"
           >
-            Command Center
+            <span className="top-nav-label">Command Center</span>
           </NavLink>
 
           <NavLink
             to="/workflows"
-            className={({ isActive }) =>
-              isActive
+            className={
+              location.pathname === "/workflows" ||
+              location.pathname.startsWith("/workflows/")
                 ? "top-nav-link active"
                 : "top-nav-link"
             }
+            aria-label="Workflows"
           >
-            Workflows
+            <span className="top-nav-label">Workflows</span>
           </NavLink>
 
           <NavLink
             to="/users"
-            className={({ isActive }) =>
-              isActive
+            className={
+              location.pathname === "/users" ||
+              location.pathname.startsWith("/users/")
                 ? "top-nav-link active"
                 : "top-nav-link"
             }
+            aria-label="Team"
           >
-            Team
+            <span className="top-nav-label">Team</span>
           </NavLink>
 
           <NavLink
             to="/activity"
-            className={({ isActive }) =>
-              isActive
+            className={
+              location.pathname === "/activity" ||
+              location.pathname.startsWith("/activity/")
                 ? "top-nav-link active"
                 : "top-nav-link"
             }
+            aria-label="Activity"
           >
-            Activity
+            <span className="top-nav-label">Activity</span>
           </NavLink>
 
         </nav>
@@ -1030,25 +1164,51 @@ const TopNav = () => {
           >
 
             <button
+              ref={searchButtonRef}
               type="button"
               className="icon-button"
               title="Search workflows"
+              aria-label={
+                searchOpen
+                  ? "Close workflow search"
+                  : "Search workflows"
+              }
+              aria-expanded={searchOpen}
+              aria-controls="top-search-panel"
+              aria-haspopup="dialog"
               onClick={handleSearchClick}
             >
-              <Search size={19} />
+              <Search
+                size={19}
+                aria-hidden="true"
+              />
             </button>
 
             {searchOpen && (
-              <div className="top-search-panel">
+              <div
+                className="top-search-panel"
+                id="top-search-panel"
+                role="dialog"
+                aria-label="Workflow search"
+              >
 
                 <button
                   type="button"
                   className="top-search-close"
-                  onClick={closeSearch}
+                  onClick={() => {
+                    closeSearch();
+
+                    requestAnimationFrame(() => {
+                      searchButtonRef.current?.focus();
+                    });
+                  }}
                   title="Close search"
-                  aria-label="Close search"
+                  aria-label="Close workflow search"
                 >
-                  <X size={16} />
+                  <X
+                    size={16}
+                    aria-hidden="true"
+                  />
                 </button>
 
                 <div className="top-search-input-wrapper">
@@ -1056,6 +1216,7 @@ const TopNav = () => {
                   <Search
                     size={17}
                     className="top-search-input-icon"
+                    aria-hidden="true"
                   />
 
                   <input
@@ -1072,6 +1233,8 @@ const TopNav = () => {
                     }
                     placeholder="Search workflows..."
                     className="top-search-input"
+                    aria-label="Search workflows"
+                    aria-controls="top-search-results"
                   />
 
                   {searchTerm && (
@@ -1080,19 +1243,34 @@ const TopNav = () => {
                       className="top-search-clear"
                       onClick={clearSearch}
                       title="Clear search"
-                      aria-label="Clear search"
+                      aria-label="Clear workflow search text"
                     >
-                      <X size={14} />
+                      <X
+                        size={14}
+                        aria-hidden="true"
+                      />
                     </button>
                   )}
 
                 </div>
 
-                <div className="top-search-results">
+                <div
+                  className="top-search-results"
+                  id="top-search-results"
+                  aria-live="polite"
+                  aria-atomic="false"
+                >
 
                   {searchLoading && (
-                    <div className="top-search-message">
-                      Searching workflows...
+                    <div
+                      className="top-search-message"
+                      role="status"
+                    >
+
+                      <span>
+                        Searching workflows...
+                      </span>
+
                     </div>
                   )}
 
@@ -1100,7 +1278,10 @@ const TopNav = () => {
                     searchTerm.trim() === "" && (
                       <div className="top-search-message">
 
-                        <Search size={18} />
+                        <Search
+                          size={18}
+                          aria-hidden="true"
+                        />
 
                         <span>
                           Search your workflows by
@@ -1115,7 +1296,10 @@ const TopNav = () => {
                     filteredWorkflows.length === 0 && (
                       <div className="top-search-message">
 
-                        <WorkflowIcon size={18} />
+                        <WorkflowIcon
+                          size={18}
+                          aria-hidden="true"
+                        />
 
                         <span>
                           No matching workflows found.
@@ -1127,7 +1311,11 @@ const TopNav = () => {
                   {!searchLoading &&
                     filteredWorkflows.length > 0 && (
                       <>
-                        <div className="top-search-result-label">
+
+                        <div
+                          className="top-search-result-label"
+                          aria-hidden="true"
+                        >
                           WORKFLOWS
                         </div>
 
@@ -1142,9 +1330,20 @@ const TopNav = () => {
                                   workflow.id
                                 )
                               }
+                              aria-label={`Open workflow ${
+                                workflow.name ||
+                                "Unnamed Workflow"
+                              }${
+                                workflow.description
+                                  ? `, ${workflow.description}`
+                                  : ""
+                              }`}
                             >
 
-                              <div className="top-search-result-icon">
+                              <div
+                                className="top-search-result-icon"
+                                aria-hidden="true"
+                              >
 
                                 <WorkflowIcon
                                   size={17}
@@ -1166,7 +1365,10 @@ const TopNav = () => {
 
                               </div>
 
-                              <div className="top-search-result-arrow">
+                              <div
+                                className="top-search-result-arrow"
+                                aria-hidden="true"
+                              >
                                 →
                               </div>
 
@@ -1195,6 +1397,7 @@ const TopNav = () => {
           >
 
             <button
+              ref={notificationButtonRef}
               type="button"
               className={
                 notificationsEnabled
@@ -1209,17 +1412,36 @@ const TopNav = () => {
               onClick={
                 handleNotificationClick
               }
-              aria-label="Notifications"
+              aria-label={
+                notificationsEnabled
+                  ? unreadCount > 0
+                    ? `Notifications, ${unreadCount} unread`
+                    : "Notifications"
+                  : "Notifications disabled in Settings"
+              }
+              aria-expanded={
+                notificationsEnabled
+                  ? notificationOpen
+                  : false
+              }
+              aria-controls="notification-panel"
+              aria-haspopup="dialog"
               aria-disabled={
                 !notificationsEnabled
               }
             >
 
-              <Bell size={19} />
+              <Bell
+                size={19}
+                aria-hidden="true"
+              />
 
               {notificationsEnabled &&
                 unreadCount > 0 && (
-                  <span className="notification-badge">
+                  <span
+                    className="notification-badge"
+                    aria-hidden="true"
+                  >
 
                     {unreadCount > 99
                       ? "99+"
@@ -1233,7 +1455,12 @@ const TopNav = () => {
 
             {notificationOpen &&
               notificationsEnabled && (
-                <div className="notification-panel">
+                <div
+                  className="notification-panel"
+                  id="notification-panel"
+                  role="dialog"
+                  aria-label="Notifications"
+                >
 
                   <div className="notification-header">
 
@@ -1243,7 +1470,10 @@ const TopNav = () => {
                         Notifications
                       </strong>
 
-                      <span>
+                      <span
+                        aria-live="polite"
+                        aria-atomic="true"
+                      >
                         {unreadCount > 0
                           ? `${unreadCount} unread`
                           : "All caught up"}
@@ -1261,9 +1491,13 @@ const TopNav = () => {
                         unreadCount === 0
                       }
                       title="Mark all as read"
+                      aria-label="Mark all notifications as read"
                     >
 
-                      <CheckCheck size={15} />
+                      <CheckCheck
+                        size={15}
+                        aria-hidden="true"
+                      />
 
                       Mark all
 
@@ -1273,9 +1507,15 @@ const TopNav = () => {
 
 
                   {notificationError && (
-                    <div className="notification-message notification-error-message">
+                    <div
+                      className="notification-message notification-error-message"
+                      role="alert"
+                    >
 
-                      <AlertCircle size={17} />
+                      <AlertCircle
+                        size={17}
+                        aria-hidden="true"
+                      />
 
                       <span>
                         {notificationError}
@@ -1286,9 +1526,16 @@ const TopNav = () => {
 
 
                   {notificationLoading && (
-                    <div className="notification-message">
+                    <div
+                      className="notification-message"
+                      role="status"
+                      aria-live="polite"
+                    >
 
-                      <div className="loading-spinner"></div>
+                      <div
+                        className="loading-spinner"
+                        aria-hidden="true"
+                      ></div>
 
                       <span>
                         Loading notifications...
@@ -1303,7 +1550,10 @@ const TopNav = () => {
                     displayedNotifications.length === 0 && (
                       <div className="notification-empty">
 
-                        <Bell size={25} />
+                        <Bell
+                          size={25}
+                          aria-hidden="true"
+                        />
 
                         <strong>
                           No notifications
@@ -1319,96 +1569,144 @@ const TopNav = () => {
 
                   {!notificationLoading &&
                     displayedNotifications.length > 0 && (
-                      <div className="notification-list">
+                      <div
+                        className="notification-list"
+                        aria-label="Notification list"
+                      >
 
                         {displayedNotifications.map(
-                          (notification) => (
-                            <div
-                              key={
-                                notification.id
-                              }
-                              className={
-                                notification.read
-                                  ? "notification-item"
-                                  : "notification-item notification-unread"
-                              }
-                              onClick={() =>
-                                handleNotificationOpen(
-                                  notification
-                                )
-                              }
-                            >
+                          (notification) => {
+                            const notificationName =
+                              notification.title ||
+                              "Notification";
 
-                              {!notification.read && (
-                                <span className="notification-unread-dot"></span>
-                              )}
+                            const workflowName =
+                              notification.workflowName ||
+                              notification.workflow?.name ||
+                              "";
 
-
+                            return (
                               <div
-                                className={getNotificationClass(
-                                  notification
-                                )}
-                              >
-
-                                {getNotificationIcon(
-                                  notification
-                                )}
-
-                              </div>
-
-
-                              <div className="notification-content">
-
-                                <strong>
-                                  {notification.title ||
-                                    "Notification"}
-                                </strong>
-
-                                <span className="notification-workflow-name">
-
-                                  {notification.workflowName ||
-                                    notification.workflow?.name ||
-                                    "NovaWavex"}
-
-                                </span>
-
-                                <span className="notification-message-text">
-
-                                  {notification.message ||
-                                    "No message"}
-
-                                </span>
-
-                                <small>
-
-                                  {formatNotificationTime(
-                                    notification.createdAt
-                                  )}
-
-                                </small>
-
-                              </div>
-
-
-                              <button
-                                type="button"
-                                className="notification-delete"
-                                onClick={(event) =>
-                                  handleDeleteNotification(
-                                    event,
-                                    notification.id
+                                key={
+                                  notification.id
+                                }
+                                className={
+                                  notification.read
+                                    ? "notification-item"
+                                    : "notification-item notification-unread"
+                                }
+                                onClick={() =>
+                                  handleNotificationOpen(
+                                    notification
                                   )
                                 }
-                                title="Delete notification"
-                                aria-label="Delete notification"
+                                onKeyDown={(event) =>
+                                  handleNotificationKeyDown(
+                                    event,
+                                    notification
+                                  )
+                                }
+                                role="button"
+                                tabIndex={0}
+                                aria-label={`${
+                                  notification.read
+                                    ? ""
+                                    : "Unread "
+                                }${notificationName}${
+                                  workflowName
+                                    ? `, ${workflowName}`
+                                    : ""
+                                }`}
+                                aria-describedby={`notification-message-${notification.id}`}
                               >
 
-                                <Trash2 size={14} />
+                                {!notification.read && (
+                                  <span
+                                    className="notification-unread-dot"
+                                    aria-hidden="true"
+                                  ></span>
+                                )}
 
-                              </button>
 
-                            </div>
-                          )
+                                <div
+                                  className={getNotificationClass(
+                                    notification
+                                  )}
+                                  aria-hidden="true"
+                                >
+
+                                  {getNotificationIcon(
+                                    notification
+                                  )}
+
+                                </div>
+
+
+                                <div className="notification-content">
+
+                                  <strong>
+                                    {notification.title ||
+                                      "Notification"}
+                                  </strong>
+
+                                  <span className="notification-workflow-name">
+
+                                    {notification.workflowName ||
+                                      notification.workflow?.name ||
+                                      "NovaWavex"}
+
+                                  </span>
+
+                                  <span
+                                    className="notification-message-text"
+                                    id={`notification-message-${notification.id}`}
+                                  >
+
+                                    {notification.message ||
+                                      "No message"}
+
+                                  </span>
+
+                                  <small>
+
+                                    {formatNotificationTime(
+                                      notification.createdAt
+                                    )}
+
+                                  </small>
+
+                                </div>
+
+
+                                <button
+                                  type="button"
+                                  className="notification-delete"
+                                  onClick={(event) =>
+                                    handleDeleteNotification(
+                                      event,
+                                      notification.id
+                                    )
+                                  }
+                                  onKeyDown={(event) =>
+                                    event.stopPropagation()
+                                  }
+                                  title="Delete notification"
+                                  aria-label={`Delete notification: ${
+                                    notification.title ||
+                                    "Notification"
+                                  }`}
+                                >
+
+                                  <Trash2
+                                    size={14}
+                                    aria-hidden="true"
+                                  />
+
+                                </button>
+
+                              </div>
+                            );
+                          }
                         )}
 
                       </div>
@@ -1428,11 +1726,12 @@ const TopNav = () => {
                         );
 
                       }}
+                      aria-label="View all notifications"
                     >
 
                       View all notifications
 
-                      <span>
+                      <span aria-hidden="true">
                         →
                       </span>
 
@@ -1453,9 +1752,15 @@ const TopNav = () => {
           <div
             className={getSystemStatusClass()}
             title={`Backend status: ${getSystemStatusLabel()}`}
+            role="status"
+            aria-label={`Backend status: ${getSystemStatusLabel()}`}
+            aria-live="polite"
           >
 
-            <Activity size={16} />
+            <Activity
+              size={16}
+              aria-hidden="true"
+            />
 
             <span>
               {getSystemStatusLabel()}
@@ -1471,27 +1776,34 @@ const TopNav = () => {
           <div className="profile-container">
 
             <button
+              ref={profileButtonRef}
+              type="button"
               className="profile-button"
-              onClick={() =>
-                setProfileOpen(
-                  !profileOpen
-                )
-              }
+              onClick={handleProfileClick}
+              onKeyDown={handleProfileKeyDown}
               title="Account menu"
+              aria-label={`Account menu for ${profileName}`}
+              aria-expanded={profileOpen}
+              aria-haspopup="menu"
+              aria-controls="profile-menu"
             >
 
               {profileImage ? (
                 <img
                   src={profileImage}
-                  alt={profileName}
+                  alt=""
                   className="profile-avatar profile-avatar-image"
+                  aria-hidden="true"
                   onError={(event) => {
                     event.currentTarget.style.display =
                       "none";
                   }}
                 />
               ) : (
-                <div className="profile-avatar">
+                <div
+                  className="profile-avatar"
+                  aria-hidden="true"
+                >
                   {profileInitials}
                 </div>
               )}
@@ -1503,28 +1815,38 @@ const TopNav = () => {
                     ? "profile-chevron profile-chevron-open"
                     : "profile-chevron"
                 }
+                aria-hidden="true"
               />
 
             </button>
 
 
             {profileOpen && (
-              <div className="profile-menu">
+              <div
+                className="profile-menu"
+                id="profile-menu"
+                role="menu"
+                aria-label="Account menu"
+              >
 
                 <div className="profile-menu-header">
 
                   {profileImage ? (
                     <img
                       src={profileImage}
-                      alt={profileName}
+                      alt=""
                       className="profile-menu-avatar profile-avatar-image"
+                      aria-hidden="true"
                       onError={(event) => {
                         event.currentTarget.style.display =
                           "none";
                       }}
                     />
                   ) : (
-                    <div className="profile-menu-avatar">
+                    <div
+                      className="profile-menu-avatar"
+                      aria-hidden="true"
+                    >
                       {profileInitials}
                     </div>
                   )}
@@ -1545,11 +1867,16 @@ const TopNav = () => {
                 </div>
 
 
-                <div className="profile-menu-divider"></div>
+                <div
+                  className="profile-menu-divider"
+                  role="separator"
+                ></div>
 
 
                 <button
+                  type="button"
                   className="profile-menu-item"
+                  role="menuitem"
                   onClick={() => {
 
                     setProfileOpen(false);
@@ -1561,7 +1888,10 @@ const TopNav = () => {
                   }}
                 >
 
-                  <User size={16} />
+                  <User
+                    size={16}
+                    aria-hidden="true"
+                  />
 
                   <span>
                     Profile
@@ -1571,7 +1901,9 @@ const TopNav = () => {
 
 
                 <button
+                  type="button"
                   className="profile-menu-item"
+                  role="menuitem"
                   onClick={() => {
 
                     setProfileOpen(false);
@@ -1583,7 +1915,10 @@ const TopNav = () => {
                   }}
                 >
 
-                  <Settings size={16} />
+                  <Settings
+                    size={16}
+                    aria-hidden="true"
+                  />
 
                   <span>
                     Settings
@@ -1592,15 +1927,23 @@ const TopNav = () => {
                 </button>
 
 
-                <div className="profile-menu-divider"></div>
+                <div
+                  className="profile-menu-divider"
+                  role="separator"
+                ></div>
 
 
                 <button
+                  type="button"
                   className="profile-menu-item logout-item"
+                  role="menuitem"
                   onClick={logout}
                 >
 
-                  <LogOut size={16} />
+                  <LogOut
+                    size={16}
+                    aria-hidden="true"
+                  />
 
                   <span>
                     Logout
@@ -1621,8 +1964,12 @@ const TopNav = () => {
       <style>{`
 
         /* =========================================
-           PROFILE IMAGE
+           PHASE 13.9 — MICRO-INTERACTIONS
            ========================================= */
+
+        /* -----------------------------------------
+           PROFILE IMAGE
+           ----------------------------------------- */
 
         .profile-avatar-image {
           display: block;
@@ -1632,9 +1979,125 @@ const TopNav = () => {
         }
 
 
-        /* =========================================
+        /* -----------------------------------------
+           TOP NAVIGATION
+           ----------------------------------------- */
+
+        .top-navigation {
+          align-items: center;
+        }
+
+        .top-nav-link {
+          position: relative;
+          transition:
+            color 0.2s ease,
+            background 0.2s ease,
+            transform 0.18s ease;
+        }
+
+        .top-nav-link::after {
+          display: none;
+        }
+
+        .top-nav-label {
+          position: relative;
+          display: inline-block;
+        }
+
+        .top-nav-label::after {
+          content: "";
+          position: absolute;
+          left: 50%;
+          bottom: -23px;
+          width: 0;
+          height: 3px;
+          border-radius: 999px;
+          background: #2563eb;
+          opacity: 0;
+          transform: translateX(-50%);
+          transition:
+            width 0.22s ease,
+            opacity 0.2s ease;
+        }
+
+        .top-nav-link:hover {
+          transform: translateY(-1px);
+        }
+
+        .top-nav-link:hover .top-nav-label::after {
+          width: 16px;
+          opacity: 0.45;
+        }
+
+        .top-nav-link.active {
+          transform: translateY(0);
+        }
+
+        .top-nav-link.active .top-nav-label::after {
+          width: 42px;
+          opacity: 0.95;
+        }
+
+        .top-nav-link:active {
+          transform: translateY(0) scale(0.98);
+        }
+
+
+        /* -----------------------------------------
+           GLOBAL TOP ACTION MICRO-INTERACTIONS
+           ----------------------------------------- */
+
+        .top-actions > * {
+          transition:
+            transform 0.18s ease;
+        }
+
+        .icon-button {
+          transition:
+            color 0.18s ease,
+            background 0.18s ease,
+            border-color 0.18s ease,
+            box-shadow 0.18s ease,
+            transform 0.18s ease;
+        }
+
+        .icon-button:hover:not(:disabled) {
+          transform: translateY(-1px);
+        }
+
+        .icon-button:active:not(:disabled) {
+          transform: translateY(0) scale(0.94);
+        }
+
+
+        /* -----------------------------------------
+           BRAND MICRO-INTERACTION
+           ----------------------------------------- */
+
+        .brand-symbol {
+          transition:
+            transform 0.28s ease,
+            box-shadow 0.28s ease;
+        }
+
+        .brand:hover .brand-symbol {
+          transform:
+            translateY(-1px)
+            rotate(-4deg)
+            scale(1.035);
+        }
+
+        .brand:active .brand-symbol {
+          transform:
+            translateY(0)
+            rotate(0deg)
+            scale(0.98);
+        }
+
+
+        /* -----------------------------------------
            SEARCH
-           ========================================= */
+           ----------------------------------------- */
 
         .top-search-container {
           position: relative;
@@ -1660,6 +2123,27 @@ const TopNav = () => {
             0 20px 50px rgba(0, 0, 0, 0.45);
           backdrop-filter: blur(18px);
           z-index: 1000;
+
+          animation:
+            top-panel-enter 0.2s ease-out both;
+          transform-origin:
+            top right;
+        }
+
+        @keyframes top-panel-enter {
+          from {
+            opacity: 0;
+            transform:
+              translateY(-7px)
+              scale(0.985);
+          }
+
+          to {
+            opacity: 1;
+            transform:
+              translateY(0)
+              scale(1);
+          }
         }
 
         .top-search-close {
@@ -1678,12 +2162,20 @@ const TopNav = () => {
           color: #8490a8;
           background: transparent;
           cursor: pointer;
-          transition: 0.15s ease;
+          transition:
+            color 0.15s ease,
+            background 0.15s ease,
+            transform 0.15s ease;
         }
 
         .top-search-close:hover {
           color: #e8eefc;
           background: rgba(255, 255, 255, 0.08);
+          transform: rotate(4deg) scale(1.04);
+        }
+
+        .top-search-close:active {
+          transform: scale(0.92);
         }
 
         .top-search-input-wrapper {
@@ -1700,6 +2192,15 @@ const TopNav = () => {
           left: 25px;
           color: #69758c;
           pointer-events: none;
+          transition:
+            color 0.18s ease,
+            transform 0.18s ease;
+        }
+
+        .top-search-input-wrapper:focus-within
+          .top-search-input-icon {
+          color: #8eb1ff;
+          transform: scale(1.04);
         }
 
         .top-search-input {
@@ -1715,15 +2216,26 @@ const TopNav = () => {
           background:
             rgba(255, 255, 255, 0.045);
           font-size: 13px;
+          transition:
+            border-color 0.18s ease,
+            background 0.18s ease,
+            box-shadow 0.18s ease;
         }
 
         .top-search-input::placeholder {
           color: #69758c;
         }
 
+        .top-search-input:hover {
+          background:
+            rgba(255, 255, 255, 0.06);
+        }
+
         .top-search-input:focus {
           border-color:
             rgba(77, 124, 255, 0.45);
+          background:
+            rgba(255, 255, 255, 0.055);
           box-shadow:
             0 0 0 3px
             rgba(77, 124, 255, 0.08);
@@ -1743,12 +2255,21 @@ const TopNav = () => {
           color: #8490a8;
           background: transparent;
           cursor: pointer;
+          transition:
+            color 0.15s ease,
+            background 0.15s ease,
+            transform 0.15s ease;
         }
 
         .top-search-clear:hover {
           color: #e8eefc;
           background:
             rgba(255, 255, 255, 0.08);
+          transform: scale(1.06);
+        }
+
+        .top-search-clear:active {
+          transform: scale(0.9);
         }
 
         .top-search-results {
@@ -1777,12 +2298,22 @@ const TopNav = () => {
           background: transparent;
           text-align: left;
           cursor: pointer;
-          transition: 0.15s ease;
+          transition:
+            background 0.17s ease,
+            transform 0.17s ease;
         }
 
         .top-search-result:hover {
           background:
             rgba(77, 124, 255, 0.1);
+          transform:
+            translateX(2px);
+        }
+
+        .top-search-result:active {
+          transform:
+            translateX(1px)
+            scale(0.995);
         }
 
         .top-search-result-icon {
@@ -1796,6 +2327,18 @@ const TopNav = () => {
           color: #9bb9ff;
           background:
             rgba(77, 124, 255, 0.1);
+          transition:
+            transform 0.18s ease,
+            background 0.18s ease;
+        }
+
+        .top-search-result:hover
+          .top-search-result-icon {
+          transform:
+            translateX(1px)
+            scale(1.04);
+          background:
+            rgba(77, 124, 255, 0.15);
         }
 
         .top-search-result-content {
@@ -1827,6 +2370,15 @@ const TopNav = () => {
           flex-shrink: 0;
           color: #69758c;
           font-size: 17px;
+          transition:
+            color 0.17s ease,
+            transform 0.17s ease;
+        }
+
+        .top-search-result:hover
+          .top-search-result-arrow {
+          color: #9bb9ff;
+          transform: translateX(3px);
         }
 
         .top-search-message {
@@ -1843,9 +2395,9 @@ const TopNav = () => {
         }
 
 
-        /* =========================================
+        /* -----------------------------------------
            NOTIFICATIONS
-           ========================================= */
+           ----------------------------------------- */
 
         .notification-container {
           position: relative;
@@ -1855,6 +2407,31 @@ const TopNav = () => {
 
         .notification-button {
           position: relative;
+        }
+
+        .notification-button:not(.notification-disabled):hover
+          svg {
+          animation:
+            notification-bell-hover 0.42s ease;
+        }
+
+        @keyframes notification-bell-hover {
+          0%,
+          100% {
+            transform: rotate(0deg);
+          }
+
+          25% {
+            transform: rotate(-7deg);
+          }
+
+          50% {
+            transform: rotate(6deg);
+          }
+
+          75% {
+            transform: rotate(-3deg);
+          }
         }
 
         .notification-disabled {
@@ -1884,6 +2461,32 @@ const TopNav = () => {
           font-weight: 800;
           line-height: 1;
           box-sizing: border-box;
+
+          animation:
+            notification-badge-enter 0.28s
+            ease-out both;
+        }
+
+        @keyframes notification-badge-enter {
+          from {
+            opacity: 0;
+            transform:
+              scale(0.65)
+              translateY(-2px);
+          }
+
+          65% {
+            transform:
+              scale(1.08)
+              translateY(0);
+          }
+
+          to {
+            opacity: 1;
+            transform:
+              scale(1)
+              translateY(0);
+          }
         }
 
         .notification-panel {
@@ -1904,6 +2507,11 @@ const TopNav = () => {
             0 20px 50px rgba(0, 0, 0, 0.45);
           backdrop-filter: blur(18px);
           z-index: 1100;
+
+          animation:
+            top-panel-enter 0.2s ease-out both;
+          transform-origin:
+            top right;
         }
 
         .notification-header {
@@ -1945,12 +2553,21 @@ const TopNav = () => {
           font-size: 10px;
           font-weight: 650;
           cursor: pointer;
-          transition: 0.15s ease;
+          transition:
+            background 0.17s ease,
+            color 0.17s ease,
+            transform 0.17s ease;
         }
 
         .notification-mark-all:hover:not(:disabled) {
           background:
             rgba(77, 124, 255, 0.16);
+          color: #b5caff;
+          transform: translateY(-1px);
+        }
+
+        .notification-mark-all:active:not(:disabled) {
+          transform: scale(0.96);
         }
 
         .notification-mark-all:disabled {
@@ -1972,12 +2589,28 @@ const TopNav = () => {
           padding: 11px 10px;
           border-radius: 10px;
           cursor: pointer;
-          transition: 0.15s ease;
+          transition:
+            background 0.17s ease,
+            transform 0.17s ease;
         }
 
         .notification-item:hover {
           background:
             rgba(255, 255, 255, 0.045);
+          transform: translateX(1px);
+        }
+
+        .notification-item:active {
+          transform:
+            translateX(1px)
+            scale(0.995);
+        }
+
+        .notification-item:focus-visible {
+          outline: 2px solid #2563eb;
+          outline-offset: 2px;
+          background:
+            rgba(77, 124, 255, 0.08);
         }
 
         .notification-unread {
@@ -2000,6 +2633,22 @@ const TopNav = () => {
           background: #5b8cff;
           box-shadow:
             0 0 8px rgba(91, 140, 255, 0.7);
+
+          animation:
+            unread-dot-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes unread-dot-pulse {
+          0%,
+          100% {
+            opacity: 0.75;
+            transform: scale(0.9);
+          }
+
+          50% {
+            opacity: 1;
+            transform: scale(1.15);
+          }
         }
 
         .notification-icon {
@@ -2010,6 +2659,16 @@ const TopNav = () => {
           align-items: center;
           justify-content: center;
           border-radius: 9px;
+          transition:
+            transform 0.18s ease,
+            background 0.18s ease;
+        }
+
+        .notification-item:hover
+          .notification-icon {
+          transform:
+            translateY(-1px)
+            scale(1.04);
         }
 
         .notification-success {
@@ -2092,10 +2751,15 @@ const TopNav = () => {
           background: transparent;
           cursor: pointer;
           opacity: 0;
-          transition: 0.15s ease;
+          transition:
+            opacity 0.15s ease,
+            color 0.15s ease,
+            background 0.15s ease,
+            transform 0.15s ease;
         }
 
-        .notification-item:hover .notification-delete {
+        .notification-item:hover .notification-delete,
+        .notification-item:focus-within .notification-delete {
           opacity: 1;
         }
 
@@ -2103,6 +2767,11 @@ const TopNav = () => {
           color: #ff7272;
           background:
             rgba(255, 82, 82, 0.09);
+          transform: scale(1.05);
+        }
+
+        .notification-delete:active {
+          transform: scale(0.9);
         }
 
         .notification-message {
@@ -2136,6 +2805,14 @@ const TopNav = () => {
         .notification-empty svg {
           margin-bottom: 4px;
           color: #59657b;
+          transition:
+            transform 0.25s ease;
+        }
+
+        .notification-empty:hover svg {
+          transform:
+            translateY(-2px)
+            scale(1.04);
         }
 
         .notification-empty strong {
@@ -2169,22 +2846,37 @@ const TopNav = () => {
           font-size: 11px;
           font-weight: 650;
           cursor: pointer;
-          transition: 0.15s ease;
+          transition:
+            background 0.17s ease,
+            color 0.17s ease,
+            transform 0.17s ease;
         }
 
         .notification-footer button:hover {
           background:
             rgba(77, 124, 255, 0.13);
+          color: #b5caff;
+          transform: translateY(-1px);
+        }
+
+        .notification-footer button:active {
+          transform: scale(0.98);
         }
 
         .notification-footer button span {
           font-size: 15px;
+          transition:
+            transform 0.17s ease;
+        }
+
+        .notification-footer button:hover span {
+          transform: translateX(3px);
         }
 
 
-        /* =========================================
+        /* -----------------------------------------
            SYSTEM STATUS
-           ========================================= */
+           ----------------------------------------- */
 
         .system-indicator {
           display: inline-flex;
@@ -2199,7 +2891,13 @@ const TopNav = () => {
           transition:
             color 0.2s ease,
             background 0.2s ease,
-            border-color 0.2s ease;
+            border-color 0.2s ease,
+            transform 0.18s ease,
+            box-shadow 0.18s ease;
+        }
+
+        .system-indicator:hover {
+          transform: translateY(-1px);
         }
 
         .system-operational {
@@ -2208,12 +2906,26 @@ const TopNav = () => {
           border-color: rgba(46, 204, 113, 0.12);
         }
 
+        .system-operational:hover {
+          background: rgba(46, 204, 113, 0.11);
+          border-color: rgba(46, 204, 113, 0.18);
+          box-shadow:
+            0 5px 18px
+            rgba(46, 204, 113, 0.07);
+        }
+
         .system-operational svg {
           filter:
             drop-shadow(
               0 0 5px
               rgba(46, 204, 113, 0.45)
             );
+          transition:
+            transform 0.2s ease;
+        }
+
+        .system-operational:hover svg {
+          transform: scale(1.06);
         }
 
         .system-degraded {
@@ -2253,9 +2965,104 @@ const TopNav = () => {
         }
 
 
-        /* =========================================
+        /* -----------------------------------------
+           PROFILE
+           ----------------------------------------- */
+
+        .profile-button {
+          transition:
+            background 0.18s ease,
+            border-color 0.18s ease,
+            box-shadow 0.18s ease,
+            transform 0.18s ease;
+        }
+
+        .profile-button:hover {
+          transform: translateY(-1px);
+        }
+
+        .profile-button:active {
+          transform: scale(0.97);
+        }
+
+        .profile-avatar {
+          transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+        }
+
+        .profile-button:hover .profile-avatar {
+          transform: scale(1.035);
+        }
+
+        .profile-chevron {
+          transition:
+            transform 0.2s ease,
+            color 0.18s ease;
+        }
+
+        .profile-chevron-open {
+          transform: rotate(180deg);
+        }
+
+        .profile-button:hover
+          .profile-chevron {
+          color: #9bb9ff;
+        }
+
+        .profile-menu {
+          animation:
+            profile-menu-enter 0.2s ease-out both;
+          transform-origin:
+            top right;
+        }
+
+        @keyframes profile-menu-enter {
+          from {
+            opacity: 0;
+            transform:
+              translateY(-6px)
+              scale(0.985);
+          }
+
+          to {
+            opacity: 1;
+            transform:
+              translateY(0)
+              scale(1);
+          }
+        }
+
+        .profile-menu-item {
+          transition:
+            background 0.16s ease,
+            color 0.16s ease,
+            transform 0.16s ease;
+        }
+
+        .profile-menu-item:hover {
+          transform: translateX(2px);
+        }
+
+        .profile-menu-item:active {
+          transform:
+            translateX(1px)
+            scale(0.985);
+        }
+
+        .profile-menu-item svg {
+          transition:
+            transform 0.17s ease;
+        }
+
+        .profile-menu-item:hover svg {
+          transform: scale(1.05);
+        }
+
+
+        /* -----------------------------------------
            LOADING SPINNER
-           ========================================= */
+           ----------------------------------------- */
 
         .loading-spinner {
           width: 16px;
@@ -2277,7 +3084,200 @@ const TopNav = () => {
 
 
         /* =========================================
-           RESPONSIVE
+           REDUCED MOTION
+           ========================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+          .top-nav-link,
+          .top-nav-link::after,
+          .icon-button,
+          .brand-symbol,
+          .top-search-panel,
+          .top-search-close,
+          .top-search-input-icon,
+          .top-search-input,
+          .top-search-clear,
+          .top-search-result,
+          .top-search-result-icon,
+          .top-search-result-arrow,
+          .notification-button svg,
+          .notification-badge,
+          .notification-mark-all,
+          .notification-item,
+          .notification-unread-dot,
+          .notification-icon,
+          .notification-delete,
+          .notification-footer button,
+          .notification-footer button span,
+          .system-indicator,
+          .system-operational svg,
+          .profile-button,
+          .profile-avatar,
+          .profile-chevron,
+          .profile-menu,
+          .profile-menu-item,
+          .profile-menu-item svg,
+          .notification-empty svg {
+            animation: none !important;
+            transition: none !important;
+          }
+
+          .top-nav-link:hover,
+          .top-nav-link:active,
+          .icon-button:hover,
+          .icon-button:active,
+          .brand:hover .brand-symbol,
+          .top-search-result:hover,
+          .top-search-result:active,
+          .notification-item:hover,
+          .notification-item:active,
+          .notification-delete:hover,
+          .notification-delete:active,
+          .notification-mark-all:hover,
+          .notification-mark-all:active,
+          .notification-footer button:hover,
+          .notification-footer button:active,
+          .system-indicator:hover,
+          .profile-button:hover,
+          .profile-button:active,
+          .profile-menu-item:hover,
+          .profile-menu-item:active {
+            transform: none !important;
+          }
+
+        }
+
+
+        /* =========================================
+           PHASE 13.2 — TABLET
+           ========================================= */
+
+        @media (max-width: 1050px) and (min-width: 901px) {
+
+          .top-nav {
+            gap: 18px;
+          }
+
+          .brand {
+            flex-shrink: 0;
+          }
+
+          .brand-symbol {
+            width: 36px;
+            height: 36px;
+          }
+
+          .brand h2 {
+            font-size: 16px;
+          }
+
+          .brand span {
+            font-size: 9px;
+          }
+
+          .top-navigation {
+            gap: 4px;
+          }
+
+          .top-nav-link {
+            padding: 7px 8px;
+            font-size: 11px;
+          }
+
+          .top-actions {
+            gap: 7px;
+          }
+
+          .icon-button {
+            width: 34px;
+            height: 34px;
+          }
+
+          .system-indicator {
+            padding: 6px 8px;
+            gap: 5px;
+            font-size: 9px;
+          }
+
+          .profile-button {
+            padding: 5px 6px;
+          }
+
+          .profile-avatar {
+            width: 30px;
+            height: 30px;
+          }
+
+        }
+
+
+        @media (max-width: 900px) and (min-width: 769px) {
+
+          .top-nav {
+            gap: 14px;
+          }
+
+          .brand {
+            min-width: auto;
+            flex-shrink: 0;
+          }
+
+          .brand span {
+            display: none;
+          }
+
+          .brand h2 {
+            font-size: 16px;
+          }
+
+          .top-navigation {
+            display: none;
+          }
+
+          .top-actions {
+            margin-left: auto;
+            gap: 8px;
+          }
+
+          .icon-button {
+            width: 35px;
+            height: 35px;
+          }
+
+          .system-indicator {
+            padding: 6px 8px;
+            font-size: 9px;
+          }
+
+          .profile-button {
+            padding: 4px 5px;
+          }
+
+          .profile-avatar {
+            width: 31px;
+            height: 31px;
+          }
+
+          .profile-chevron {
+            margin-left: 2px;
+          }
+
+          .top-search-panel {
+            right: 0;
+            width: 360px;
+          }
+
+          .notification-panel {
+            right: -35px;
+            width: 360px;
+          }
+
+        }
+
+
+        /* =========================================
+           MOBILE
            ========================================= */
 
         @media (max-width: 600px) {

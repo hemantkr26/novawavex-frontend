@@ -43,6 +43,10 @@ const CreateWorkflow = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    if (loading) {
+      return;
+    }
+
     const name = formData.name.trim();
     const description = formData.description.trim();
 
@@ -119,6 +123,14 @@ const CreateWorkflow = () => {
         setError(
           "The workflow service could not be found."
         );
+      } else if (status >= 500) {
+        setError(
+          "The workflow service is temporarily unavailable. Please try again."
+        );
+      } else if (err.request && !err.response) {
+        setError(
+          "Unable to reach the workflow service. Check your connection and try again."
+        );
       } else {
         setError(
           "Unable to create workflow. Please try again."
@@ -130,7 +142,11 @@ const CreateWorkflow = () => {
   };
 
   return (
-    <div className="create-workflow-page">
+    <div
+      className={`create-workflow-page ${
+        loading ? "is-submitting" : ""
+      }`}
+    >
       <style>{`
         .create-workflow-page {
           min-height: 100vh;
@@ -183,10 +199,18 @@ const CreateWorkflow = () => {
           transition: 0.2s ease;
         }
 
-        .back-button:hover {
+        .back-button:hover:not(:disabled) {
           color: #e8eefc;
           background: rgba(255, 255, 255, 0.08);
           border-color: rgba(77, 124, 255, 0.3);
+          transform: translateX(-2px);
+        }
+
+        .back-button:focus-visible,
+        .cancel-button:focus-visible,
+        .submit-button:focus-visible {
+          outline: 2px solid rgba(77, 124, 255, 0.8);
+          outline-offset: 3px;
         }
 
         .header-icon {
@@ -215,6 +239,8 @@ const CreateWorkflow = () => {
         }
 
         .workflow-form-card {
+          position: relative;
+          overflow: hidden;
           padding: 30px;
           border: 1px solid rgba(255, 255, 255, 0.07);
           border-radius: 20px;
@@ -226,6 +252,31 @@ const CreateWorkflow = () => {
             );
           box-shadow: 0 18px 45px rgba(0, 0, 0, 0.2);
           backdrop-filter: blur(12px);
+        }
+
+        .workflow-form-card::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: -120%;
+          width: 45%;
+          height: 100%;
+          pointer-events: none;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.035),
+            transparent
+          );
+          transform: skewX(-18deg);
+          opacity: 0;
+        }
+
+        .create-workflow-page.is-submitting
+          .workflow-form-card::after {
+          opacity: 1;
+          animation: form-submit-shimmer 1.8s ease-in-out
+            infinite;
         }
 
         .form-section {
@@ -314,6 +365,13 @@ const CreateWorkflow = () => {
             0 0 0 3px rgba(77, 124, 255, 0.08);
         }
 
+        .form-input:disabled,
+        .form-textarea:disabled,
+        .form-select:disabled {
+          opacity: 0.65;
+          cursor: not-allowed;
+        }
+
         .form-select option {
           color: #111827;
           background: #ffffff;
@@ -329,11 +387,12 @@ const CreateWorkflow = () => {
         }
 
         .alert {
+          position: relative;
           display: flex;
           align-items: flex-start;
           gap: 10px;
           margin-bottom: 22px;
-          padding: 13px 15px;
+          padding: 14px 15px;
           border-radius: 11px;
           font-size: 13px;
           line-height: 1.5;
@@ -341,14 +400,46 @@ const CreateWorkflow = () => {
 
         .alert.error {
           color: #ffb0b8;
-          background: rgba(255, 77, 96, 0.08);
-          border: 1px solid rgba(255, 77, 96, 0.2);
+          background:
+            linear-gradient(
+              135deg,
+              rgba(255, 77, 96, 0.1),
+              rgba(255, 77, 96, 0.055)
+            );
+          border: 1px solid rgba(255, 77, 96, 0.25);
+          box-shadow:
+            0 8px 24px rgba(255, 77, 96, 0.05);
+          animation: alert-enter 0.25s ease-out;
+        }
+
+        .alert.error::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 10px;
+          bottom: 10px;
+          width: 2px;
+          border-radius: 2px;
+          background: rgba(255, 126, 140, 0.8);
         }
 
         .alert.success {
           color: #8df0d4;
-          background: rgba(0, 212, 170, 0.08);
+          background:
+            linear-gradient(
+              135deg,
+              rgba(0, 212, 170, 0.1),
+              rgba(0, 212, 170, 0.055)
+            );
           border: 1px solid rgba(0, 212, 170, 0.2);
+          box-shadow:
+            0 8px 24px rgba(0, 212, 170, 0.04);
+          animation: success-enter 0.3s ease-out;
+        }
+
+        .success-icon {
+          flex-shrink: 0;
+          animation: success-pop 0.35s ease-out;
         }
 
         .form-footer {
@@ -382,32 +473,80 @@ const CreateWorkflow = () => {
           background: rgba(255, 255, 255, 0.035);
         }
 
-        .cancel-button:hover {
+        .cancel-button:hover:not(:disabled) {
           color: #e8eefc;
           background: rgba(255, 255, 255, 0.07);
+          transform: translateY(-1px);
         }
 
         .submit-button {
+          position: relative;
+          overflow: hidden;
           border: 1px solid rgba(77, 124, 255, 0.4);
           color: #ffffff;
           background: rgba(77, 124, 255, 0.8);
-          box-shadow: 0 8px 20px rgba(77, 124, 255, 0.15);
+          box-shadow:
+            0 8px 20px rgba(77, 124, 255, 0.15);
         }
 
-        .submit-button:hover {
+        .submit-button:hover:not(:disabled) {
           background: rgba(77, 124, 255, 0.95);
           transform: translateY(-1px);
         }
 
+        .submit-button.is-loading {
+          cursor: wait;
+          background: rgba(77, 124, 255, 0.68);
+        }
+
+        .submit-button.is-loading::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          width: 100%;
+          height: 2px;
+          transform-origin: left;
+          background: rgba(255, 255, 255, 0.7);
+          animation: submit-progress 1.4s ease-in-out
+            infinite;
+        }
+
+        .submit-button-content {
+          position: relative;
+          z-index: 1;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+        }
+
         .cancel-button:disabled,
-        .submit-button:disabled {
+        .submit-button:disabled,
+        .back-button:disabled {
           opacity: 0.55;
           cursor: not-allowed;
           transform: none;
         }
 
+        .submit-button.is-loading:disabled {
+          opacity: 0.9;
+        }
+
         .spin {
           animation: spin 1s linear infinite;
+        }
+
+        .sr-only {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
         }
 
         @keyframes spin {
@@ -417,6 +556,89 @@ const CreateWorkflow = () => {
 
           to {
             transform: rotate(360deg);
+          }
+        }
+
+        @keyframes submit-progress {
+          0% {
+            transform: scaleX(0.08);
+            opacity: 0.35;
+          }
+
+          45% {
+            transform: scaleX(0.55);
+            opacity: 0.8;
+          }
+
+          100% {
+            transform: scaleX(0.95);
+            opacity: 0.35;
+          }
+        }
+
+        @keyframes form-submit-shimmer {
+          0% {
+            left: -120%;
+          }
+
+          100% {
+            left: 150%;
+          }
+        }
+
+        @keyframes success-enter {
+          from {
+            opacity: 0;
+            transform: translateY(-5px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes success-pop {
+          0% {
+            opacity: 0;
+            transform: scale(0.7);
+          }
+
+          70% {
+            transform: scale(1.08);
+          }
+
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        @keyframes alert-enter {
+          from {
+            opacity: 0;
+            transform: translateY(-4px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .workflow-form-card::after,
+          .submit-button.is-loading::before,
+          .spin,
+          .alert,
+          .success-icon {
+            animation: none !important;
+          }
+
+          .submit-button:hover:not(:disabled),
+          .cancel-button:hover:not(:disabled),
+          .back-button:hover:not(:disabled) {
+            transform: none;
           }
         }
 
@@ -459,15 +681,22 @@ const CreateWorkflow = () => {
               aria-label="Back to workflows"
               title="Back to workflows"
             >
-              <ArrowLeft size={18} />
+              <ArrowLeft
+                size={18}
+                aria-hidden="true"
+              />
             </button>
 
-            <div className="header-icon">
+            <div
+              className="header-icon"
+              aria-hidden="true"
+            >
               <WorkflowIcon size={25} />
             </div>
 
             <div>
               <h1>Create Workflow</h1>
+
               <p>
                 Create a new workflow in the NovaWavex
                 workflow engine.
@@ -479,12 +708,19 @@ const CreateWorkflow = () => {
         <form
           className="workflow-form-card"
           onSubmit={handleSubmit}
+          aria-busy={loading}
+          noValidate
         >
           {error && (
-            <div className="alert error">
+            <div
+              className="alert error"
+              role="alert"
+              aria-live="assertive"
+            >
               <AlertCircle
                 size={18}
                 style={{ flexShrink: 0 }}
+                aria-hidden="true"
               />
 
               <div>{error}</div>
@@ -492,13 +728,28 @@ const CreateWorkflow = () => {
           )}
 
           {success && (
-            <div className="alert success">
+            <div
+              className="alert success"
+              role="status"
+              aria-live="polite"
+            >
               <CheckCircle2
                 size={18}
-                style={{ flexShrink: 0 }}
+                className="success-icon"
+                aria-hidden="true"
               />
 
               <div>{success}</div>
+            </div>
+          )}
+
+          {loading && (
+            <div
+              className="sr-only"
+              role="status"
+              aria-live="polite"
+            >
+              Creating workflow. Please wait.
             </div>
           )}
 
@@ -532,6 +783,11 @@ const CreateWorkflow = () => {
                 maxLength={100}
                 disabled={loading}
                 autoComplete="off"
+                aria-required="true"
+                aria-invalid={
+                  Boolean(error) &&
+                  !formData.name.trim()
+                }
               />
 
               <div className="field-hint">
@@ -625,23 +881,34 @@ const CreateWorkflow = () => {
 
             <button
               type="submit"
-              className="submit-button"
+              className={`submit-button ${
+                loading ? "is-loading" : ""
+              }`}
               disabled={loading}
+              aria-busy={loading}
             >
-              {loading ? (
-                <>
-                  <Loader2
-                    size={16}
-                    className="spin"
-                  />
-                  Creating...
-                </>
-              ) : (
-                <>
-                  <Save size={16} />
-                  Create Workflow
-                </>
-              )}
+              <span className="submit-button-content">
+                {loading ? (
+                  <>
+                    <Loader2
+                      size={16}
+                      className="spin"
+                      aria-hidden="true"
+                    />
+
+                    Creating...
+                  </>
+                ) : (
+                  <>
+                    <Save
+                      size={16}
+                      aria-hidden="true"
+                    />
+
+                    Create Workflow
+                  </>
+                )}
+              </span>
             </button>
           </div>
         </form>

@@ -454,8 +454,14 @@ const Profile = () => {
 
   const openFileSelector = () => {
 
+    if (uploadingImage) {
+      return;
+    }
+
+
     setImageMessage("");
     setImageError("");
+
 
     if (fileInputRef.current) {
 
@@ -596,6 +602,11 @@ const Profile = () => {
 
   const cancelImageSelection = () => {
 
+    if (uploadingImage) {
+      return;
+    }
+
+
     setSelectedImage(null);
     setImagePreview(null);
     setImageMessage("");
@@ -652,6 +663,13 @@ const Profile = () => {
       setImageError(
         "Unable to process the selected image."
       );
+
+      return;
+
+    }
+
+
+    if (uploadingImage) {
 
       return;
 
@@ -933,17 +951,6 @@ const Profile = () => {
    * =========================================
    * DELETE ACCOUNT
    * =========================================
-   *
-   * Backend endpoint:
-   *
-   * DELETE /api/users/me
-   *
-   * After successful deletion:
-   *
-   * 1. Tell AuthContext to logout.
-   * 2. Redirect to login.
-   *
-   * =========================================
    */
 
   const handleDeleteAccount = async () => {
@@ -958,10 +965,6 @@ const Profile = () => {
     setDeleteError("");
 
 
-    /*
-     * First confirmation
-     */
-
     const firstConfirmation =
       window.confirm(
         "Delete your NovaWavex account?\n\nThis action permanently removes your account and cannot be undone."
@@ -974,10 +977,6 @@ const Profile = () => {
 
     }
 
-
-    /*
-     * Second confirmation
-     */
 
     const secondConfirmation =
       window.confirm(
@@ -998,33 +997,11 @@ const Profile = () => {
       setDeleteError("");
 
 
-      /*
-       * REAL BACKEND DELETE
-       */
-
       await userService.deleteCurrentUser();
 
 
-      /*
-       * Use the existing AuthContext logout()
-       * instead of manually clearing storage.
-       *
-       * This keeps:
-       *
-       * - isAuthenticated
-       * - user
-       * - JWT storage
-       *
-       * synchronized with the rest of
-       * the application.
-       */
-
       logout();
 
-
-      /*
-       * Redirect to login.
-       */
 
       window.location.href =
         "/login";
@@ -1204,39 +1181,58 @@ const Profile = () => {
               AVATAR
               ================================= */}
 
-          <div className="profile-avatar-wrapper">
+          <div
+            className={
+              `profile-avatar-wrapper${
+                imagePreview
+                  ? " profile-avatar-wrapper-preview"
+                  : ""
+              }`
+            }
+          >
 
-            {(
-              imagePreview ||
-              (
-                profileImage &&
-                !profileImageError
-              )
-            ) ? (
+            <div className="profile-avatar-ring">
 
-              <img
-                src={
-                  imagePreview ||
-                  profileImage
-                }
-                alt="Profile"
-                className="profile-avatar-image"
-                onError={
-                  imagePreview
-                    ? undefined
-                    : handleProfileImageError
-                }
-              />
+              {(
+                imagePreview ||
+                (
+                  profileImage &&
+                  !profileImageError
+                )
+              ) ? (
 
-            ) : (
+                <img
+                  src={
+                    imagePreview ||
+                    profileImage
+                  }
+                  alt={
+                    fullName !== "Not available"
+                      ? `${fullName} profile`
+                      : "Profile"
+                  }
+                  className="profile-avatar-image"
+                  onError={
+                    imagePreview
+                      ? undefined
+                      : handleProfileImageError
+                  }
+                />
 
-              <div className="profile-avatar-large">
+              ) : (
 
-                {avatarInitials}
+                <div
+                  className="profile-avatar-large"
+                  aria-hidden="true"
+                >
 
-              </div>
+                  {avatarInitials}
 
-            )}
+                </div>
+
+              )}
+
+            </div>
 
 
             <button
@@ -1245,9 +1241,21 @@ const Profile = () => {
               onClick={openFileSelector}
               disabled={uploadingImage}
               title="Change profile image"
+              aria-label="Change profile image"
             >
 
-              <Camera size={13} />
+              {uploadingImage ? (
+
+                <Loader2
+                  size={13}
+                  className="profile-loading-spinner"
+                />
+
+              ) : (
+
+                <Camera size={13} />
+
+              )}
 
             </button>
 
@@ -1258,6 +1266,7 @@ const Profile = () => {
               accept="image/*"
               onChange={handleImageSelect}
               className="profile-image-input"
+              aria-label="Choose profile image"
             />
 
           </div>
@@ -1301,17 +1310,28 @@ const Profile = () => {
 
         {selectedImage && (
 
-          <div className="profile-image-actions">
+          <div
+            className="profile-image-actions"
+            aria-live="polite"
+          >
 
             <div className="profile-image-selected">
 
-              <span>
-                {selectedImage.name}
-              </span>
+              <div className="profile-image-file-icon">
+                <Upload size={13} />
+              </div>
 
-              <small>
-                Ready to upload
-              </small>
+              <div className="profile-image-file-copy">
+
+                <span>
+                  {selectedImage.name}
+                </span>
+
+                <small>
+                  Image selected • Ready to upload
+                </small>
+
+              </div>
 
             </div>
 
@@ -1337,6 +1357,7 @@ const Profile = () => {
                 className="profile-image-upload"
                 onClick={handleUploadImage}
                 disabled={uploadingImage}
+                aria-busy={uploadingImage}
               >
 
                 {uploadingImage ? (
@@ -1371,11 +1392,17 @@ const Profile = () => {
 
         {imageMessage && (
 
-          <div className="profile-image-success">
+          <div
+            className="profile-image-success"
+            role="status"
+            aria-live="polite"
+          >
 
             <CheckCircle2 size={14} />
 
-            {imageMessage}
+            <span>
+              {imageMessage}
+            </span>
 
           </div>
 
@@ -1384,9 +1411,17 @@ const Profile = () => {
 
         {imageError && (
 
-          <div className="profile-image-error">
+          <div
+            className="profile-image-error"
+            role="alert"
+            aria-live="assertive"
+          >
 
-            {imageError}
+            <AlertTriangle size={14} />
+
+            <span>
+              {imageError}
+            </span>
 
           </div>
 
@@ -1399,11 +1434,17 @@ const Profile = () => {
 
         {nameMessage && (
 
-          <div className="profile-image-success">
+          <div
+            className="profile-image-success"
+            role="status"
+            aria-live="polite"
+          >
 
             <CheckCircle2 size={14} />
 
-            {nameMessage}
+            <span>
+              {nameMessage}
+            </span>
 
           </div>
 
@@ -1451,7 +1492,15 @@ const Profile = () => {
                 FULL NAME
                 ================================= */}
 
-            <div className="profile-information-item">
+            <div
+              className={
+                `profile-information-item${
+                  editingName
+                    ? " profile-information-item-editing"
+                    : ""
+                }`
+              }
+            >
 
               <div className="profile-information-label">
 
@@ -1477,6 +1526,7 @@ const Profile = () => {
                     disabled={savingName}
                     placeholder="Enter your full name"
                     className="profile-name-input"
+                    aria-label="Full name"
                   />
 
 
@@ -1486,6 +1536,7 @@ const Profile = () => {
                     onClick={handleSaveName}
                     disabled={savingName}
                     title="Save name"
+                    aria-busy={savingName}
                   >
 
                     {savingName ? (
@@ -1514,6 +1565,7 @@ const Profile = () => {
                     onClick={handleCancelEditName}
                     disabled={savingName}
                     title="Cancel"
+                    aria-label="Cancel name editing"
                   >
 
                     <X size={13} />
@@ -1536,6 +1588,7 @@ const Profile = () => {
                     className="profile-name-edit"
                     onClick={handleStartEditName}
                     title="Edit full name"
+                    aria-label="Edit full name"
                   >
 
                     <Pencil size={13} />
@@ -1553,7 +1606,11 @@ const Profile = () => {
 
             {nameError && (
 
-              <div className="profile-name-error">
+              <div
+                className="profile-name-error"
+                role="alert"
+                aria-live="assertive"
+              >
 
                 {nameError}
 
@@ -1830,6 +1887,7 @@ const Profile = () => {
               className="profile-delete-button"
               onClick={handleDeleteAccount}
               disabled={deletingAccount}
+              aria-busy={deletingAccount}
             >
 
               {deletingAccount ? (
@@ -1856,7 +1914,11 @@ const Profile = () => {
 
           {deleteError && (
 
-            <div className="profile-delete-error">
+            <div
+              className="profile-delete-error"
+              role="alert"
+              aria-live="assertive"
+            >
 
               <AlertTriangle size={14} />
 
@@ -1891,6 +1953,22 @@ const Profile = () => {
 
         .profile-page-header {
           margin-bottom: 24px;
+          animation: profile-header-enter 0.45s ease both;
+        }
+
+
+        @keyframes profile-header-enter {
+
+          from {
+            opacity: 0;
+            transform: translateY(8px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+
         }
 
 
@@ -1929,6 +2007,22 @@ const Profile = () => {
           border-radius: 14px;
           background: #ffffff;
           box-shadow: 0 5px 18px rgba(25, 40, 70, 0.045);
+          animation: profile-card-enter 0.5s ease 0.04s both;
+        }
+
+
+        @keyframes profile-card-enter {
+
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+
         }
 
 
@@ -1941,11 +2035,123 @@ const Profile = () => {
         }
 
 
+        /* =====================================
+           PROFILE IMAGE POLISH
+           ===================================== */
+
         .profile-avatar-wrapper {
           width: 58px;
           height: 58px;
           flex-shrink: 0;
           position: relative;
+          border-radius: 16px;
+          isolation: isolate;
+          transition:
+            transform 0.22s ease,
+            filter 0.22s ease;
+        }
+
+
+        .profile-avatar-wrapper:hover {
+          transform: translateY(-1px);
+          filter: brightness(1.01);
+        }
+
+
+        .profile-avatar-wrapper::before {
+          content: "";
+          position: absolute;
+          inset: -3px;
+          z-index: -1;
+          border-radius: 18px;
+          background:
+            linear-gradient(
+              135deg,
+              rgba(79, 125, 243, 0.34),
+              rgba(79, 125, 243, 0.05) 55%,
+              rgba(120, 150, 230, 0.24)
+            );
+          opacity: 0.72;
+          transition:
+            opacity 0.22s ease,
+            transform 0.22s ease;
+        }
+
+
+        .profile-avatar-wrapper:hover::before {
+          opacity: 0.95;
+          transform: scale(1.025);
+        }
+
+
+        .profile-avatar-ring {
+          width: 58px;
+          height: 58px;
+          box-sizing: border-box;
+          overflow: hidden;
+          position: relative;
+          border-radius: 15px;
+          background: #eef4ff;
+          border: 1px solid #dce7ff;
+          box-shadow:
+            0 2px 7px rgba(45, 75, 130, 0.07);
+          transition:
+            box-shadow 0.22s ease,
+            border-color 0.22s ease;
+        }
+
+
+        .profile-avatar-wrapper:hover
+        .profile-avatar-ring {
+          border-color: #cbdcff;
+          box-shadow:
+            0 7px 18px rgba(30, 50, 90, 0.13);
+        }
+
+
+        .profile-avatar-wrapper-preview {
+          animation: profile-avatar-preview 0.35s ease both;
+        }
+
+
+        .profile-avatar-wrapper-preview::before {
+          opacity: 1;
+          animation: profile-avatar-ring-pulse 0.7s ease both;
+        }
+
+
+        @keyframes profile-avatar-preview {
+
+          from {
+            opacity: 0.7;
+            transform: scale(0.94);
+          }
+
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+
+        }
+
+
+        @keyframes profile-avatar-ring-pulse {
+
+          0% {
+            opacity: 0.35;
+            transform: scale(0.96);
+          }
+
+          55% {
+            opacity: 1;
+            transform: scale(1.04);
+          }
+
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+
         }
 
 
@@ -1958,11 +2164,26 @@ const Profile = () => {
           justify-content: center;
           border-radius: 14px;
           color: #4f7df3;
-          background: #eef4ff;
-          border: 1px solid #dce7ff;
+          background:
+            linear-gradient(
+              145deg,
+              #f3f7ff,
+              #e9f0ff
+            );
           font-size: 17px;
           font-weight: 800;
           letter-spacing: 0.4px;
+          transition:
+            transform 0.22s ease,
+            box-shadow 0.22s ease;
+        }
+
+
+        .profile-avatar-wrapper:hover
+        .profile-avatar-large {
+          transform: scale(1.025);
+          box-shadow:
+            inset 0 0 0 1px rgba(79, 125, 243, 0.05);
         }
 
 
@@ -1972,17 +2193,27 @@ const Profile = () => {
           display: block;
           object-fit: cover;
           border-radius: 14px;
-          border: 1px solid #dce7ff;
           background: #eef4ff;
+          transition:
+            transform 0.28s ease,
+            filter 0.28s ease,
+            opacity 0.25s ease;
+        }
+
+
+        .profile-avatar-wrapper:hover
+        .profile-avatar-image {
+          transform: scale(1.045);
+          filter: brightness(1.035) saturate(1.02);
         }
 
 
         .profile-avatar-camera {
           position: absolute;
-          right: -5px;
-          bottom: -5px;
-          width: 24px;
-          height: 24px;
+          right: -6px;
+          bottom: -6px;
+          width: 25px;
+          height: 25px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -1992,18 +2223,38 @@ const Profile = () => {
           color: #ffffff;
           background: #4f7df3;
           cursor: pointer;
-          box-shadow: 0 2px 6px rgba(30, 50, 90, 0.18);
+          box-shadow:
+            0 2px 6px rgba(30, 50, 90, 0.18);
+          transition:
+            transform 0.18s ease,
+            background 0.18s ease,
+            box-shadow 0.18s ease;
         }
 
 
         .profile-avatar-camera:hover {
           background: #3f6fe8;
+          transform: scale(1.1);
+          box-shadow:
+            0 4px 11px rgba(30, 50, 90, 0.23);
+        }
+
+
+        .profile-avatar-camera:active {
+          transform: scale(0.92);
+        }
+
+
+        .profile-avatar-camera:focus-visible {
+          outline: 2px solid #2563eb;
+          outline-offset: 3px;
         }
 
 
         .profile-avatar-camera:disabled {
           opacity: 0.6;
           cursor: not-allowed;
+          transform: none;
         }
 
 
@@ -2012,6 +2263,10 @@ const Profile = () => {
         }
 
 
+        /* =====================================
+           IMAGE SELECTION PANEL
+           ===================================== */
+
         .profile-image-actions {
           margin: 0 0 16px;
           padding: 11px 12px;
@@ -2019,13 +2274,82 @@ const Profile = () => {
           align-items: center;
           justify-content: space-between;
           gap: 15px;
+          position: relative;
+          overflow: hidden;
           border: 1px solid #e4eaf4;
           border-radius: 9px;
-          background: #f8faff;
+          background:
+            linear-gradient(
+              135deg,
+              #f8faff,
+              #f5f8fd
+            );
+          box-shadow:
+            0 2px 7px rgba(40, 65, 110, 0.035);
+          animation: profile-image-panel-enter 0.28s ease both;
+        }
+
+
+        .profile-image-actions::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 3px;
+          height: 100%;
+          background: #4f7df3;
+          opacity: 0.72;
+        }
+
+
+        @keyframes profile-image-panel-enter {
+
+          from {
+            opacity: 0;
+            transform: translateY(-5px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+
         }
 
 
         .profile-image-selected {
+          min-width: 0;
+          display: flex;
+          align-items: center;
+          gap: 9px;
+        }
+
+
+        .profile-image-file-icon {
+          width: 28px;
+          height: 28px;
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 7px;
+          color: #4f7df3;
+          background: #eaf1ff;
+          transition:
+            transform 0.18s ease,
+            box-shadow 0.18s ease;
+        }
+
+
+        .profile-image-actions:hover
+        .profile-image-file-icon {
+          transform: translateY(-1px);
+          box-shadow:
+            0 3px 8px rgba(79, 125, 243, 0.10);
+        }
+
+
+        .profile-image-file-copy {
           min-width: 0;
           display: flex;
           flex-direction: column;
@@ -2069,6 +2393,11 @@ const Profile = () => {
           font-size: 10px;
           font-weight: 700;
           cursor: pointer;
+          transition:
+            transform 0.16s ease,
+            background 0.16s ease,
+            border-color 0.16s ease,
+            box-shadow 0.16s ease;
         }
 
 
@@ -2081,10 +2410,21 @@ const Profile = () => {
 
         .profile-image-cancel:hover {
           background: #f5f7fa;
+          border-color: #d8e0ec;
+          transform: translateY(-1px);
+          box-shadow:
+            0 3px 8px rgba(40, 55, 80, 0.06);
+        }
+
+
+        .profile-image-cancel:active {
+          transform: scale(0.97);
         }
 
 
         .profile-image-upload {
+          position: relative;
+          overflow: hidden;
           border: 1px solid #4f7df3;
           color: #ffffff;
           background: #4f7df3;
@@ -2093,6 +2433,14 @@ const Profile = () => {
 
         .profile-image-upload:hover {
           background: #3f6fe8;
+          box-shadow:
+            0 4px 10px rgba(79, 125, 243, 0.18);
+          transform: translateY(-1px);
+        }
+
+
+        .profile-image-upload:active {
+          transform: scale(0.97);
         }
 
 
@@ -2100,6 +2448,43 @@ const Profile = () => {
         .profile-image-cancel:disabled {
           opacity: 0.6;
           cursor: not-allowed;
+          transform: none;
+          box-shadow: none;
+        }
+
+
+        .profile-image-upload::after {
+          content: "";
+          position: absolute;
+          left: -100%;
+          top: 0;
+          width: 45%;
+          height: 100%;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.24),
+            transparent
+          );
+          pointer-events: none;
+        }
+
+
+        .profile-image-upload:disabled::after {
+          animation: profile-upload-shimmer 1.2s linear infinite;
+        }
+
+
+        @keyframes profile-upload-shimmer {
+
+          from {
+            transform: translateX(0);
+          }
+
+          to {
+            transform: translateX(340%);
+          }
+
         }
 
 
@@ -2115,18 +2500,68 @@ const Profile = () => {
           background: #f4fbf7;
           font-size: 10px;
           font-weight: 650;
+          animation: profile-message-enter 0.25s ease both;
+        }
+
+
+        .profile-image-success svg {
+          flex-shrink: 0;
+          animation: profile-success-pop 0.35s ease both;
+        }
+
+
+        @keyframes profile-success-pop {
+
+          0% {
+            opacity: 0;
+            transform: scale(0.65);
+          }
+
+          70% {
+            transform: scale(1.12);
+          }
+
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+
         }
 
 
         .profile-image-error {
           margin-bottom: 15px;
           padding: 9px 11px;
+          display: flex;
+          align-items: center;
+          gap: 7px;
           border: 1px solid #f0d8d8;
           border-radius: 8px;
           color: #b44747;
           background: #fff7f7;
           font-size: 10px;
           line-height: 1.4;
+          animation: profile-message-enter 0.25s ease both;
+        }
+
+
+        .profile-image-error svg {
+          flex-shrink: 0;
+        }
+
+
+        @keyframes profile-message-enter {
+
+          from {
+            opacity: 0;
+            transform: translateY(-4px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+
         }
 
 
@@ -2210,6 +2645,17 @@ const Profile = () => {
           border-radius: 8px;
           color: #4f7df3;
           background: #eef4ff;
+          transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+        }
+
+
+        .profile-section-heading:hover
+        .profile-section-icon {
+          transform: translateY(-1px);
+          box-shadow:
+            0 4px 10px rgba(79, 125, 243, 0.10);
         }
 
 
@@ -2247,6 +2693,13 @@ const Profile = () => {
           padding: 8px 13px;
           box-sizing: border-box;
           border-bottom: 1px solid #edf0f5;
+          transition:
+            background 0.18s ease;
+        }
+
+
+        .profile-information-item:hover {
+          background: #f8faff;
         }
 
 
@@ -2255,8 +2708,25 @@ const Profile = () => {
         }
 
 
+        /*
+         * =====================================
+         * FULL NAME EDITOR FIX
+         * =====================================
+         *
+         * The label and editor now occupy separate
+         * flexible areas so the input cannot cover
+         * the "Full Name" label.
+         */
+
+        .profile-information-item-editing {
+          align-items: center;
+          gap: 24px;
+        }
+
+
         .profile-information-label {
-          min-width: 0;
+          min-width: 105px;
+          flex: 0 0 auto;
           display: flex;
           align-items: center;
           gap: 9px;
@@ -2282,15 +2752,17 @@ const Profile = () => {
 
 
         .profile-name-display {
+          min-width: 0;
+          flex: 1;
           display: flex;
           align-items: center;
           justify-content: flex-end;
           gap: 8px;
-          max-width: 70%;
         }
 
 
         .profile-name-display strong {
+          min-width: 0;
           max-width: 100%;
         }
 
@@ -2310,17 +2782,45 @@ const Profile = () => {
           font-weight: 700;
           cursor: pointer;
           flex-shrink: 0;
+          transition:
+            transform 0.16s ease,
+            background 0.16s ease,
+            border-color 0.16s ease;
         }
 
 
         .profile-name-edit:hover {
           background: #eef4ff;
           border-color: #cddcff;
+          transform: translateY(-1px);
         }
 
 
+        .profile-name-edit:active {
+          transform: translateY(0);
+        }
+
+
+        .profile-name-edit:focus-visible,
+        .profile-name-save:focus-visible,
+        .profile-name-cancel:focus-visible,
+        .profile-image-upload:focus-visible,
+        .profile-image-cancel:focus-visible,
+        .profile-delete-button:focus-visible {
+          outline: 2px solid #2563eb;
+          outline-offset: 3px;
+        }
+
+
+        /*
+         * =====================================
+         * FULL NAME EDITOR
+         * =====================================
+         */
+
         .profile-name-editor {
-          max-width: 70%;
+          min-width: 0;
+          flex: 1;
           display: flex;
           align-items: center;
           justify-content: flex-end;
@@ -2330,7 +2830,9 @@ const Profile = () => {
 
         .profile-name-input {
           width: 210px;
+          min-width: 0;
           min-height: 31px;
+          flex: 1 1 210px;
           box-sizing: border-box;
           padding: 0 9px;
           border: 1px solid #cbd6e8;
@@ -2340,12 +2842,22 @@ const Profile = () => {
           background: #ffffff;
           font-size: 11px;
           font-weight: 550;
+          transition:
+            border-color 0.18s ease,
+            box-shadow 0.18s ease;
         }
 
 
         .profile-name-input:focus {
           border-color: #4f7df3;
-          box-shadow: 0 0 0 2px rgba(79, 125, 243, 0.10);
+          box-shadow:
+            0 0 0 2px rgba(79, 125, 243, 0.10);
+        }
+
+
+        .profile-name-input:disabled {
+          opacity: 0.65;
+          background: #f5f7fa;
         }
 
 
@@ -2364,11 +2876,23 @@ const Profile = () => {
           font-weight: 700;
           cursor: pointer;
           flex-shrink: 0;
+          transition:
+            transform 0.16s ease,
+            background 0.16s ease,
+            box-shadow 0.16s ease;
         }
 
 
         .profile-name-save:hover {
           background: #3f6fe8;
+          transform: translateY(-1px);
+          box-shadow:
+            0 4px 10px rgba(79, 125, 243, 0.18);
+        }
+
+
+        .profile-name-save:active {
+          transform: translateY(0);
         }
 
 
@@ -2376,6 +2900,8 @@ const Profile = () => {
         .profile-name-cancel:disabled {
           opacity: 0.6;
           cursor: not-allowed;
+          transform: none;
+          box-shadow: none;
         }
 
 
@@ -2392,11 +2918,20 @@ const Profile = () => {
           background: #ffffff;
           cursor: pointer;
           flex-shrink: 0;
+          transition:
+            transform 0.16s ease,
+            background 0.16s ease;
         }
 
 
         .profile-name-cancel:hover {
           background: #f5f7fa;
+          transform: translateY(-1px);
+        }
+
+
+        .profile-name-cancel:active {
+          transform: translateY(0);
         }
 
 
@@ -2407,6 +2942,7 @@ const Profile = () => {
           background: #fff7f7;
           font-size: 9px;
           line-height: 1.4;
+          animation: profile-message-enter 0.25s ease both;
         }
 
 
@@ -2601,18 +3137,33 @@ const Profile = () => {
           font-weight: 750;
           cursor: pointer;
           box-shadow: 0 2px 5px rgba(180, 60, 60, 0.12);
+          transition:
+            transform 0.16s ease,
+            background 0.16s ease,
+            border-color 0.16s ease,
+            box-shadow 0.16s ease;
         }
 
 
         .profile-delete-button:hover {
           background: #b94141;
           border-color: #b94141;
+          transform: translateY(-1px);
+          box-shadow:
+            0 5px 12px rgba(180, 60, 60, 0.16);
+        }
+
+
+        .profile-delete-button:active {
+          transform: translateY(0);
         }
 
 
         .profile-delete-button:disabled {
           opacity: 0.65;
           cursor: not-allowed;
+          transform: none;
+          box-shadow: none;
         }
 
 
@@ -2629,6 +3180,7 @@ const Profile = () => {
           font-size: 9px;
           font-weight: 650;
           line-height: 1.4;
+          animation: profile-message-enter 0.25s ease both;
         }
 
 
@@ -2648,6 +3200,7 @@ const Profile = () => {
           color: #68758a;
           background: #ffffff;
           font-size: 11px;
+          animation: profile-message-enter 0.3s ease both;
         }
 
 
@@ -2671,11 +3224,70 @@ const Profile = () => {
 
         .profile-error {
           padding: 16px;
+          display: flex;
+          align-items: center;
           border: 1px solid #f0d8d8;
           border-radius: 10px;
           color: #b44747;
           background: #fff7f7;
           font-size: 11px;
+          animation: profile-message-enter 0.3s ease both;
+        }
+
+
+        /* =====================================
+           REDUCED MOTION
+           ===================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+
+          .profile-page-header,
+          .profile-card,
+          .profile-avatar-wrapper-preview,
+          .profile-image-actions,
+          .profile-image-success,
+          .profile-image-error,
+          .profile-name-error,
+          .profile-delete-error,
+          .profile-loading,
+          .profile-error {
+            animation: none !important;
+          }
+
+
+          .profile-avatar-wrapper,
+          .profile-avatar-wrapper::before,
+          .profile-avatar-ring,
+          .profile-avatar-large,
+          .profile-avatar-image,
+          .profile-avatar-camera,
+          .profile-image-file-icon,
+          .profile-image-cancel,
+          .profile-image-upload,
+          .profile-name-edit,
+          .profile-name-save,
+          .profile-name-cancel,
+          .profile-delete-button,
+          .profile-section-icon {
+            transition: none !important;
+            transform: none !important;
+          }
+
+
+          .profile-image-upload::after {
+            display: none;
+          }
+
+
+          .profile-loading-spinner {
+            animation: none !important;
+          }
+
+
+          .profile-image-success svg {
+            animation: none !important;
+          }
+
         }
 
 
@@ -2711,6 +3323,28 @@ const Profile = () => {
             width: 100%;
           }
 
+
+          /*
+           * Keep Full Name label and editor
+           * separated on tablet widths.
+           */
+
+          .profile-information-item-editing {
+            align-items: flex-start;
+          }
+
+
+          .profile-information-item-editing
+          .profile-information-label {
+            min-width: 105px;
+            padding-top: 8px;
+          }
+
+
+          .profile-name-editor {
+            min-width: 0;
+          }
+
         }
 
 
@@ -2730,6 +3364,11 @@ const Profile = () => {
           .profile-image-actions {
             align-items: stretch;
             flex-direction: column;
+          }
+
+
+          .profile-image-selected {
+            width: 100%;
           }
 
 
@@ -2767,10 +3406,33 @@ const Profile = () => {
           }
 
 
+          /*
+           * Mobile Full Name editor:
+           * label gets its own row, then the editor
+           * gets a completely separate row.
+           *
+           * This prevents the input from hiding
+           * the Full Name label or section content.
+           */
+
+          .profile-information-item-editing {
+            gap: 8px;
+          }
+
+
+          .profile-information-item-editing
+          .profile-information-label {
+            width: 100%;
+            min-width: 0;
+            padding-top: 0;
+          }
+
+
           .profile-name-editor {
             width: 100%;
             max-width: 100%;
             padding-left: 24px;
+            box-sizing: border-box;
             justify-content: flex-start;
             flex-wrap: wrap;
           }
@@ -2778,8 +3440,18 @@ const Profile = () => {
 
           .profile-name-input {
             width: 100%;
-            flex: 1;
-            min-width: 160px;
+            flex: 1 1 100%;
+            min-width: 0;
+          }
+
+
+          .profile-name-save {
+            flex: 0 0 auto;
+          }
+
+
+          .profile-name-cancel {
+            flex: 0 0 auto;
           }
 
 

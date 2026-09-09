@@ -4,25 +4,28 @@
   box-sizing: border-box;
 }
 
+html {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
 body {
+  width: 100%;
+  min-height: 100vh;
   font-family: Arial, Helvetica, sans-serif;
   background: #f4f6f8;
   color: #1f2937;
+  overflow-x: hidden;
 }
 
-/* =========================
-   Dashboard Layout
-   ========================= */
-
+/* Dashboard Layout */
 .dashboard-layout {
   display: flex;
   min-height: 100vh;
 }
 
-/* =========================
-   Sidebar
-   ========================= */
-
+/* Sidebar */
 .sidebar {
   width: 250px;
   min-height: 100vh;
@@ -113,10 +116,7 @@ body {
   transform: translateX(4px);
 }
 
-/* =========================
-   Main Content
-   ========================= */
-
+/* Main Content */
 .dashboard-content {
   margin-left: 250px;
   width: calc(100% - 250px);
@@ -124,10 +124,7 @@ body {
   min-height: 100vh;
 }
 
-/* =========================
-   Dashboard
-   ========================= */
-
+/* Dashboard */
 .dashboard-page h1 {
   font-size: 30px;
   margin-bottom: 8px;
@@ -170,10 +167,7 @@ body {
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
 }
 
-/* =========================
-   Dashboard Header
-   ========================= */
-
+/* Dashboard Header */
 .dashboard-header {
   display: flex;
   justify-content: space-between;
@@ -234,10 +228,7 @@ body {
   margin-top: 4px;
 }
 
-/* =========================
-   Dashboard Grid
-   ========================= */
-
+/* Dashboard Grid */
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
@@ -269,10 +260,7 @@ body {
   color: #6b7280;
 }
 
-/* =========================
-   Activity
-   ========================= */
-
+/* Activity */
 .activity-list {
   display: flex;
   flex-direction: column;
@@ -299,6 +287,10 @@ body {
   flex-shrink: 0;
 }
 
+.activity-content {
+  min-width: 0;
+}
+
 .activity-content h4 {
   font-size: 14px;
   margin-bottom: 4px;
@@ -315,10 +307,7 @@ body {
   color: #9ca3af;
 }
 
-/* =========================
-   Progress
-   ========================= */
-
+/* Progress */
 .progress-section {
   display: flex;
   flex-direction: column;
@@ -364,7 +353,9 @@ body {
    ========================================= */
 
 .nova-shell {
+  width: 100%;
   min-height: 100vh;
+  overflow-x: clip;
   background:
     radial-gradient(
       circle at 20% 20%,
@@ -384,6 +375,7 @@ body {
    ========================================= */
 
 .top-nav {
+  width: 100%;
   height: 72px;
   display: flex;
   align-items: center;
@@ -396,13 +388,12 @@ body {
   z-index: 100;
 }
 
-/* Brand */
-
 .brand {
   display: flex;
   align-items: center;
   gap: 11px;
   min-width: 230px;
+  flex-shrink: 0;
 }
 
 .brand-symbol {
@@ -414,6 +405,7 @@ body {
   border-radius: 10px;
   background: #111827;
   color: white;
+  flex-shrink: 0;
 }
 
 .brand h2 {
@@ -428,13 +420,12 @@ body {
   letter-spacing: 0.4px;
 }
 
-/* Navigation */
-
 .top-navigation {
   display: flex;
   align-items: center;
   gap: 28px;
   flex: 1;
+  min-width: 0;
 }
 
 .top-nav-link {
@@ -448,6 +439,7 @@ body {
   font-size: 13px;
   font-weight: 500;
   transition: color 0.2s ease;
+  white-space: nowrap;
 }
 
 .top-nav-link:hover {
@@ -472,12 +464,11 @@ body {
   border-radius: 2px;
 }
 
-/* Actions */
-
 .top-actions {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .icon-button {
@@ -493,6 +484,7 @@ body {
   color: #6b7280;
   cursor: pointer;
   transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
 .icon-button:hover {
@@ -511,8 +503,6 @@ body {
   border-radius: 50%;
 }
 
-/* System Indicator */
-
 .system-indicator {
   display: flex;
   align-items: center;
@@ -523,6 +513,7 @@ body {
   color: #15803d;
   font-size: 11px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .system-indicator svg {
@@ -540,10 +531,9 @@ body {
   }
 }
 
-/* Profile */
-
 .profile-container {
   position: relative;
+  flex-shrink: 0;
 }
 
 .profile-button {
@@ -567,6 +557,7 @@ body {
   justify-content: center;
   font-size: 11px;
   font-weight: 700;
+  flex-shrink: 0;
 }
 
 .profile-chevron {
@@ -578,13 +569,16 @@ body {
   transform: rotate(180deg);
 }
 
-/* Main */
+/* =========================================
+   MAIN
+   ========================================= */
 
 .nova-main {
   width: 100%;
   max-width: 1500px;
   margin: 0 auto;
   padding: 34px 40px 60px;
+  min-width: 0;
 }
 
 /* =========================================
@@ -593,6 +587,7 @@ body {
 
 .command-center {
   animation: command-enter 0.6s ease both;
+  min-width: 0;
 }
 
 @keyframes command-enter {
@@ -613,6 +608,11 @@ body {
   align-items: flex-end;
   gap: 40px;
   margin-bottom: 38px;
+  min-width: 0;
+}
+
+.command-header > div:first-child {
+  min-width: 0;
 }
 
 .eyebrow {
@@ -632,6 +632,7 @@ body {
   background: #2563eb;
   border-radius: 50%;
   animation: eyebrow-pulse 2s infinite;
+  flex-shrink: 0;
 }
 
 @keyframes eyebrow-pulse {
@@ -662,6 +663,7 @@ body {
   color: #64748b;
   line-height: 1.7;
   font-size: 14px;
+  overflow-wrap: anywhere;
 }
 
 /* =========================================
@@ -677,6 +679,7 @@ body {
   border: 1px solid #bbf7d0;
   border-radius: 12px;
   min-width: 235px;
+  flex-shrink: 0;
 }
 
 .status-pulse {
@@ -685,6 +688,7 @@ body {
   background: #22c55e;
   border-radius: 50%;
   animation: system-pulse 2s infinite;
+  flex-shrink: 0;
 }
 
 @keyframes system-pulse {
@@ -708,6 +712,7 @@ body {
 .system-status span {
   color: #4d7c5a;
   font-size: 10px;
+  overflow-wrap: anywhere;
 }
 
 /* =========================================
@@ -722,6 +727,7 @@ body {
   padding: 28px;
   margin-bottom: 22px;
   color: white;
+  min-width: 0;
 }
 
 .workflow-universe::before {
@@ -746,6 +752,7 @@ body {
   background: rgba(37, 99, 235, 0.18);
   filter: blur(80px);
   border-radius: 50%;
+  pointer-events: none;
 }
 
 .universe-header {
@@ -755,6 +762,7 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 38px;
+  min-width: 0;
 }
 
 .section-label {
@@ -777,6 +785,9 @@ body {
   gap: 7px;
   color: #94a3b8;
   font-size: 11px;
+  min-width: 0;
+  max-width: 48%;
+  overflow-wrap: anywhere;
 }
 
 /* =========================================
@@ -791,6 +802,10 @@ body {
   justify-content: center;
   gap: 0;
   padding: 15px 0 20px;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #475569 transparent;
 }
 
 .workflow-node {
@@ -799,6 +814,7 @@ body {
   gap: 11px;
   padding: 14px 17px;
   min-width: 155px;
+  flex-shrink: 0;
   background: rgba(30, 41, 59, 0.88);
   border: 1px solid #334155;
   border-radius: 12px;
@@ -837,11 +853,13 @@ body {
   display: block;
   font-size: 12px;
   margin-bottom: 4px;
+  overflow-wrap: anywhere;
 }
 
 .workflow-node span {
   color: #94a3b8;
   font-size: 9px;
+  overflow-wrap: anywhere;
 }
 
 .flow-line {
@@ -850,6 +868,7 @@ body {
   height: 2px;
   background: #334155;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .flow-pulse {
@@ -942,6 +961,7 @@ body {
   display: grid;
   grid-template-columns: 1.35fr 1fr;
   gap: 22px;
+  min-width: 0;
 }
 
 .command-panel {
@@ -949,22 +969,26 @@ body {
   border: 1px solid #e2e8f0;
   border-radius: 16px;
   padding: 25px;
+  min-width: 0;
 }
 
 .panel-heading {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 12px;
   margin-bottom: 24px;
 }
 
 .panel-heading h2 {
   font-size: 18px;
   color: #0f172a;
+  overflow-wrap: anywhere;
 }
 
 .panel-heading > svg {
   color: #64748b;
+  flex-shrink: 0;
 }
 
 /* =========================================
@@ -974,6 +998,7 @@ body {
 .execution-list {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .execution-row {
@@ -983,6 +1008,7 @@ body {
   padding: 15px 0;
   border-bottom: 1px solid #f1f5f9;
   transition: transform 0.2s ease;
+  min-width: 0;
 }
 
 .execution-row:hover {
@@ -997,6 +1023,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .execution-indicator span {
@@ -1020,6 +1047,7 @@ body {
 
 .execution-main {
   flex: 1;
+  min-width: 0;
 }
 
 .execution-main strong {
@@ -1027,15 +1055,19 @@ body {
   color: #1e293b;
   font-size: 12px;
   margin-bottom: 4px;
+  overflow-wrap: anywhere;
 }
 
 .execution-main span {
   color: #94a3b8;
   font-size: 10px;
+  overflow-wrap: anywhere;
 }
 
 .execution-status {
   text-align: right;
+  flex-shrink: 0;
+  min-width: 55px;
 }
 
 .execution-status span {
@@ -1048,6 +1080,7 @@ body {
 .execution-status small {
   color: #94a3b8;
   font-size: 9px;
+  white-space: nowrap;
 }
 
 .status-running {
@@ -1118,6 +1151,7 @@ body {
 .health-bars > div:not(.health-track) {
   display: flex;
   justify-content: space-between;
+  gap: 12px;
   font-size: 10px;
   color: #64748b;
 }
@@ -1156,6 +1190,7 @@ body {
   top: calc(100% + 12px);
   right: 0;
   width: 235px;
+  max-width: calc(100vw - 24px);
   background: rgba(255, 255, 255, 0.97);
   backdrop-filter: blur(18px);
   border: 1px solid #e2e8f0;
@@ -1185,6 +1220,7 @@ body {
   align-items: center;
   gap: 11px;
   padding: 10px;
+  min-width: 0;
 }
 
 .profile-menu-avatar {
@@ -1201,17 +1237,23 @@ body {
   font-weight: 700;
 }
 
+.profile-menu-header > div {
+  min-width: 0;
+}
+
 .profile-menu-header strong {
   display: block;
   color: #0f172a;
   font-size: 12px;
   margin-bottom: 3px;
+  overflow-wrap: anywhere;
 }
 
 .profile-menu-header span {
   display: block;
   color: #94a3b8;
   font-size: 10px;
+  overflow-wrap: anywhere;
 }
 
 .profile-menu-divider {
@@ -1247,6 +1289,7 @@ body {
 
 .profile-menu-item svg {
   color: #64748b;
+  flex-shrink: 0;
 }
 
 .logout-item {
@@ -1268,6 +1311,7 @@ body {
 
 .users-page {
   width: 100%;
+  min-width: 0;
 }
 
 .users-page h1 {
@@ -1284,11 +1328,13 @@ body {
   overflow-x: auto;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
-  background: #ffffff;
+  background: #fff;
+  -webkit-overflow-scrolling: touch;
 }
 
 .users-table {
   width: 100%;
+  min-width: 650px;
   border-collapse: collapse;
   table-layout: fixed;
 }
@@ -1356,6 +1402,7 @@ body {
 
 .user-email {
   color: #6b7280;
+  overflow-wrap: anywhere;
 }
 
 .user-role {
@@ -1378,7 +1425,7 @@ body {
   padding: 28px;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
-  background: #ffffff;
+  background: #fff;
 }
 
 .users-access-denied h2 {
@@ -1398,6 +1445,7 @@ body {
 .user-details-page {
   width: 100%;
   max-width: 1100px;
+  min-width: 0;
 }
 
 .user-details-back-button {
@@ -1408,7 +1456,7 @@ body {
   margin-bottom: 24px;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  background: #ffffff;
+  background: #fff;
   color: #475569;
   font-size: 13px;
   font-weight: 600;
@@ -1442,19 +1490,21 @@ body {
   margin: 0 0 8px 0;
   font-size: 30px;
   color: #111827;
+  overflow-wrap: anywhere;
 }
 
 .user-details-header p {
   margin: 0;
   color: #6b7280;
   font-size: 14px;
+  overflow-wrap: anywhere;
 }
 
 .user-profile-card {
   width: 100%;
   border: 1px solid #e5e7eb;
   border-radius: 16px;
-  background: #ffffff;
+  background: #fff;
   overflow: hidden;
 }
 
@@ -1463,6 +1513,7 @@ body {
   align-items: center;
   gap: 18px;
   padding: 28px;
+  min-width: 0;
 }
 
 .user-profile-avatar {
@@ -1481,18 +1532,21 @@ body {
 
 .user-profile-info {
   flex: 1;
+  min-width: 0;
 }
 
 .user-profile-info h2 {
   margin: 0 0 5px 0;
   font-size: 20px;
   color: #111827;
+  overflow-wrap: anywhere;
 }
 
 .user-profile-info p {
   margin: 0;
   font-size: 14px;
   color: #64748b;
+  overflow-wrap: anywhere;
 }
 
 .user-details-role {
@@ -1505,6 +1559,7 @@ body {
   color: #475569;
   font-size: 12px;
   font-weight: 700;
+  flex-shrink: 0;
 }
 
 .user-details-role.admin {
@@ -1520,6 +1575,7 @@ body {
 .user-information {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
 }
 
 .user-information-item {
@@ -1528,6 +1584,7 @@ body {
   gap: 14px;
   padding: 22px 28px;
   border-bottom: 1px solid #eef0f3;
+  min-width: 0;
 }
 
 .user-information-item:nth-child(odd) {
@@ -1551,10 +1608,11 @@ body {
   color: #64748b;
 }
 
-.user-information-item div:last-child {
+.user-information-item > div:last-child {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  min-width: 0;
 }
 
 .user-information-item span {
@@ -1599,7 +1657,7 @@ body {
   padding: 40px;
   border: 1px solid #e5e7eb;
   border-radius: 16px;
-  background: #ffffff;
+  background: #fff;
 }
 
 .user-details-error-icon {
@@ -1631,6 +1689,7 @@ body {
 .profile-page {
   width: 100%;
   max-width: 1100px;
+  min-width: 0;
 }
 
 .profile-page-header {
@@ -1651,17 +1710,19 @@ body {
   font-size: 30px;
   font-weight: 700;
   color: #111827;
+  overflow-wrap: anywhere;
 }
 
 .profile-page-header p {
   margin: 8px 0 0;
   color: #6b7280;
   font-size: 14px;
+  overflow-wrap: anywhere;
 }
 
 .profile-card {
   width: 100%;
-  background: #ffffff;
+  background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 14px;
   overflow: hidden;
@@ -1672,6 +1733,7 @@ body {
   align-items: center;
   gap: 18px;
   padding: 26px 28px;
+  min-width: 0;
 }
 
 .profile-avatar-large {
@@ -1683,9 +1745,13 @@ body {
   justify-content: center;
   border-radius: 50%;
   background: #111827;
-  color: #ffffff;
+  color: #fff;
   font-size: 20px;
   font-weight: 700;
+}
+
+.profile-card-identity {
+  min-width: 0;
 }
 
 .profile-card-identity h2 {
@@ -1693,12 +1759,14 @@ body {
   font-size: 20px;
   font-weight: 700;
   color: #111827;
+  overflow-wrap: anywhere;
 }
 
 .profile-card-identity p {
   margin: 5px 0 0;
   font-size: 14px;
   color: #64748b;
+  overflow-wrap: anywhere;
 }
 
 .profile-divider {
@@ -1723,7 +1791,7 @@ body {
 
 .profile-information {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 }
 
@@ -1733,6 +1801,7 @@ body {
   border: 1px solid #eef0f3;
   border-radius: 10px;
   background: #f8fafc;
+  min-width: 0;
 }
 
 .profile-information-item span {
@@ -1783,6 +1852,7 @@ body {
 .settings-page {
   width: 100%;
   max-width: 1100px;
+  min-width: 0;
 }
 
 .settings-page-header {
@@ -1803,18 +1873,20 @@ body {
   font-size: 30px;
   font-weight: 700;
   color: #111827;
+  overflow-wrap: anywhere;
 }
 
 .settings-page-header p {
   margin: 8px 0 0;
   color: #6b7280;
   font-size: 14px;
+  overflow-wrap: anywhere;
 }
 
 .settings-card {
   width: 100%;
   margin-bottom: 20px;
-  background: #ffffff;
+  background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 14px;
   overflow: hidden;
@@ -1836,6 +1908,7 @@ body {
   margin: 6px 0 0;
   font-size: 13px;
   color: #64748b;
+  overflow-wrap: anywhere;
 }
 
 .settings-item {
@@ -1846,6 +1919,7 @@ body {
   padding: 20px 28px;
   border-bottom: 1px solid #eef0f3;
   transition: background 0.2s ease;
+  min-width: 0;
 }
 
 .settings-item:last-child {
@@ -1873,6 +1947,7 @@ body {
   font-size: 13px;
   color: #64748b;
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .settings-status {
@@ -1888,35 +1963,15 @@ body {
   font-weight: 600;
 }
 
-/* =========================================================
-   STEP 5.3 — GLOBAL COMPACT INTERFACE MODE
-   ========================================================= */
-
-/*
-   AuthContext applies:
-
-   body.novawavex-interface-compact
-
-   Compact mode intentionally changes density only.
-   The NovaWavex layout, visual identity, colors,
-   navigation structure and Command Center design
-   remain unchanged.
-
-   Normal/default mode is not affected.
-*/
-
 /* =========================================
-   GLOBAL
+   STEP 5.3 — GLOBAL COMPACT INTERFACE MODE
    ========================================= */
 
 body.novawavex-interface-compact {
   font-size: 14px;
 }
 
-/* =========================================
-   TOP NAVIGATION
-   ========================================= */
-
+/* Top Navigation */
 body.novawavex-interface-compact .top-nav {
   height: 58px;
   padding: 0 22px;
@@ -1963,18 +2018,12 @@ body.novawavex-interface-compact .profile-avatar {
   height: 32px;
 }
 
-/* =========================================
-   MAIN CONTENT
-   ========================================= */
-
+/* Main Content */
 body.novawavex-interface-compact .nova-main {
   padding: 22px 30px 40px;
 }
 
-/* =========================================
-   COMMAND CENTER HEADER
-   ========================================= */
-
+/* Command Center Header */
 body.novawavex-interface-compact .command-header {
   margin-bottom: 24px;
   gap: 25px;
@@ -1997,19 +2046,13 @@ body.novawavex-interface-compact .command-header p {
   max-width: 520px;
 }
 
-/* =========================================
-   SYSTEM STATUS
-   ========================================= */
-
+/* System Status */
 body.novawavex-interface-compact .system-status {
   min-width: 205px;
   padding: 10px 14px;
 }
 
-/* =========================================
-   WORKFLOW UNIVERSE
-   ========================================= */
-
+/* Workflow Universe */
 body.novawavex-interface-compact .workflow-universe {
   padding: 20px;
   margin-bottom: 16px;
@@ -2054,10 +2097,7 @@ body.novawavex-interface-compact .flow-line {
   width: 38px;
 }
 
-/* =========================================
-   COMMAND GRID
-   ========================================= */
-
+/* Command Grid */
 body.novawavex-interface-compact .command-grid {
   gap: 16px;
 }
@@ -2075,10 +2115,7 @@ body.novawavex-interface-compact .panel-heading h2 {
   font-size: 16px;
 }
 
-/* =========================================
-   EXECUTIONS
-   ========================================= */
-
+/* Executions */
 body.novawavex-interface-compact .execution-row {
   gap: 10px;
   padding: 10px 0;
@@ -2102,10 +2139,7 @@ body.novawavex-interface-compact .execution-status span {
   font-size: 9px;
 }
 
-/* =========================================
-   SYSTEM HEALTH
-   ========================================= */
-
+/* System Health */
 body.novawavex-interface-compact .health-score {
   padding: 4px 0 17px;
 }
@@ -2122,10 +2156,7 @@ body.novawavex-interface-compact .health-bars {
   gap: 5px;
 }
 
-/* =========================================
-   DASHBOARD
-   ========================================= */
-
+/* Dashboard */
 body.novawavex-interface-compact .dashboard-content {
   padding: 22px;
 }
@@ -2193,10 +2224,7 @@ body.novawavex-interface-compact .activity-item {
   padding: 12px 0;
 }
 
-/* =========================================
-   PROFILE PAGE
-   ========================================= */
-
+/* Profile Page */
 body.novawavex-interface-compact .profile-page {
   max-width: 1000px;
 }
@@ -2265,10 +2293,7 @@ body.novawavex-interface-compact .profile-information-item strong {
   font-size: 12px;
 }
 
-/* =========================================
-   USERS PAGE
-   ========================================= */
-
+/* Users Page */
 body.novawavex-interface-compact .users-page {
   max-width: 1100px;
 }
@@ -2306,10 +2331,7 @@ body.novawavex-interface-compact .users-access-denied {
   padding: 22px;
 }
 
-/* =========================================
-   USER DETAILS
-   ========================================= */
-
+/* User Details */
 body.novawavex-interface-compact .user-details-page {
   max-width: 1000px;
 }
@@ -2374,10 +2396,7 @@ body.novawavex-interface-compact .user-information-item strong {
   font-size: 12px;
 }
 
-/* =========================================
-   SETTINGS PAGE
-   ========================================= */
-
+/* Settings Page */
 body.novawavex-interface-compact .settings-page {
   max-width: 1000px;
 }
@@ -2429,10 +2448,7 @@ body.novawavex-interface-compact .settings-status {
   font-size: 10px;
 }
 
-/* =========================================
-   PROFILE MENU
-   ========================================= */
-
+/* Profile Menu */
 body.novawavex-interface-compact .profile-menu {
   width: 215px;
   padding: 6px;
@@ -2455,28 +2471,402 @@ body.novawavex-interface-compact .profile-menu-item {
   font-size: 10px;
 }
 
-/* =========================================
-   COMPACT ANIMATION DENSITY
-   ========================================= */
-
+/* Compact Animation Density */
 body.novawavex-interface-compact .command-center {
   animation-duration: 0.35s;
 }
 
 /* =========================================
-   RESPONSIVE — EXISTING NOVAWAVEX UI
+   PHASE 13.1 — RESPONSIVE DESKTOP
    ========================================= */
 
-@media (max-width: 1050px) {
+@media (min-width: 1400px) {
+  .nova-main {
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+
+  .command-grid {
+    grid-template-columns: 1.4fr 1fr;
+  }
+}
+
+@media (min-width: 1051px) and (max-width: 1399px) {
+  .nova-main {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  .command-header {
+    gap: 30px;
+  }
+
+  .workflow-node {
+    min-width: 145px;
+  }
+
+  .command-grid {
+    gap: 18px;
+  }
+}
+
+/* =========================================
+   CONTENT WIDTH SAFEGUARDS
+   ========================================= */
+
+.command-grid,
+.workflow-universe {
+  min-width: 0;
+}
+
+.execution-main {
+  min-width: 0;
+}
+
+.execution-main strong,
+.execution-main span {
+  overflow-wrap: anywhere;
+}
+
+/* =========================================
+   PHASE 13.2 — TABLET
+   ========================================= */
+
+@media (max-width: 1050px) and (min-width: 901px) {
+  .top-nav {
+    padding: 0 20px;
+    gap: 18px;
+  }
+
+  .brand {
+    min-width: 205px;
+    flex-shrink: 0;
+  }
+
+  .brand-symbol {
+    width: 36px;
+    height: 36px;
+  }
+
+  .brand h2 {
+    font-size: 16px;
+  }
+
+  .brand span {
+    font-size: 9px;
+  }
+
+  .top-navigation {
+    gap: 5px;
+  }
+
+  .top-nav-link {
+    padding: 7px 8px;
+    font-size: 11px;
+  }
+
+  .top-nav-link.active::after {
+    bottom: -22px;
+  }
+
+  .top-actions {
+    gap: 7px;
+    flex-shrink: 0;
+  }
+
+  .icon-button {
+    width: 34px;
+    height: 34px;
+  }
+
+  .system-indicator {
+    padding: 6px 8px;
+    gap: 5px;
+    font-size: 9px;
+  }
+
+  .profile-button {
+    padding: 5px 6px;
+  }
+
+  .profile-avatar {
+    width: 30px;
+    height: 30px;
+  }
+
+  .nova-main {
+    padding: 28px 28px 48px;
+  }
+
+  .command-header {
+    gap: 28px;
+    margin-bottom: 30px;
+  }
+
+  .command-header h1 {
+    font-size: clamp(34px, 4vw, 46px);
+    letter-spacing: -1.7px;
+  }
+
+  .command-header p {
+    max-width: 520px;
+    font-size: 13px;
+  }
+
+  .system-status {
+    min-width: 215px;
+    padding: 12px 15px;
+  }
+
+  .workflow-universe {
+    padding: 24px;
+  }
+
+  .universe-header {
+    margin-bottom: 28px;
+  }
+
+  .workflow-flow {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 12px 4px 20px;
+  }
+
+  .workflow-node {
+    min-width: 145px;
+    flex-shrink: 0;
+  }
+
+  .flow-line {
+    flex-shrink: 0;
+    width: 42px;
+  }
+
+  .command-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .command-panel {
+    padding: 22px;
+  }
+
+  .profile-information {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .users-table {
+    min-width: 650px;
+  }
+
+  .user-details-page,
+  .profile-page,
+  .settings-page {
+    max-width: 100%;
+  }
+}
+
+/* =========================================
+   TABLET — 769px TO 900px
+   ========================================= */
+
+@media (max-width: 900px) and (min-width: 769px) {
+  .top-nav {
+    height: 66px;
+    padding: 0 18px;
+    gap: 10px;
+  }
+
+  .brand {
+    min-width: auto;
+    flex-shrink: 0;
+  }
+
+  .brand-symbol {
+    width: 36px;
+    height: 36px;
+  }
+
+  .brand h2 {
+    font-size: 16px;
+  }
+
+  .brand span {
+    display: none;
+  }
+
+  /*
+   * IMPORTANT:
+   * Navigation must remain visible between 769px and 900px.
+   */
+  .top-navigation {
+    display: flex !important;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .top-nav-link {
+    padding: 6px 7px;
+    font-size: 10px;
+  }
+
+  .top-nav-link.active::after {
+    bottom: -23px;
+  }
+
+  .top-actions {
+    margin-left: auto;
+    gap: 6px;
+  }
+
+  .icon-button {
+    width: 35px;
+    height: 35px;
+  }
+
+  .system-indicator {
+    display: none;
+  }
+
+  .profile-button {
+    padding: 4px 5px;
+  }
+
+  .profile-avatar {
+    width: 31px;
+    height: 31px;
+  }
+
+  .profile-chevron {
+    margin-left: 2px;
+  }
+
+  .nova-main {
+    padding: 25px 22px 44px;
+  }
+
   .command-header {
     align-items: flex-start;
     flex-direction: column;
+    gap: 20px;
+    margin-bottom: 28px;
   }
 
+  .command-header h1 {
+    font-size: clamp(34px, 5vw, 44px);
+    letter-spacing: -1.6px;
+    margin-bottom: 14px;
+  }
+
+  .command-header p {
+    max-width: 650px;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+
+  .command-header > div:last-child {
+    width: 100%;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px !important;
+  }
+
+  .system-status {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .workflow-universe {
+    padding: 22px;
+    border-radius: 16px;
+  }
+
+  .universe-header {
+    margin-bottom: 24px;
+  }
+
+  .universe-meta {
+    max-width: 55%;
+    text-align: right;
+  }
+
+  .workflow-flow {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 10px 4px 18px;
+  }
+
+  .workflow-node {
+    min-width: 145px;
+    flex-shrink: 0;
+    padding: 13px 14px;
+  }
+
+  .flow-line {
+    width: 40px;
+    flex-shrink: 0;
+  }
+
+  .command-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .command-panel {
+    padding: 21px;
+  }
+
+  .profile-information {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .users-table {
+    min-width: 650px;
+  }
+
+  .user-details-page,
+  .profile-page,
+  .settings-page {
+    max-width: 100%;
+  }
+
+  body.novawavex-interface-compact .top-nav {
+    height: 54px;
+    padding: 0 16px;
+  }
+
+  body.novawavex-interface-compact .top-navigation {
+    gap: 3px;
+  }
+
+  body.novawavex-interface-compact .top-nav-link {
+    padding: 5px 6px;
+    font-size: 9px;
+  }
+
+  body.novawavex-interface-compact .nova-main {
+    padding: 18px 18px 32px;
+  }
+}
+
+/* =========================================
+   RESPONSIVE BASE
+   ========================================= */
+
+@media (max-width: 1050px) {
   .workflow-flow {
     overflow-x: auto;
     justify-content: flex-start;
     padding-bottom: 20px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .workflow-node {
+    flex-shrink: 0;
   }
 
   .command-grid {
@@ -2508,9 +2898,16 @@ body.novawavex-interface-compact .command-center {
     min-width: auto;
   }
 
-  .brand span,
-  .top-navigation {
+  .brand span {
     display: none;
+  }
+
+  /*
+   * Do not hide top navigation here.
+   * The 769px-900px navigation must remain visible.
+   */
+  .top-navigation {
+    display: flex !important;
   }
 
   .top-nav {
@@ -2539,20 +2936,13 @@ body.novawavex-interface-compact .command-center {
   }
 }
 
-@media (max-width: 768px) {
-  .users-table {
-    min-width: 650px;
-  }
+/* =========================================
+   TABLET PROFILE / SETTINGS POLISH
+   ========================================= */
 
-  .users-table-wrapper {
-    overflow-x: auto;
-  }
-
-  .profile-page {
-    max-width: 100%;
-  }
-
-  .profile-card-header {
+@media (max-width: 850px) and (min-width: 769px) {
+  .profile-card-header,
+  .user-profile-header {
     padding: 22px;
   }
 
@@ -2560,52 +2950,751 @@ body.novawavex-interface-compact .command-center {
     padding: 22px;
   }
 
+  .settings-card-header,
+  .settings-item {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  .user-information-item {
+    padding: 18px 22px;
+  }
+
+  .user-details-header h1,
+  .profile-page-header h1,
+  .settings-page-header h1 {
+    font-size: 28px;
+  }
+}
+
+/* =========================================
+   PHASE 13.3 — MOBILE
+   ========================================= */
+
+/* =========================================
+   MOBILE — UP TO 768px
+   ========================================= */
+
+@media (max-width: 768px) {
+  .nova-shell {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: clip;
+  }
+
+  /*
+   * MOBILE TOP NAVIGATION
+   *
+   * First row:
+   * Brand + actions
+   *
+   * Second row:
+   * Command Center / Workflows / Team / Activity
+   */
+
+  .top-nav {
+    width: 100%;
+    height: auto;
+    min-height: 62px;
+    padding: 8px 14px;
+    gap: 8px;
+    row-gap: 7px;
+    flex-wrap: wrap;
+    align-content: center;
+  }
+
+  .brand {
+    min-width: 0;
+    flex: 1 1 auto;
+    gap: 9px;
+  }
+
+  .brand-symbol {
+    width: 35px;
+    height: 35px;
+    border-radius: 9px;
+  }
+
+  .brand h2 {
+    font-size: 15px;
+  }
+
+  .brand span {
+    display: none;
+  }
+
+  /*
+   * Navigation is intentionally visible.
+   */
+  .top-navigation {
+    display: flex !important;
+    order: 3;
+    flex: 0 0 100%;
+    width: 100%;
+    min-width: 0;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 3px 0 5px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .top-navigation::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  .top-nav-link {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 7px 5px;
+    font-size: 10px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .top-nav-link.active::after {
+    bottom: -5px;
+    left: 12%;
+    right: 12%;
+  }
+
+  .top-actions {
+    margin-left: auto;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .icon-button {
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+  }
+
+  .system-indicator {
+    display: none;
+  }
+
+  .profile-button {
+    padding: 2px;
+  }
+
+  .profile-avatar {
+    width: 35px;
+    height: 35px;
+  }
+
+  .profile-chevron {
+    display: none;
+  }
+
+  .nova-main {
+    width: 100%;
+    max-width: none;
+    padding: 24px 18px 42px;
+  }
+
+  .command-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .command-header h1 {
+    font-size: clamp(32px, 9vw, 42px);
+    line-height: 1.05;
+    letter-spacing: -1.6px;
+    margin-bottom: 14px;
+  }
+
+  .command-header p {
+    max-width: 100%;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+
+  .command-header > div:last-child {
+    width: 100%;
+    display: block !important;
+  }
+
+  .system-status {
+    width: 100%;
+    min-width: 0;
+    padding: 12px 14px;
+  }
+
+  .workflow-universe {
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
+    margin-bottom: 18px;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .workflow-universe::after {
+    width: 260px;
+    height: 260px;
+    top: -150px;
+    right: -110px;
+    filter: blur(65px);
+  }
+
+  .universe-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 11px;
+    margin-bottom: 20px;
+  }
+
+  .universe-header h2 {
+    font-size: 19px;
+  }
+
+  .universe-meta {
+    width: 100%;
+    max-width: 100%;
+    text-align: left;
+    line-height: 1.5;
+  }
+
+  /*
+   * IMPORTANT:
+   * The entire Workflow Universe is kept inside the card.
+   * No visible scrollbar.
+   * No sideways scrolling.
+   * Nodes shrink to fit the available width.
+   */
+
+  .workflow-flow {
+    width: 100%;
+    max-width: 100%;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 5px;
+    overflow: hidden;
+    padding: 8px 0 4px;
+    margin: 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: auto;
+  }
+
+  .workflow-flow::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  .workflow-node {
+    min-width: 0;
+    width: auto;
+    flex: 1 1 0;
+    padding: 11px 7px;
+    gap: 6px;
+    border-radius: 10px;
+  }
+
+  .node-icon {
+    width: 31px;
+    height: 31px;
+    border-radius: 8px;
+  }
+
+  .workflow-node strong {
+    font-size: 10px;
+    line-height: 1.25;
+  }
+
+  .workflow-node span {
+    font-size: 8px;
+    line-height: 1.25;
+  }
+
+  .flow-line {
+    width: 12px;
+    min-width: 12px;
+    flex: 0 1 12px;
+  }
+
+  .command-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .command-panel {
+    width: 100%;
+    padding: 19px;
+    border-radius: 14px;
+  }
+
+  .panel-heading {
+    margin-bottom: 18px;
+  }
+
+  .panel-heading h2 {
+    font-size: 17px;
+  }
+
+  .execution-row {
+    gap: 10px;
+    padding: 13px 0;
+    align-items: flex-start;
+  }
+
+  .execution-indicator {
+    width: 29px;
+    height: 29px;
+  }
+
+  .execution-main strong {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .execution-main span {
+    font-size: 9px;
+    line-height: 1.4;
+  }
+
+  .execution-status {
+    min-width: 52px;
+  }
+
+  .execution-status span {
+    font-size: 9px;
+  }
+
+  .execution-status small {
+    font-size: 8px;
+  }
+
+  .health-number {
+    font-size: 38px;
+  }
+
+  .profile-menu {
+    right: -2px;
+    width: min(235px, calc(100vw - 28px));
+  }
+
+  /* Users */
+  .users-page h1 {
+    font-size: 28px;
+  }
+
+  .users-page > p {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .users-table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    border-radius: 10px;
+  }
+
+  .users-table {
+    min-width: 650px;
+  }
+
+  /* Profile */
+  .profile-page {
+    max-width: 100%;
+  }
+
+  .profile-page-header {
+    margin-bottom: 20px;
+  }
+
+  .profile-page-header h1 {
+    font-size: 28px;
+  }
+
+  .profile-page-header p {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .profile-card-header {
+    padding: 20px;
+    gap: 14px;
+  }
+
+  .profile-avatar-large {
+    width: 58px;
+    height: 58px;
+    font-size: 18px;
+  }
+
+  .profile-card-identity h2 {
+    font-size: 18px;
+  }
+
+  .profile-card-identity p {
+    font-size: 13px;
+  }
+
+  .profile-section {
+    padding: 20px;
+  }
+
   .profile-information {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .profile-information-item {
+    min-height: 0;
+    padding: 14px;
+  }
+
+  /* User Details */
+  .user-details-page {
+    max-width: 100%;
+  }
+
+  .user-details-back-button {
+    margin-bottom: 18px;
+  }
+
+  .user-details-header {
+    margin-bottom: 20px;
+  }
+
+  .user-details-header h1 {
+    font-size: 28px;
+  }
+
+  .user-details-header p {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .user-profile-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 20px;
+  }
+
+  .user-profile-avatar {
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    font-size: 19px;
+  }
+
+  .user-profile-info {
+    flex: 1;
+    min-width: 150px;
+  }
+
+  .user-profile-info h2 {
+    font-size: 18px;
+  }
+
+  .user-profile-info p {
+    font-size: 13px;
+  }
+
+  .user-details-role {
+    margin-left: 72px;
+    margin-top: -2px;
+  }
+
+  .user-information {
     grid-template-columns: 1fr;
   }
 
-  body.novawavex-interface-compact .dashboard-card {
-    padding: 16px;
+  .user-information-item {
+    padding: 18px 20px;
+    border-right: none !important;
+    border-bottom: 1px solid #eef0f3 !important;
   }
 
-  body.novawavex-interface-compact .command-panel {
-    padding: 17px;
+  .user-information-item:last-child {
+    border-bottom: none !important;
+  }
+
+  /* Settings */
+  .settings-page {
+    max-width: 100%;
+  }
+
+  .settings-page-header {
+    margin-bottom: 20px;
+  }
+
+  .settings-page-header h1 {
+    font-size: 28px;
+  }
+
+  .settings-page-header p {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .settings-card {
+    margin-bottom: 16px;
+    border-radius: 12px;
+  }
+
+  .settings-card-header {
+    padding: 20px;
+  }
+
+  .settings-item {
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px 20px;
+  }
+
+  .settings-item strong {
+    font-size: 13px;
+  }
+
+  .settings-item span:not(.settings-status) {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .settings-status {
+    padding: 5px 9px;
+    font-size: 11px;
+  }
+
+  /* Compact */
+  body.novawavex-interface-compact .top-nav {
+    height: auto;
+    min-height: 56px;
+    padding: 7px 14px;
+    row-gap: 6px;
+  }
+
+  body.novawavex-interface-compact .brand-symbol {
+    width: 32px;
+    height: 32px;
+  }
+
+  body.novawavex-interface-compact .brand h2 {
+    font-size: 14px;
+  }
+
+  body.novawavex-interface-compact .top-navigation {
+    display: flex !important;
+    order: 3;
+    flex: 0 0 100%;
+    width: 100%;
+    gap: 3px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 2px 0 4px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  body.novawavex-interface-compact .top-navigation::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  body.novawavex-interface-compact .top-nav-link {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 6px 4px;
+    font-size: 9px;
+    text-align: center;
+  }
+
+  body.novawavex-interface-compact .top-nav-link.active::after {
+    bottom: -4px;
+  }
+
+  body.novawavex-interface-compact .top-actions {
+    gap: 5px;
+  }
+
+  body.novawavex-interface-compact .icon-button {
+    width: 33px;
+    height: 33px;
+  }
+
+  body.novawavex-interface-compact .profile-avatar {
+    width: 33px;
+    height: 33px;
+  }
+
+  body.novawavex-interface-compact .nova-main {
+    padding: 19px 16px 34px;
+  }
+
+  body.novawavex-interface-compact .command-header {
+    gap: 17px;
+    margin-bottom: 20px;
+  }
+
+  body.novawavex-interface-compact .command-header h1 {
+    font-size: clamp(28px, 8vw, 36px);
+    letter-spacing: -1.2px;
+  }
+
+  body.novawavex-interface-compact .command-header p {
+    font-size: 11px;
+    line-height: 1.55;
+  }
+
+  body.novawavex-interface-compact .system-status {
+    width: 100%;
+    min-width: 0;
+    padding: 10px 12px;
   }
 
   body.novawavex-interface-compact .workflow-universe {
-    padding: 18px;
+    width: 100%;
+    max-width: 100%;
+    padding: 16px;
+    overflow: hidden;
   }
 
-  body.novawavex-interface-compact .profile-section,
-  body.novawavex-interface-compact .profile-card-header {
-    padding: 18px;
+  body.novawavex-interface-compact .universe-header {
+    margin-bottom: 16px;
+  }
+
+  body.novawavex-interface-compact .universe-header h2 {
+    font-size: 16px;
+  }
+
+  body.novawavex-interface-compact .workflow-flow {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 4px;
+    overflow: hidden;
+    padding: 7px 0 3px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  body.novawavex-interface-compact .workflow-flow::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  body.novawavex-interface-compact .workflow-node {
+    min-width: 0;
+    width: auto;
+    flex: 1 1 0;
+    padding: 9px 6px;
+    gap: 5px;
+  }
+
+  body.novawavex-interface-compact .node-icon {
+    width: 27px;
+    height: 27px;
+  }
+
+  body.novawavex-interface-compact .workflow-node strong {
+    font-size: 9px;
+  }
+
+  body.novawavex-interface-compact .workflow-node span {
+    font-size: 7px;
+  }
+
+  body.novawavex-interface-compact .flow-line {
+    width: 10px;
+    min-width: 10px;
+    flex: 0 1 10px;
+  }
+
+  body.novawavex-interface-compact .command-panel {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  body.novawavex-interface-compact .execution-row {
+    gap: 8px;
+    padding: 10px 0;
+  }
+
+  body.novawavex-interface-compact .execution-indicator {
+    width: 26px;
+    height: 26px;
+  }
+
+  body.novawavex-interface-compact .execution-status {
+    min-width: 45px;
+  }
+
+  body.novawavex-interface-compact .health-number {
+    font-size: 32px;
+  }
+
+  body.novawavex-interface-compact .profile-card-header,
+  body.novawavex-interface-compact .profile-section {
+    padding: 16px;
   }
 
   body.novawavex-interface-compact .settings-card-header,
   body.novawavex-interface-compact .settings-item {
-    padding-left: 18px;
-    padding-right: 18px;
+    padding-left: 16px;
+    padding-right: 16px;
   }
 }
+
+/* =========================================
+   MOBILE — UP TO 700px
+   ========================================= */
 
 @media (max-width: 700px) {
   .dashboard-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 20px;
+    gap: 18px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 28px;
+  }
+
+  .dashboard-action {
+    width: 100%;
+    justify-content: center;
   }
 
   .dashboard-cards {
     grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-panel {
+    padding: 19px;
   }
 
   .user-profile-header {
     flex-wrap: wrap;
-    padding: 22px;
+    padding: 20px;
   }
 
   .user-details-role {
-    margin-left: 82px;
+    margin-left: 72px;
   }
 
   .user-information {
@@ -2616,40 +3705,160 @@ body.novawavex-interface-compact .command-center {
     border-right: none;
   }
 
-  .user-information-item:nth-child(3) {
-    border-bottom: 1px solid #eef0f3;
+  .user-information-item {
+    border-bottom: 1px solid #eef0f3 !important;
   }
 
-  .user-information-item:nth-child(4) {
-    border-bottom: none;
+  .user-information-item:last-child {
+    border-bottom: none !important;
   }
 }
 
+/* =========================================
+   MOBILE — UP TO 650px
+   ========================================= */
+
 @media (max-width: 650px) {
-  .workflow-universe {
-    padding: 20px;
+  .top-nav {
+    padding: 7px 14px;
   }
 
-  .universe-header {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 12px;
+  .top-actions {
+    gap: 5px;
   }
 
-  .workflow-node {
-    min-width: 140px;
+  .icon-button {
+    width: 34px;
+    height: 34px;
   }
 
-  .flow-line {
-    width: 30px;
+  .profile-avatar {
+    width: 34px;
+    height: 34px;
+  }
+
+  .top-navigation {
+    gap: 3px;
+  }
+
+  .top-nav-link {
+    padding: 6px 4px;
+    font-size: 9.5px;
+  }
+
+  .nova-main {
+    padding: 22px 16px 36px;
   }
 
   .command-header h1 {
     font-size: 34px;
   }
 
+  .command-header p {
+    font-size: 12.5px;
+  }
+
+  .workflow-universe {
+    padding: 18px;
+  }
+
+  .universe-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .universe-meta {
+    max-width: 100%;
+    text-align: left;
+  }
+
+  /*
+   * Keep all workflow nodes inside the universe.
+   */
+  .workflow-flow {
+    width: 100%;
+    max-width: 100%;
+    gap: 4px;
+    overflow: hidden;
+  }
+
+  .workflow-node {
+    min-width: 0;
+    flex: 1 1 0;
+    padding: 9px 5px;
+    gap: 5px;
+  }
+
+  .node-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .workflow-node strong {
+    font-size: 9px;
+  }
+
+  .workflow-node span {
+    font-size: 7px;
+  }
+
+  .flow-line {
+    width: 9px;
+    min-width: 9px;
+    flex-basis: 9px;
+  }
+
+  .command-panel {
+    padding: 18px;
+  }
+
+  .panel-heading h2 {
+    font-size: 16px;
+  }
+
+  .execution-row {
+    gap: 9px;
+  }
+
+  .execution-status {
+    min-width: 50px;
+  }
+
+  .profile-card-header {
+    align-items: flex-start;
+  }
+
+  .profile-information {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-item {
+    gap: 12px;
+  }
+
+  body.novawavex-interface-compact .nova-main {
+    padding: 18px 14px 32px;
+  }
+
   body.novawavex-interface-compact .workflow-universe {
-    padding: 15px;
+    padding: 14px;
+  }
+
+  body.novawavex-interface-compact .workflow-flow {
+    gap: 3px;
+  }
+
+  body.novawavex-interface-compact .workflow-node {
+    min-width: 0;
+    flex: 1 1 0;
+    padding: 8px 4px;
+  }
+
+  body.novawavex-interface-compact .flow-line {
+    width: 8px;
+    min-width: 8px;
+    flex-basis: 8px;
   }
 
   body.novawavex-interface-compact .command-header h1 {
@@ -2657,28 +3866,38 @@ body.novawavex-interface-compact .command-center {
   }
 
   body.novawavex-interface-compact .command-panel {
-    padding: 15px;
+    padding: 14px;
   }
 
   body.novawavex-interface-compact .profile-section,
   body.novawavex-interface-compact .profile-card-header {
-    padding: 15px;
+    padding: 14px;
   }
 
   body.novawavex-interface-compact .settings-card-header,
   body.novawavex-interface-compact .settings-item {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 14px;
+    padding-right: 14px;
   }
 }
 
+/* =========================================
+   MOBILE — UP TO 600px
+   ========================================= */
+
 @media (max-width: 600px) {
+  /* Legacy dashboard */
   .sidebar {
-    width: 70px;
+    width: 64px;
+  }
+
+  .sidebar-logo {
+    padding: 18px 10px;
+    text-align: center;
   }
 
   .sidebar-logo h2 {
-    font-size: 16px;
+    font-size: 15px;
   }
 
   .sidebar-logo span,
@@ -2687,13 +3906,905 @@ body.novawavex-interface-compact .command-center {
     display: none;
   }
 
-  .dashboard-content {
-    margin-left: 70px;
-    width: calc(100% - 70px);
-    padding: 20px;
+  .sidebar-nav {
+    padding: 14px 8px;
   }
 
-  .dashboard-cards {
-    grid-template-columns: 1fr;
+  .sidebar-link {
+    justify-content: center;
+    padding: 12px 8px;
   }
+
+  .sidebar-logout {
+    justify-content: center;
+    padding: 12px 8px;
+  }
+
+  .dashboard-content {
+    margin-left: 64px;
+    width: calc(100% - 64px);
+    padding: 18px;
+  }
+
+  .dashboard-page h1 {
+    font-size: 26px;
+  }
+
+  .dashboard-page-subtitle {
+    margin-bottom: 20px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .dashboard-card {
+    padding: 18px;
+  }
+
+  .dashboard-card p {
+    font-size: 25px;
+  }
+
+  /* Command Center */
+  .top-nav {
+    min-height: 60px;
+  }
+
+  .brand-symbol {
+    width: 34px;
+    height: 34px;
+  }
+
+  .brand h2 {
+    font-size: 14px;
+  }
+
+  .top-actions {
+    gap: 4px;
+  }
+
+  .icon-button {
+    width: 33px;
+    height: 33px;
+  }
+
+  .profile-avatar {
+    width: 33px;
+    height: 33px;
+  }
+
+  .top-navigation {
+    gap: 2px;
+  }
+
+  .top-nav-link {
+    padding: 6px 3px;
+    font-size: 9px;
+  }
+
+  .nova-main {
+    padding: 20px 14px 34px;
+  }
+
+  .eyebrow {
+    font-size: 9px;
+    letter-spacing: 1.2px;
+    margin-bottom: 10px;
+  }
+
+  .command-header {
+    gap: 17px;
+    margin-bottom: 21px;
+  }
+
+  .command-header h1 {
+    font-size: 32px;
+    letter-spacing: -1.4px;
+    margin-bottom: 12px;
+  }
+
+  .command-header p {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .system-status {
+    padding: 11px 12px;
+    border-radius: 10px;
+  }
+
+  .system-status strong {
+    font-size: 11px;
+  }
+
+  .system-status span {
+    font-size: 9px;
+  }
+
+  .workflow-universe {
+    padding: 16px;
+    border-radius: 14px;
+    margin-bottom: 16px;
+  }
+
+  .universe-header {
+    margin-bottom: 16px;
+  }
+
+  .section-label {
+    font-size: 9px;
+  }
+
+  .universe-header h2 {
+    font-size: 18px;
+  }
+
+  .universe-meta {
+    font-size: 10px;
+  }
+
+  .workflow-flow {
+    width: 100%;
+    max-width: 100%;
+    gap: 3px;
+    padding: 7px 0 4px;
+    overflow: hidden;
+  }
+
+  .workflow-node {
+    min-width: 0;
+    flex: 1 1 0;
+    padding: 8px 4px;
+    gap: 4px;
+  }
+
+  .node-icon {
+    width: 27px;
+    height: 27px;
+  }
+
+  .workflow-node strong {
+    font-size: 8.5px;
+  }
+
+  .workflow-node span {
+    font-size: 7px;
+  }
+
+  .flow-line {
+    width: 8px;
+    min-width: 8px;
+    flex-basis: 8px;
+  }
+
+  .command-grid {
+    gap: 14px;
+  }
+
+  .command-panel {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .panel-heading {
+    margin-bottom: 15px;
+  }
+
+  .panel-heading h2 {
+    font-size: 15px;
+  }
+
+  .execution-row {
+    gap: 8px;
+    padding: 11px 0;
+  }
+
+  .execution-indicator {
+    width: 27px;
+    height: 27px;
+    border-radius: 7px;
+  }
+
+  .execution-main strong {
+    font-size: 10px;
+  }
+
+  .execution-main span {
+    font-size: 8px;
+  }
+
+  .execution-status {
+    min-width: 44px;
+  }
+
+  .execution-status span {
+    font-size: 8px;
+  }
+
+  .execution-status small {
+    font-size: 7px;
+  }
+
+  .health-score {
+    padding: 5px 0 18px;
+  }
+
+  .health-number {
+    font-size: 34px;
+  }
+
+  .health-number span {
+    font-size: 17px;
+  }
+
+  .health-bars > div:not(.health-track) {
+    font-size: 9px;
+  }
+
+  /* Profile */
+  .profile-page-header h1,
+  .settings-page-header h1,
+  .user-details-header h1 {
+    font-size: 26px;
+  }
+
+  .profile-card-header {
+    padding: 18px;
+    gap: 12px;
+  }
+
+  .profile-avatar-large {
+    width: 54px;
+    height: 54px;
+    font-size: 17px;
+  }
+
+  .profile-card-identity h2 {
+    font-size: 17px;
+  }
+
+  .profile-card-identity p {
+    font-size: 12px;
+  }
+
+  .profile-section {
+    padding: 18px;
+  }
+
+  .profile-section h3 {
+    font-size: 14px;
+    margin-bottom: 15px;
+  }
+
+  .profile-information {
+    gap: 10px;
+  }
+
+  .profile-information-item {
+    padding: 13px;
+  }
+
+  /* User details */
+  .user-details-back-button {
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+
+  .user-profile-header {
+    padding: 18px;
+    gap: 12px;
+  }
+
+  .user-profile-avatar {
+    width: 54px;
+    height: 54px;
+    font-size: 17px;
+  }
+
+  .user-profile-info {
+    min-width: 0;
+  }
+
+  .user-profile-info h2 {
+    font-size: 17px;
+  }
+
+  .user-profile-info p {
+    font-size: 12px;
+  }
+
+  .user-details-role {
+    margin-left: 66px;
+    font-size: 10px;
+    padding: 6px 9px;
+  }
+
+  .user-information-item {
+    gap: 10px;
+    padding: 16px 18px;
+  }
+
+  .user-information-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .user-information-item span {
+    font-size: 10px;
+  }
+
+  .user-information-item strong {
+    font-size: 12px;
+  }
+
+  /* Settings */
+  .settings-card-header {
+    padding: 18px;
+  }
+
+  .settings-card-header h2 {
+    font-size: 14px;
+  }
+
+  .settings-card-header p {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  .settings-item {
+    padding: 16px 18px;
+    gap: 10px;
+  }
+
+  .settings-item strong {
+    font-size: 12px;
+  }
+
+  .settings-item span:not(.settings-status) {
+    font-size: 11px;
+  }
+
+  .settings-status {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+
+  /* Compact */
+  body.novawavex-interface-compact .top-nav {
+    min-height: 54px;
+    padding: 6px 12px;
+  }
+
+  body.novawavex-interface-compact .brand-symbol {
+    width: 31px;
+    height: 31px;
+  }
+
+  body.novawavex-interface-compact .brand h2 {
+    font-size: 13px;
+  }
+
+  body.novawavex-interface-compact .top-navigation {
+    display: flex !important;
+    gap: 2px;
+  }
+
+  body.novawavex-interface-compact .top-nav-link {
+    padding: 5px 3px;
+    font-size: 8px;
+  }
+
+  body.novawavex-interface-compact .icon-button {
+    width: 31px;
+    height: 31px;
+  }
+
+  body.novawavex-interface-compact .profile-avatar {
+    width: 31px;
+    height: 31px;
+  }
+
+  body.novawavex-interface-compact .nova-main {
+    padding: 17px 12px 30px;
+  }
+
+  body.novawavex-interface-compact .command-header h1 {
+    font-size: 28px;
+  }
+
+  body.novawavex-interface-compact .workflow-universe {
+    padding: 13px;
+  }
+
+  body.novawavex-interface-compact .workflow-flow {
+    gap: 2px;
+    overflow: hidden;
+  }
+
+  body.novawavex-interface-compact .workflow-node {
+    min-width: 0;
+    flex: 1 1 0;
+    padding: 7px 3px;
+  }
+
+  body.novawavex-interface-compact .flow-line {
+    width: 7px;
+    min-width: 7px;
+    flex-basis: 7px;
+  }
+
+  body.novawavex-interface-compact .command-panel {
+    padding: 13px;
+  }
+
+  body.novawavex-interface-compact .profile-card-header,
+  body.novawavex-interface-compact .profile-section {
+    padding: 13px;
+  }
+
+  body.novawavex-interface-compact .settings-card-header,
+  body.novawavex-interface-compact .settings-item {
+    padding-left: 13px;
+    padding-right: 13px;
+  }
+}
+
+/* =========================================
+   VERY SMALL PHONES — UP TO 480px
+   ========================================= */
+
+@media (max-width: 480px) {
+  .top-nav {
+    min-height: 58px;
+    padding: 6px 11px;
+  }
+
+  .brand {
+    gap: 7px;
+  }
+
+  .brand-symbol {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+  }
+
+  .brand h2 {
+    font-size: 13px;
+  }
+
+  .top-actions {
+    gap: 3px;
+  }
+
+  .icon-button {
+    width: 31px;
+    height: 31px;
+  }
+
+  .profile-avatar {
+    width: 31px;
+    height: 31px;
+  }
+
+  .notification-dot {
+    top: 5px;
+    right: 5px;
+    width: 5px;
+    height: 5px;
+  }
+
+  .top-navigation {
+    gap: 2px;
+  }
+
+  .top-nav-link {
+    padding: 5px 2px;
+    font-size: 8.5px;
+  }
+
+  .nova-main {
+    padding: 18px 12px 30px;
+  }
+
+  .command-header {
+    gap: 15px;
+    margin-bottom: 18px;
+  }
+
+  .command-header h1 {
+    font-size: 29px;
+    letter-spacing: -1.2px;
+  }
+
+  .command-header p {
+    font-size: 11.5px;
+    line-height: 1.55;
+  }
+
+  .system-status {
+    padding: 10px 11px;
+  }
+
+  .workflow-universe {
+    padding: 14px;
+    border-radius: 13px;
+  }
+
+  .universe-header h2 {
+    font-size: 17px;
+  }
+
+  .workflow-flow {
+    gap: 2px;
+    overflow: hidden;
+  }
+
+  .workflow-node {
+    min-width: 0;
+    flex: 1 1 0;
+    padding: 7px 3px;
+    gap: 3px;
+  }
+
+  .node-icon {
+    width: 25px;
+    height: 25px;
+  }
+
+  .workflow-node strong {
+    font-size: 8px;
+  }
+
+  .workflow-node span {
+    font-size: 6.5px;
+  }
+
+  .flow-line {
+    width: 6px;
+    min-width: 6px;
+    flex-basis: 6px;
+  }
+
+  .command-panel {
+    padding: 14px;
+  }
+
+  .panel-heading h2 {
+    font-size: 14px;
+  }
+
+  .execution-row {
+    gap: 7px;
+  }
+
+  .execution-indicator {
+    width: 25px;
+    height: 25px;
+  }
+
+  .execution-status {
+    min-width: 40px;
+  }
+
+  .execution-status span {
+    font-size: 7px;
+  }
+
+  .execution-status small {
+    font-size: 6.5px;
+  }
+
+  .health-number {
+    font-size: 31px;
+  }
+
+  .profile-menu {
+    right: -2px;
+    width: min(225px, calc(100vw - 24px));
+  }
+
+  .users-page h1,
+  .profile-page-header h1,
+  .settings-page-header h1,
+  .user-details-header h1 {
+    font-size: 24px;
+  }
+
+  .profile-card-header,
+  .profile-section,
+  .user-profile-header,
+  .settings-card-header {
+    padding: 16px;
+  }
+
+  .user-details-role {
+    margin-left: 64px;
+  }
+
+  .settings-item {
+    padding: 15px 16px;
+  }
+
+  body.novawavex-interface-compact .top-nav {
+    min-height: 52px;
+    padding: 5px 9px;
+  }
+
+  body.novawavex-interface-compact .brand-symbol {
+    width: 29px;
+    height: 29px;
+  }
+
+  body.novawavex-interface-compact .brand h2 {
+    font-size: 12px;
+  }
+
+  body.novawavex-interface-compact .top-navigation {
+    gap: 1px;
+  }
+
+  body.novawavex-interface-compact .top-nav-link {
+    padding: 5px 2px;
+    font-size: 7.5px;
+  }
+
+  body.novawavex-interface-compact .icon-button {
+    width: 29px;
+    height: 29px;
+  }
+
+  body.novawavex-interface-compact .profile-avatar {
+    width: 29px;
+    height: 29px;
+  }
+
+  body.novawavex-interface-compact .nova-main {
+    padding: 15px 10px 28px;
+  }
+
+  body.novawavex-interface-compact .command-header h1 {
+    font-size: 26px;
+  }
+
+  body.novawavex-interface-compact .workflow-universe {
+    padding: 11px;
+  }
+
+  body.novawavex-interface-compact .workflow-flow {
+    gap: 1px;
+  }
+
+  body.novawavex-interface-compact .workflow-node {
+    min-width: 0;
+    flex: 1 1 0;
+    padding: 6px 2px;
+  }
+
+  body.novawavex-interface-compact .workflow-node strong {
+    font-size: 7px;
+  }
+
+  body.novawavex-interface-compact .workflow-node span {
+    font-size: 6px;
+  }
+
+  body.novawavex-interface-compact .flow-line {
+    width: 5px;
+    min-width: 5px;
+    flex-basis: 5px;
+  }
+
+  body.novawavex-interface-compact .command-panel {
+    padding: 11px;
+  }
+}
+
+/* =========================================
+   EXTRA SMALL PHONES — UP TO 390px
+   ========================================= */
+
+@media (max-width: 390px) {
+  .top-nav {
+    padding: 5px 9px;
+  }
+
+  .brand-symbol {
+    width: 30px;
+    height: 30px;
+  }
+
+  .brand h2 {
+    font-size: 12px;
+  }
+
+  .icon-button {
+    width: 30px;
+    height: 30px;
+  }
+
+  .profile-avatar {
+    width: 30px;
+    height: 30px;
+  }
+
+  .top-navigation {
+    gap: 1px;
+  }
+
+  .top-nav-link {
+    padding: 5px 1px;
+    font-size: 7.5px;
+  }
+
+  .nova-main {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .command-header h1 {
+    font-size: 27px;
+  }
+
+  .command-header p {
+    font-size: 11px;
+  }
+
+  .workflow-universe {
+    padding: 12px;
+  }
+
+  .workflow-flow {
+    gap: 1px;
+  }
+
+  .workflow-node {
+    min-width: 0;
+    flex: 1 1 0;
+    padding: 5px 2px;
+  }
+
+  .node-icon {
+    width: 23px;
+    height: 23px;
+  }
+
+  .workflow-node strong {
+    font-size: 7px;
+  }
+
+  .workflow-node span {
+    font-size: 5.5px;
+  }
+
+  .flow-line {
+    width: 5px;
+    min-width: 5px;
+    flex-basis: 5px;
+  }
+
+  .command-panel {
+    padding: 13px;
+  }
+
+  .execution-row {
+    gap: 6px;
+  }
+
+  .execution-indicator {
+    width: 24px;
+    height: 24px;
+  }
+
+  .execution-status {
+    min-width: 38px;
+  }
+
+  .execution-status span {
+    font-size: 7px;
+  }
+
+  .execution-status small {
+    display: none;
+  }
+
+  .profile-menu {
+    width: calc(100vw - 20px);
+    right: -2px;
+  }
+
+  body.novawavex-interface-compact .nova-main {
+    padding-left: 9px;
+    padding-right: 9px;
+  }
+
+  body.novawavex-interface-compact .command-header h1 {
+    font-size: 24px;
+  }
+
+  body.novawavex-interface-compact .workflow-node {
+    min-width: 0;
+    flex: 1 1 0;
+  }
+
+  body.novawavex-interface-compact .workflow-node strong {
+    font-size: 6.5px;
+  }
+
+  body.novawavex-interface-compact .workflow-node span {
+    font-size: 5px;
+  }
+}
+
+/* =========================================
+   TOUCH SAFETY
+   ========================================= */
+
+button,
+a,
+[role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 3px;
+}
+
+@media (hover: none) {
+  .workflow-node:hover,
+  .dashboard-card:hover,
+  .activity-item:hover,
+  .execution-row:hover,
+  .panel-action:hover,
+  .interactive-card:hover {
+    transform: none;
+  }
+}
+
+/* =========================================
+   REDUCED MOTION
+   ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+/* =========================================
+   KEYBOARD NAVIGATION
+   ========================================= */
+
+.skip-to-content {
+  position: fixed;
+  top: -100px;
+  left: 16px;
+  z-index: 10000;
+
+  padding: 10px 16px;
+
+  background: #111827;
+  color: #ffffff;
+
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+
+  transition: top 0.2s ease;
+}
+
+.skip-to-content:focus {
+  top: 16px;
+}
+
+.nova-main:focus {
+  outline: none;
 }
