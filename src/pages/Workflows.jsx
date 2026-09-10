@@ -240,6 +240,7 @@ const Workflows = () => {
         .workflows-container {
           max-width: 1400px;
           margin: 0 auto;
+          min-width: 0;
         }
 
         .workflows-header {
@@ -248,23 +249,30 @@ const Workflows = () => {
           justify-content: space-between;
           gap: 24px;
           margin-bottom: 28px;
+          min-width: 0;
         }
 
         .workflows-heading {
           display: flex;
           align-items: center;
           gap: 14px;
+          min-width: 0;
         }
 
         .workflows-icon {
           width: 48px;
           height: 48px;
+          flex: 0 0 48px;
           display: flex;
           align-items: center;
           justify-content: center;
           border-radius: 14px;
           background: rgba(77, 124, 255, 0.12);
           border: 1px solid rgba(77, 124, 255, 0.25);
+        }
+
+        .workflows-heading > div:last-child {
+          min-width: 0;
         }
 
         .workflows-heading h1 {
@@ -278,12 +286,14 @@ const Workflows = () => {
           margin: 5px 0 0;
           color: #8490a8;
           font-size: 14px;
+          line-height: 1.5;
         }
 
         .header-actions {
           display: flex;
           align-items: center;
           gap: 10px;
+          flex-shrink: 0;
         }
 
         .create-button,
@@ -340,6 +350,7 @@ const Workflows = () => {
         }
 
         .summary-card {
+          min-width: 0;
           padding: 20px;
           border: 1px solid rgba(255, 255, 255, 0.07);
           border-radius: 16px;
@@ -370,12 +381,14 @@ const Workflows = () => {
           border: 1px solid rgba(255, 255, 255, 0.07);
           border-radius: 16px;
           background: rgba(255, 255, 255, 0.025);
+          min-width: 0;
         }
 
         .search-wrapper {
           position: relative;
           flex: 1;
           max-width: 500px;
+          min-width: 0;
         }
 
         .search-icon {
@@ -437,6 +450,7 @@ const Workflows = () => {
           align-items: center;
           gap: 7px;
           flex-wrap: wrap;
+          min-width: 0;
         }
 
         .status-filter {
@@ -477,10 +491,12 @@ const Workflows = () => {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 18px;
+          min-width: 0;
         }
 
         .workflow-card {
           position: relative;
+          min-width: 0;
           min-height: 230px;
           padding: 22px;
           border: 1px solid rgba(255, 255, 255, 0.07);
@@ -497,6 +513,8 @@ const Workflows = () => {
             transform 0.2s ease,
             border-color 0.2s ease,
             box-shadow 0.2s ease;
+          box-sizing: border-box;
+          overflow: hidden;
         }
 
         .workflow-card:hover {
@@ -515,10 +533,12 @@ const Workflows = () => {
           align-items: flex-start;
           justify-content: space-between;
           gap: 12px;
+          min-width: 0;
         }
 
         .workflow-title-wrapper {
           min-width: 0;
+          flex: 1;
         }
 
         .workflow-title {
@@ -527,6 +547,7 @@ const Workflows = () => {
           font-size: 18px;
           font-weight: 650;
           word-break: break-word;
+          overflow-wrap: anywhere;
         }
 
         .workflow-id {
@@ -547,6 +568,7 @@ const Workflows = () => {
           font-weight: 650;
           background: rgba(255, 255, 255, 0.06);
           color: #cdd7eb;
+          white-space: nowrap;
         }
 
         .status-badge.active {
@@ -575,6 +597,8 @@ const Workflows = () => {
           color: #8d99b0;
           font-size: 13px;
           line-height: 1.65;
+          overflow-wrap: anywhere;
+          word-break: break-word;
         }
 
         .workflow-meta {
@@ -582,19 +606,29 @@ const Workflows = () => {
           gap: 10px;
           padding-top: 16px;
           border-top: 1px solid rgba(255, 255, 255, 0.06);
+          min-width: 0;
         }
 
         .meta-row {
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           gap: 8px;
           color: #7f8ba3;
           font-size: 12px;
+          min-width: 0;
+          line-height: 1.45;
+        }
+
+        .meta-row svg {
+          flex: 0 0 auto;
+          margin-top: 1px;
         }
 
         .meta-row span {
           color: #b5bfd1;
           word-break: break-word;
+          overflow-wrap: anywhere;
+          min-width: 0;
         }
 
         /* =========================
@@ -604,16 +638,19 @@ const Workflows = () => {
         .workflow-loading-state {
           display: grid;
           gap: 20px;
+          min-width: 0;
         }
 
         .loading-summary {
           display: grid;
           grid-template-columns: repeat(4, minmax(0, 1fr));
           gap: 16px;
+          min-width: 0;
         }
 
         .loading-summary-card {
           min-height: 94px;
+          min-width: 0;
           padding: 20px;
           box-sizing: border-box;
           border: 1px solid rgba(255, 255, 255, 0.07);
@@ -628,6 +665,7 @@ const Workflows = () => {
           justify-content: space-between;
           gap: 16px;
           min-height: 76px;
+          min-width: 0;
           padding: 16px;
           box-sizing: border-box;
           border: 1px solid rgba(255, 255, 255, 0.07);
@@ -647,6 +685,7 @@ const Workflows = () => {
           align-items: center;
           gap: 7px;
           flex-wrap: wrap;
+          min-width: 0;
         }
 
         .loading-filter {
@@ -682,10 +721,12 @@ const Workflows = () => {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 18px;
+          min-width: 0;
         }
 
         .workflow-skeleton-card {
           position: relative;
+          min-width: 0;
           min-height: 230px;
           padding: 22px;
           box-sizing: border-box;
@@ -783,6 +824,7 @@ const Workflows = () => {
           display: flex;
           align-items: center;
           justify-content: center;
+          flex-shrink: 0;
         }
 
         .loading-orbit::before,
@@ -960,10 +1002,6 @@ const Workflows = () => {
           }
         }
 
-        /* =========================
-           EMPTY STATE ICON
-           ========================= */
-
         .state-icon {
           position: relative;
           width: 58px;
@@ -1049,10 +1087,6 @@ const Workflows = () => {
           }
         }
 
-        /* =========================
-           EMPTY UNIVERSE STATE
-           ========================= */
-
         .empty-state {
           background:
             radial-gradient(
@@ -1096,10 +1130,6 @@ const Workflows = () => {
             transform: scale(1.04);
           }
         }
-
-        /* =========================
-           SEARCH EMPTY STATE
-           ========================= */
 
         .search-empty-state {
           background:
@@ -1150,10 +1180,6 @@ const Workflows = () => {
             transform: scale(1.02);
           }
         }
-
-        /* =========================
-           EMPTY STATE CONTENT
-           ========================= */
 
         .state-eyebrow {
           display: inline-flex;
@@ -1471,6 +1497,8 @@ const Workflows = () => {
           background: rgba(255, 255, 255, 0.025);
           font-size: 10px;
           letter-spacing: 0.35px;
+          max-width: 100%;
+          box-sizing: border-box;
 
           animation:
             error-detail-enter 0.3s 0.22s ease both;
@@ -1479,6 +1507,7 @@ const Workflows = () => {
         .error-detail-dot {
           width: 6px;
           height: 6px;
+          flex: 0 0 6px;
           border-radius: 50%;
           background: #ff6f7e;
           box-shadow: 0 0 10px rgba(255, 77, 96, 0.45);
@@ -1658,10 +1687,23 @@ const Workflows = () => {
         @media (max-width: 800px) {
           .workflows-page {
             padding: 20px;
+            overflow-x: hidden;
+            box-sizing: border-box;
+          }
+
+          .workflows-container {
+            width: 100%;
+            max-width: 100%;
+            overflow: visible;
           }
 
           .workflows-header {
             flex-direction: column;
+            gap: 18px;
+          }
+
+          .workflows-heading {
+            width: 100%;
           }
 
           .header-actions {
@@ -1697,36 +1739,232 @@ const Workflows = () => {
           }
         }
 
-        @media (max-width: 500px) {
-          .workflow-summary,
-          .loading-summary {
-            grid-template-columns: 1fr;
+        /* =========================
+           MOBILE POLISH
+           ========================= */
+
+        @media (max-width: 600px) {
+          .workflows-page {
+            padding: 16px 12px 28px;
+            min-width: 0;
+          }
+
+          .workflows-header {
+            gap: 16px;
+            margin-bottom: 20px;
+          }
+
+          .workflows-heading {
+            align-items: flex-start;
+            gap: 11px;
+          }
+
+          .workflows-icon {
+            width: 42px;
+            height: 42px;
+            flex-basis: 42px;
+            border-radius: 12px;
+          }
+
+          .workflows-icon svg {
+            width: 21px;
+            height: 21px;
           }
 
           .workflows-heading h1 {
-            font-size: 26px;
+            font-size: 24px;
+            line-height: 1.2;
+            letter-spacing: -0.3px;
           }
 
-          .status-filters {
-            width: 100%;
-          }
-
-          .status-filter {
-            flex: 1;
+          .workflows-heading p {
+            margin-top: 5px;
+            font-size: 11px;
+            line-height: 1.5;
+            max-width: 270px;
           }
 
           .header-actions {
             flex-direction: column;
+            gap: 8px;
           }
 
           .create-button,
           .refresh-button {
             width: 100%;
+            flex: none;
+            min-height: 42px;
+            height: 42px;
+          }
+
+          .workflow-summary {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 9px;
+            margin-bottom: 16px;
+          }
+
+          .summary-card {
+            padding: 14px 13px;
+            border-radius: 13px;
+          }
+
+          .summary-label {
+            font-size: 9px;
+            letter-spacing: 0.8px;
+          }
+
+          .summary-value {
+            margin-top: 5px;
+            font-size: 23px;
+            line-height: 1.1;
+          }
+
+          .workflow-controls {
+            gap: 12px;
+            margin-bottom: 18px;
+            padding: 11px;
+            border-radius: 13px;
+          }
+
+          .search-wrapper {
+            width: 100%;
+          }
+
+          .search-input {
+            height: 42px;
+            padding: 11px 38px 11px 38px;
+            border-radius: 10px;
+            font-size: 12px;
+          }
+
+          .search-icon {
+            left: 12px;
+          }
+
+          .clear-search {
+            right: 7px;
+            width: 27px;
+            height: 27px;
+          }
+
+          .status-filters {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 7px;
+            width: 100%;
+          }
+
+          .status-filter {
+            width: 100%;
+            min-width: 0;
+            padding: 9px 6px;
+            font-size: 10px;
+            line-height: 1.2;
+            box-sizing: border-box;
+          }
+
+          .status-filter:first-child {
+            grid-column: 1 / -1;
+          }
+
+          .results-info {
+            margin-bottom: 11px;
+            font-size: 11px;
+          }
+
+          .workflows-grid {
+            gap: 11px;
+          }
+
+          .workflow-card {
+            min-height: 0;
+            padding: 16px;
+            border-radius: 15px;
+          }
+
+          .workflow-card-header {
+            gap: 9px;
+          }
+
+          .workflow-title {
+            font-size: 15px;
+            line-height: 1.35;
+          }
+
+          .workflow-id {
+            margin-top: 4px;
+            font-size: 10px;
+          }
+
+          .status-badge {
+            gap: 4px;
+            padding: 5px 7px;
+            font-size: 9px;
+          }
+
+          .status-badge svg {
+            width: 11px;
+            height: 11px;
+          }
+
+          .workflow-description {
+            min-height: 0;
+            margin: 14px 0;
+            font-size: 11px;
+            line-height: 1.55;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          .workflow-meta {
+            gap: 8px;
+            padding-top: 12px;
+          }
+
+          .meta-row {
+            gap: 6px;
+            font-size: 10px;
+            line-height: 1.45;
+          }
+
+          .meta-row svg {
+            width: 12px;
+            height: 12px;
+          }
+
+          .meta-row span {
+            min-width: 0;
+          }
+
+          .loading-summary {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 9px;
+          }
+
+          .loading-summary-card {
+            min-height: 76px;
+            padding: 14px;
+            border-radius: 13px;
+          }
+
+          .loading-controls {
+            gap: 12px;
+            padding: 11px;
+            border-radius: 13px;
+          }
+
+          .loading-search {
+            height: 42px;
           }
 
           .loading-filters {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
+            width: 100%;
+            gap: 7px;
           }
 
           .loading-filter,
@@ -1735,28 +1973,223 @@ const Workflows = () => {
           .loading-filter:nth-child(4),
           .loading-filter:nth-child(5) {
             width: 100%;
+            height: 34px;
+          }
+
+          .loading-grid {
+            gap: 11px;
+          }
+
+          .workflow-skeleton-card {
+            min-height: 190px;
+            padding: 16px;
+            border-radius: 15px;
           }
 
           .state-container {
-            min-height: 340px;
-            padding: 22px 16px;
+            min-height: 350px;
+            padding: 24px 16px;
+            border-radius: 15px;
+          }
+
+          .state-container::before {
+            width: 230px;
+            height: 230px;
+          }
+
+          .state-container::after {
+            width: 155px;
+            height: 155px;
+          }
+
+          .state-content {
+            width: 100%;
+            max-width: 340px;
+          }
+
+          .state-eyebrow {
+            margin-bottom: 9px;
+            padding: 5px 8px;
+            font-size: 9px;
+          }
+
+          .state-icon {
+            width: 52px;
+            height: 52px;
+            margin-bottom: 15px;
+            border-radius: 15px;
           }
 
           .state-content h2 {
-            font-size: 19px;
+            font-size: 18px;
+            line-height: 1.3;
+            margin-bottom: 8px;
           }
 
           .state-content p {
-            font-size: 12px;
+            max-width: 310px;
+            font-size: 11px;
+            line-height: 1.6;
           }
 
-          .empty-create-button {
+          .state-action {
             width: 100%;
+            margin-top: 18px;
+            display: flex;
+            justify-content: center;
+          }
+
+          .empty-create-button,
+          .empty-clear-button,
+          .retry-button {
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+          }
+
+          .empty-secondary-action {
+            font-size: 10px;
+            line-height: 1.5;
           }
 
           .error-detail {
-            max-width: 100%;
-            box-sizing: border-box;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            text-align: left;
+            line-height: 1.45;
+            font-size: 9px;
+            width: 100%;
+          }
+        }
+
+        /* =========================
+           SMALL MOBILE
+           ========================= */
+
+        @media (max-width: 400px) {
+          .workflows-page {
+            padding: 14px 10px 24px;
+          }
+
+          .workflows-heading {
+            gap: 9px;
+          }
+
+          .workflows-icon {
+            width: 39px;
+            height: 39px;
+            flex-basis: 39px;
+            border-radius: 11px;
+          }
+
+          .workflows-icon svg {
+            width: 19px;
+            height: 19px;
+          }
+
+          .workflows-heading h1 {
+            font-size: 22px;
+          }
+
+          .workflows-heading p {
+            font-size: 10px;
+            max-width: 245px;
+          }
+
+          .workflow-summary {
+            gap: 7px;
+          }
+
+          .summary-card {
+            padding: 12px 11px;
+            border-radius: 12px;
+          }
+
+          .summary-label {
+            font-size: 8px;
+          }
+
+          .summary-value {
+            font-size: 21px;
+          }
+
+          .workflow-controls {
+            padding: 9px;
+          }
+
+          .status-filter {
+            padding: 8px 5px;
+            font-size: 9px;
+          }
+
+          .workflow-card {
+            padding: 14px;
+            border-radius: 14px;
+          }
+
+          .workflow-card-header {
+            gap: 7px;
+          }
+
+          .workflow-title {
+            font-size: 14px;
+          }
+
+          .workflow-id {
+            font-size: 9px;
+          }
+
+          .status-badge {
+            padding: 4px 6px;
+            font-size: 8px;
+          }
+
+          .status-badge svg {
+            width: 10px;
+            height: 10px;
+          }
+
+          .workflow-description {
+            margin: 12px 0;
+            font-size: 10px;
+            line-height: 1.55;
+          }
+
+          .workflow-meta {
+            gap: 7px;
+            padding-top: 11px;
+          }
+
+          .meta-row {
+            font-size: 9px;
+          }
+
+          .meta-row svg {
+            width: 11px;
+            height: 11px;
+          }
+
+          .state-container {
+            min-height: 320px;
+            padding: 20px 13px;
+          }
+
+          .state-icon {
+            width: 48px;
+            height: 48px;
+          }
+
+          .state-content h2 {
+            font-size: 17px;
+          }
+
+          .state-content p {
+            font-size: 10px;
+          }
+
+          .empty-secondary-action {
+            font-size: 9px;
           }
         }
       `}</style>

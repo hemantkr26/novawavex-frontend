@@ -50,14 +50,9 @@ const Dashboard = () => {
 
       console.log("NovaWavex workflows:", data);
 
-      setWorkflows(
-        Array.isArray(data) ? data : []
-      );
+      setWorkflows(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error(
-        "Failed to load workflows:",
-        err
-      );
+      console.error("Failed to load workflows:", err);
 
       setWorkflows([]);
 
@@ -79,9 +74,7 @@ const Dashboard = () => {
     try {
       setExecutionError(null);
 
-      const response = await api.get(
-        "/api/executions"
-      );
+      const response = await api.get("/api/executions");
 
       console.log(
         "NovaWavex executions:",
@@ -223,9 +216,7 @@ const Dashboard = () => {
    * =========================================
    */
 
-  const handleWorkflowClick = (
-    workflowId
-  ) => {
+  const handleWorkflowClick = (workflowId) => {
     navigate(`/workflows/${workflowId}`);
   };
 
@@ -247,16 +238,6 @@ const Dashboard = () => {
    * =========================================
    * TIMESTAMP PARSING
    * =========================================
-   *
-   * Backend currently returns LocalDateTime
-   * values without timezone information.
-   *
-   * Render runs in UTC, so these timestamps
-   * represent UTC time.
-   *
-   * Append "Z" so JavaScript interprets the
-   * timestamp as UTC and automatically converts
-   * the timestamp to the user's local timezone.
    */
 
   const parseBackendTimestamp = (
@@ -266,14 +247,10 @@ const Dashboard = () => {
       return null;
     }
 
-    if (
-      typeof timestamp !== "string"
-    ) {
+    if (typeof timestamp !== "string") {
       const date = new Date(timestamp);
 
-      return Number.isNaN(
-        date.getTime()
-      )
+      return Number.isNaN(date.getTime())
         ? null
         : date;
     }
@@ -288,9 +265,7 @@ const Dashboard = () => {
       normalizedTimestamp
     );
 
-    return Number.isNaN(
-      date.getTime()
-    )
+    return Number.isNaN(date.getTime())
       ? null
       : date;
   };
@@ -378,14 +353,12 @@ const Dashboard = () => {
     .sort((a, b) => {
       const dateA =
         parseBackendTimestamp(
-          a.updatedAt ||
-            a.createdAt
+          a.updatedAt || a.createdAt
         )?.getTime() || 0;
 
       const dateB =
         parseBackendTimestamp(
-          b.updatedAt ||
-            b.createdAt
+          b.updatedAt || b.createdAt
         )?.getTime() || 0;
 
       return dateB - dateA;
@@ -689,7 +662,7 @@ const Dashboard = () => {
     universeExecutionCompleted;
 
   /*
-   * Flow activity.
+   * Flow activity
    */
 
   const universeFlowActive =
@@ -697,7 +670,7 @@ const Dashboard = () => {
     universeExecutionCompleted;
 
   /*
-   * Overall Universe activity.
+   * Overall Universe activity
    */
 
   const universeHasRecentExecution =
@@ -758,8 +731,6 @@ const Dashboard = () => {
           }}
         >
 
-          {/* Refresh Dashboard */}
-
           <button
             type="button"
             onClick={handleRefresh}
@@ -804,8 +775,6 @@ const Dashboard = () => {
               : "Refresh Dashboard"}
 
           </button>
-
-          {/* System Status */}
 
           <div
             className="system-status"
@@ -897,8 +866,6 @@ const Dashboard = () => {
 
         </div>
 
-        {/* Workflow Loading */}
-
         {loading && (
 
           <div
@@ -933,8 +900,6 @@ const Dashboard = () => {
           </div>
 
         )}
-
-        {/* Workflow Error */}
 
         {!loading && error && (
 
@@ -1000,8 +965,6 @@ const Dashboard = () => {
 
         )}
 
-        {/* No Workflow */}
-
         {!loading &&
           !error &&
           workflows.length === 0 && (
@@ -1024,8 +987,6 @@ const Dashboard = () => {
 
             </div>
           )}
-
-        {/* Workflow Flow */}
 
         {!loading &&
           !error &&
@@ -1066,10 +1027,12 @@ const Dashboard = () => {
             >
 
               <div className="node-icon">
+
                 <Zap
                   size={20}
                   aria-hidden="true"
                 />
+
               </div>
 
               <div>
@@ -1103,8 +1066,6 @@ const Dashboard = () => {
 
             </div>
 
-            {/* FLOW LINE */}
-
             <div
               className={
                 universeFlowActive
@@ -1113,9 +1074,11 @@ const Dashboard = () => {
               }
               aria-hidden="true"
             >
+
               {universeFlowActive && (
                 <div className="flow-pulse"></div>
               )}
+
             </div>
 
             {/* VALIDATE */}
@@ -1147,10 +1110,12 @@ const Dashboard = () => {
             >
 
               <div className="node-icon">
+
                 <Activity
                   size={20}
                   aria-hidden="true"
                 />
+
               </div>
 
               <div>
@@ -1173,8 +1138,6 @@ const Dashboard = () => {
 
             </div>
 
-            {/* FLOW LINE */}
-
             <div
               className={
                 universeFlowActive
@@ -1183,9 +1146,11 @@ const Dashboard = () => {
               }
               aria-hidden="true"
             >
+
               {universeFlowActive && (
                 <div className="flow-pulse"></div>
               )}
+
             </div>
 
             {/* APPROVE */}
@@ -1217,10 +1182,12 @@ const Dashboard = () => {
             >
 
               <div className="node-icon">
+
                 <Clock3
                   size={20}
                   aria-hidden="true"
                 />
+
               </div>
 
               <div>
@@ -1244,8 +1211,6 @@ const Dashboard = () => {
 
             </div>
 
-            {/* FLOW LINE */}
-
             <div
               className={
                 universeFlowActive
@@ -1254,9 +1219,11 @@ const Dashboard = () => {
               }
               aria-hidden="true"
             >
+
               {universeFlowActive && (
                 <div className="flow-pulse"></div>
               )}
+
             </div>
 
             {/* EXECUTE */}
@@ -1288,10 +1255,12 @@ const Dashboard = () => {
             >
 
               <div className="node-icon">
+
                 <Play
                   size={20}
                   aria-hidden="true"
                 />
+
               </div>
 
               <div>
@@ -1322,8 +1291,6 @@ const Dashboard = () => {
           </div>
 
         )}
-
-        {/* Current Workflow Information */}
 
         {!loading &&
           !error &&
@@ -1374,9 +1341,7 @@ const Dashboard = () => {
 
       <section className="command-grid">
 
-        {/* =========================================
-            LIVE EXECUTIONS
-            ========================================= */}
+        {/* LIVE EXECUTIONS */}
 
         <div className="command-panel">
 
@@ -1400,8 +1365,6 @@ const Dashboard = () => {
             />
 
           </div>
-
-          {/* Loading */}
 
           {executionLoading && (
 
@@ -1431,8 +1394,6 @@ const Dashboard = () => {
 
             </div>
           )}
-
-          {/* Error */}
 
           {!executionLoading &&
             executionError && (
@@ -1498,8 +1459,6 @@ const Dashboard = () => {
               </div>
             )}
 
-          {/* No executions */}
-
           {!executionLoading &&
             !executionError &&
             executions.length === 0 && (
@@ -1522,8 +1481,6 @@ const Dashboard = () => {
 
               </div>
             )}
-
-          {/* Recent Executions */}
 
           {!executionLoading &&
             !executionError &&
@@ -1594,8 +1551,6 @@ const Dashboard = () => {
               </div>
             )}
 
-          {/* View all workflows */}
-
           {!loading &&
             !error &&
             workflows.length > 0 && (
@@ -1620,9 +1575,7 @@ const Dashboard = () => {
 
         </div>
 
-        {/* =========================================
-            SYSTEM PULSE
-            ========================================= */}
+        {/* SYSTEM PULSE */}
 
         <div className="command-panel system-panel">
 
@@ -1647,8 +1600,6 @@ const Dashboard = () => {
 
           </div>
 
-          {/* Execution Count */}
-
           <div className="health-score">
 
             <div
@@ -1672,14 +1623,10 @@ const Dashboard = () => {
 
           </div>
 
-          {/* Health Bars */}
-
           <div
             className="health-bars"
             aria-busy={healthLoading}
           >
-
-            {/* API Services */}
 
             <div>
 
@@ -1726,8 +1673,6 @@ const Dashboard = () => {
 
             </div>
 
-            {/* Workflow Engine */}
-
             <div>
 
               <span>
@@ -1772,8 +1717,6 @@ const Dashboard = () => {
               ></div>
 
             </div>
-
-            {/* Database */}
 
             <div>
 
@@ -1822,8 +1765,6 @@ const Dashboard = () => {
 
           </div>
 
-          {/* Health Loading Message */}
-
           {healthLoading && (
 
             <div
@@ -1842,8 +1783,6 @@ const Dashboard = () => {
             </div>
 
           )}
-
-          {/* Health Error */}
 
           {healthError && (
 
@@ -1912,7 +1851,7 @@ const Dashboard = () => {
       </section>
 
       {/* =========================================
-          DASHBOARD LOADING + ERROR ANIMATIONS
+          DASHBOARD STYLES
           ========================================= */}
 
       <style>{`
@@ -2409,6 +2348,84 @@ const Dashboard = () => {
         .dashboard-health-retry:disabled {
           cursor: not-allowed;
           opacity: 0.55;
+        }
+
+        /*
+         * =========================================
+         * WORKFLOW UNIVERSE NODE FIX
+         * =========================================
+         */
+
+        .workflow-node {
+          min-width: 0;
+          width: 150px;
+          max-width: 150px;
+          min-height: 78px;
+          max-height: 78px;
+          box-sizing: border-box;
+          overflow: hidden;
+        }
+
+        .workflow-node > div:last-child {
+          min-width: 0;
+          max-width: 100%;
+          overflow: hidden;
+        }
+
+        .workflow-node > div:last-child span {
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          line-height: 1.35;
+          max-height: 2.7em;
+          min-width: 0;
+          max-width: 100%;
+          word-break: break-word;
+          overflow-wrap: anywhere;
+        }
+
+        /*
+         * =========================================
+         * MOBILE WORKFLOW NODE FIX
+         * =========================================
+         */
+
+        @media (max-width: 700px) {
+          .workflow-node {
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            min-height: 78px;
+            max-height: 78px;
+            box-sizing: border-box;
+            overflow: hidden;
+          }
+
+          .workflow-node > div:last-child {
+            min-width: 0;
+            max-width: 100%;
+            overflow: hidden;
+          }
+
+          .workflow-node > div:last-child strong,
+          .workflow-node > div:last-child span {
+            min-width: 0;
+            max-width: 100%;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+          }
+
+          .workflow-node > div:last-child span {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.35;
+            max-height: 2.7em;
+          }
         }
 
         /*

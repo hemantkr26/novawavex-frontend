@@ -479,11 +479,6 @@ const Users = () => {
 
         /* =====================================
            TABLE WRAPPER
-
-           Important:
-           The wrapper may scroll internally on
-           very narrow screens, but it will NEVER
-           make the complete page wider.
            ===================================== */
 
         .users-table-wrapper {
@@ -494,32 +489,18 @@ const Users = () => {
 
           min-width: 0;
 
-          overflow-x: auto;
+          overflow-x: hidden;
           overflow-y: hidden;
 
           -webkit-overflow-scrolling: touch;
 
-          scrollbar-width: thin;
+          scrollbar-width: none;
         }
 
 
         .users-table-wrapper::-webkit-scrollbar {
 
-          height: 6px;
-        }
-
-
-        .users-table-wrapper::-webkit-scrollbar-track {
-
-          background: #f4f6f9;
-        }
-
-
-        .users-table-wrapper::-webkit-scrollbar-thumb {
-
-          border-radius: 10px;
-
-          background: #cbd5e4;
+          display: none;
         }
 
 
@@ -531,7 +512,9 @@ const Users = () => {
 
           width: 100%;
 
-          min-width: 620px;
+          max-width: 100%;
+
+          min-width: 0;
 
           border-collapse: collapse;
 
@@ -692,6 +675,10 @@ const Users = () => {
 
           display: block;
 
+          min-width: 0;
+
+          max-width: 100%;
+
           overflow: hidden;
 
           text-overflow: ellipsis;
@@ -707,6 +694,10 @@ const Users = () => {
         .user-email {
 
           display: block;
+
+          min-width: 0;
+
+          max-width: 100%;
 
           overflow: hidden;
 
@@ -959,6 +950,22 @@ const Users = () => {
             min-width: 580px;
           }
 
+
+          .users-table-wrapper {
+
+            overflow-x: auto;
+            scrollbar-width: thin;
+          }
+
+
+          .users-table-wrapper::-webkit-scrollbar {
+
+            display: block;
+
+            height: 6px;
+          }
+
+
           .users-table th,
           .users-table td {
 
@@ -977,6 +984,12 @@ const Users = () => {
 
           .users-page {
 
+            width: 100%;
+
+            max-width: 100%;
+
+            min-width: 0;
+
             padding:
               18px 14px 24px;
 
@@ -985,6 +998,10 @@ const Users = () => {
 
 
           .users-page-header {
+
+            width: 100%;
+
+            min-width: 0;
 
             margin-bottom: 17px;
           }
@@ -1004,13 +1021,49 @@ const Users = () => {
 
           .users-table-container {
 
+            width: 100%;
+
+            max-width: 100%;
+
+            min-width: 0;
+
             border-radius: 10px;
+
+            overflow: hidden;
+          }
+
+
+          .users-table-wrapper {
+
+            width: 100%;
+
+            max-width: 100%;
+
+            min-width: 0;
+
+            overflow-x: hidden;
+
+            overflow-y: hidden;
+
+            scrollbar-width: none;
+          }
+
+
+          .users-table-wrapper::-webkit-scrollbar {
+
+            display: none;
           }
 
 
           .users-table {
 
-            min-width: 540px;
+            width: 100%;
+
+            max-width: 100%;
+
+            min-width: 0;
+
+            table-layout: fixed;
           }
 
 
@@ -1019,9 +1072,12 @@ const Users = () => {
             height: 40px;
 
             padding:
-              0 11px;
+              0 7px;
 
-            font-size: 9px;
+            font-size: 8px;
+
+            letter-spacing:
+              0.2px;
           }
 
 
@@ -1030,44 +1086,79 @@ const Users = () => {
             height: 48px;
 
             padding:
-              0 11px;
+              0 7px;
 
-            font-size: 10px;
+            font-size: 9px;
           }
 
 
           .users-table th:nth-child(1),
           .users-table td:nth-child(1) {
 
-            width: 62px;
+            width: 11%;
           }
 
 
           .users-table th:nth-child(2),
           .users-table td:nth-child(2) {
 
-            width: 145px;
+            width: 25%;
           }
 
 
           .users-table th:nth-child(3),
           .users-table td:nth-child(3) {
 
-            width: 190px;
+            width: 31%;
           }
 
 
           .users-table th:nth-child(4),
           .users-table td:nth-child(4) {
 
-            width: 85px;
+            width: 16%;
           }
 
 
           .users-table th:nth-child(5),
           .users-table td:nth-child(5) {
 
-            width: 95px;
+            width: 17%;
+          }
+
+
+          .user-id {
+
+            font-size: 8px;
+          }
+
+
+          .user-name,
+          .user-email {
+
+            min-width: 0;
+
+            max-width: 100%;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+          }
+
+
+          .user-role {
+
+            min-height: 21px;
+
+            padding:
+              0 5px;
+
+            font-size: 7px;
+
+            letter-spacing:
+              0.1px;
           }
 
 
@@ -1108,7 +1199,9 @@ const Users = () => {
 
           .users-table {
 
-            min-width: 520px;
+            width: 100%;
+
+            min-width: 0;
           }
 
 
@@ -1116,7 +1209,28 @@ const Users = () => {
           .users-table td {
 
             padding:
-              0 9px;
+              0 5px;
+          }
+
+
+          .users-table th {
+
+            font-size: 7px;
+          }
+
+
+          .users-table td {
+
+            font-size: 8px;
+          }
+
+
+          .user-role {
+
+            padding:
+              0 4px;
+
+            font-size: 6.5px;
           }
 
         }

@@ -1948,12 +1948,15 @@ const Profile = () => {
           margin: 0 auto;
           padding: 28px 34px 48px;
           box-sizing: border-box;
+          min-width: 0;
+          overflow-x: hidden;
         }
 
 
         .profile-page-header {
           margin-bottom: 24px;
           animation: profile-header-enter 0.45s ease both;
+          min-width: 0;
         }
 
 
@@ -1996,11 +1999,14 @@ const Profile = () => {
           color: #68758a;
           font-size: 12px;
           line-height: 1.5;
+          overflow-wrap: anywhere;
         }
 
 
         .profile-card {
           width: 100%;
+          max-width: 100%;
+          min-width: 0;
           box-sizing: border-box;
           padding: 0 24px 24px;
           border: 1px solid #e7ebf2;
@@ -2008,6 +2014,7 @@ const Profile = () => {
           background: #ffffff;
           box-shadow: 0 5px 18px rgba(25, 40, 70, 0.045);
           animation: profile-card-enter 0.5s ease 0.04s both;
+          overflow: hidden;
         }
 
 
@@ -2028,6 +2035,7 @@ const Profile = () => {
 
         .profile-card-header {
           min-height: 108px;
+          min-width: 0;
           display: flex;
           align-items: center;
           gap: 15px;
@@ -2319,6 +2327,7 @@ const Profile = () => {
 
         .profile-image-selected {
           min-width: 0;
+          max-width: 100%;
           display: flex;
           align-items: center;
           gap: 9px;
@@ -2351,6 +2360,7 @@ const Profile = () => {
 
         .profile-image-file-copy {
           min-width: 0;
+          max-width: 100%;
           display: flex;
           flex-direction: column;
           gap: 3px;
@@ -2370,6 +2380,7 @@ const Profile = () => {
         .profile-image-selected small {
           color: #7a8699;
           font-size: 9px;
+          overflow-wrap: anywhere;
         }
 
 
@@ -2500,6 +2511,8 @@ const Profile = () => {
           background: #f4fbf7;
           font-size: 10px;
           font-weight: 650;
+          line-height: 1.4;
+          overflow-wrap: anywhere;
           animation: profile-message-enter 0.25s ease both;
         }
 
@@ -2533,7 +2546,7 @@ const Profile = () => {
           margin-bottom: 15px;
           padding: 9px 11px;
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           gap: 7px;
           border: 1px solid #f0d8d8;
           border-radius: 8px;
@@ -2541,6 +2554,7 @@ const Profile = () => {
           background: #fff7f7;
           font-size: 10px;
           line-height: 1.4;
+          overflow-wrap: anywhere;
           animation: profile-message-enter 0.25s ease both;
         }
 
@@ -2567,6 +2581,8 @@ const Profile = () => {
 
         .profile-card-identity {
           min-width: 0;
+          max-width: 100%;
+          flex: 1;
           display: flex;
           flex-direction: column;
           gap: 5px;
@@ -2578,6 +2594,9 @@ const Profile = () => {
           color: #172033;
           font-size: 16px;
           font-weight: 750;
+          line-height: 1.3;
+          overflow-wrap: anywhere;
+          word-break: break-word;
         }
 
 
@@ -2585,12 +2604,15 @@ const Profile = () => {
           margin: 0;
           color: #68758a;
           font-size: 11px;
+          line-height: 1.4;
+          overflow-wrap: anywhere;
           word-break: break-word;
         }
 
 
         .profile-header-status {
           margin-left: auto;
+          flex-shrink: 0;
         }
 
 
@@ -2619,6 +2641,7 @@ const Profile = () => {
 
         .profile-section {
           padding: 23px 0 8px;
+          min-width: 0;
         }
 
 
@@ -2628,10 +2651,16 @@ const Profile = () => {
 
 
         .profile-section-heading {
+          min-width: 0;
           display: flex;
           align-items: center;
           gap: 11px;
           margin-bottom: 13px;
+        }
+
+
+        .profile-section-heading > div:last-child {
+          min-width: 0;
         }
 
 
@@ -2672,11 +2701,13 @@ const Profile = () => {
           color: #7a8699;
           font-size: 10px;
           line-height: 1.4;
+          overflow-wrap: anywhere;
         }
 
 
         .profile-information {
           width: 100%;
+          min-width: 0;
           border: 1px solid #e9edf3;
           border-radius: 10px;
           overflow: hidden;
@@ -2686,6 +2717,7 @@ const Profile = () => {
 
         .profile-information-item {
           min-height: 52px;
+          min-width: 0;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -2708,15 +2740,10 @@ const Profile = () => {
         }
 
 
-        /*
-         * =====================================
-         * FULL NAME EDITOR FIX
-         * =====================================
-         *
-         * The label and editor now occupy separate
-         * flexible areas so the input cannot cover
-         * the "Full Name" label.
-         */
+        .profile-information-item > * {
+          min-width: 0;
+        }
+
 
         .profile-information-item-editing {
           align-items: center;
@@ -2747,6 +2774,7 @@ const Profile = () => {
           font-size: 11px;
           font-weight: 650;
           text-align: right;
+          overflow-wrap: anywhere;
           word-break: break-word;
         }
 
@@ -2811,12 +2839,6 @@ const Profile = () => {
           outline-offset: 3px;
         }
 
-
-        /*
-         * =====================================
-         * FULL NAME EDITOR
-         * =====================================
-         */
 
         .profile-name-editor {
           min-width: 0;
@@ -2942,6 +2964,7 @@ const Profile = () => {
           background: #fff7f7;
           font-size: 9px;
           line-height: 1.4;
+          overflow-wrap: anywhere;
           animation: profile-message-enter 0.25s ease both;
         }
 
@@ -2971,6 +2994,8 @@ const Profile = () => {
           display: flex;
           align-items: center;
           gap: 11px;
+          min-width: 0;
+          box-sizing: border-box;
           border: 1px solid #dcefe4;
           border-radius: 10px;
           background: #f4fbf7;
@@ -3010,6 +3035,7 @@ const Profile = () => {
           color: #658172;
           font-size: 10px;
           line-height: 1.45;
+          overflow-wrap: anywhere;
         }
 
 
@@ -3021,6 +3047,7 @@ const Profile = () => {
           font-size: 10px;
           font-weight: 750;
           white-space: nowrap;
+          flex-shrink: 0;
         }
 
 
@@ -3031,6 +3058,8 @@ const Profile = () => {
         .profile-danger-zone {
           margin-top: 22px;
           padding: 16px;
+          min-width: 0;
+          box-sizing: border-box;
           border: 1px solid #f0d9d9;
           border-radius: 11px;
           background: linear-gradient(
@@ -3042,9 +3071,15 @@ const Profile = () => {
 
 
         .profile-danger-header {
+          min-width: 0;
           display: flex;
           align-items: flex-start;
           gap: 11px;
+        }
+
+
+        .profile-danger-header > div:last-child {
+          min-width: 0;
         }
 
 
@@ -3085,12 +3120,14 @@ const Profile = () => {
           color: #9a6868;
           font-size: 10px;
           line-height: 1.45;
+          overflow-wrap: anywhere;
         }
 
 
         .profile-danger-content {
           margin-top: 14px;
           padding-top: 14px;
+          min-width: 0;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -3118,6 +3155,7 @@ const Profile = () => {
           color: #9a6868;
           font-size: 9px;
           line-height: 1.45;
+          overflow-wrap: anywhere;
         }
 
 
@@ -3171,8 +3209,9 @@ const Profile = () => {
           margin-top: 12px;
           padding: 9px 10px;
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           gap: 7px;
+          min-width: 0;
           border: 1px solid #f0d0d0;
           border-radius: 7px;
           color: #a43e3e;
@@ -3180,6 +3219,7 @@ const Profile = () => {
           font-size: 9px;
           font-weight: 650;
           line-height: 1.4;
+          overflow-wrap: anywhere;
           animation: profile-message-enter 0.25s ease both;
         }
 
@@ -3231,6 +3271,8 @@ const Profile = () => {
           color: #b44747;
           background: #fff7f7;
           font-size: 11px;
+          line-height: 1.45;
+          overflow-wrap: anywhere;
           animation: profile-message-enter 0.3s ease both;
         }
 
@@ -3291,6 +3333,10 @@ const Profile = () => {
         }
 
 
+        /* =====================================
+           TABLET
+           ===================================== */
+
         @media (max-width: 760px) {
 
           .profile-page {
@@ -3324,11 +3370,6 @@ const Profile = () => {
           }
 
 
-          /*
-           * Keep Full Name label and editor
-           * separated on tablet widths.
-           */
-
           .profile-information-item-editing {
             align-items: flex-start;
           }
@@ -3348,22 +3389,113 @@ const Profile = () => {
         }
 
 
+        /* =====================================
+           MOBILE POLISH
+           ===================================== */
+
         @media (max-width: 520px) {
 
+          .profile-page {
+            width: 100%;
+            max-width: 100%;
+            padding: 16px 11px 28px;
+            overflow-x: hidden;
+          }
+
+
+          .profile-page-header {
+            margin-bottom: 16px;
+            padding: 0 3px;
+          }
+
+
+          .profile-eyebrow {
+            margin-bottom: 5px;
+            font-size: 9px;
+            letter-spacing: 1.25px;
+          }
+
+
           .profile-page-header h1 {
-            font-size: 24px;
+            font-size: 23px;
+            line-height: 1.18;
+          }
+
+
+          .profile-page-header p {
+            margin-top: 6px;
+            font-size: 10px;
+            line-height: 1.45;
+          }
+
+
+          .profile-card {
+            padding: 0 11px 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 14px rgba(25, 40, 70, 0.045);
           }
 
 
           .profile-card-header {
-            align-items: flex-start;
-            padding: 19px 0;
+            min-height: auto;
+            padding: 17px 2px 18px;
+            align-items: center;
+            gap: 12px;
+          }
+
+
+          .profile-avatar-wrapper {
+            width: 54px;
+            height: 54px;
+          }
+
+
+          .profile-avatar-ring,
+          .profile-avatar-large,
+          .profile-avatar-image {
+            width: 54px;
+            height: 54px;
+          }
+
+
+          .profile-avatar-wrapper::before {
+            inset: -2px;
+            border-radius: 17px;
+          }
+
+
+          .profile-avatar-camera {
+            right: -5px;
+            bottom: -5px;
+            width: 23px;
+            height: 23px;
+          }
+
+
+          .profile-card-identity {
+            gap: 4px;
+          }
+
+
+          .profile-card-identity h2 {
+            font-size: 14px;
+            line-height: 1.3;
+          }
+
+
+          .profile-card-identity p {
+            font-size: 10px;
+            line-height: 1.4;
           }
 
 
           .profile-image-actions {
+            margin-bottom: 12px;
+            padding: 10px;
             align-items: stretch;
             flex-direction: column;
+            gap: 10px;
+            border-radius: 8px;
           }
 
 
@@ -3372,48 +3504,151 @@ const Profile = () => {
           }
 
 
+          .profile-image-file-copy {
+            flex: 1;
+          }
+
+
+          .profile-image-selected span {
+            font-size: 9px;
+          }
+
+
+          .profile-image-selected small {
+            font-size: 8px;
+          }
+
+
           .profile-image-buttons {
             width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1.35fr;
+            gap: 7px;
           }
 
 
           .profile-image-cancel,
           .profile-image-upload {
-            flex: 1;
+            width: 100%;
+            min-height: 32px;
+            padding: 0 7px;
+            font-size: 9px;
+          }
+
+
+          .profile-image-success,
+          .profile-image-error {
+            margin-bottom: 12px;
+            padding: 8px 9px;
+            font-size: 9px;
+            border-radius: 7px;
+          }
+
+
+          .profile-section {
+            padding: 18px 0 6px;
+          }
+
+
+          .profile-section + .profile-section {
+            margin-top: 4px;
+          }
+
+
+          .profile-section-heading {
+            gap: 9px;
+            margin-bottom: 10px;
+          }
+
+
+          .profile-section-icon {
+            width: 29px;
+            height: 29px;
+            border-radius: 7px;
+          }
+
+
+          .profile-section-heading h3 {
+            font-size: 12px;
+          }
+
+
+          .profile-section-heading p {
+            margin-top: 2px;
+            font-size: 9px;
+            line-height: 1.4;
+          }
+
+
+          .profile-information {
+            border-radius: 9px;
           }
 
 
           .profile-information-item {
+            min-height: auto;
             align-items: flex-start;
             flex-direction: column;
+            gap: 6px;
+            padding: 10px 11px;
+          }
+
+
+          .profile-information-item:hover {
+            background: #fafbfd;
+          }
+
+
+          .profile-information-label {
+            width: 100%;
+            min-width: 0;
+            font-size: 10px;
             gap: 7px;
-            padding: 10px 12px;
+          }
+
+
+          .profile-information-label svg {
+            width: 14px;
+            height: 14px;
           }
 
 
           .profile-information-item strong {
+            width: 100%;
             max-width: 100%;
-            padding-left: 24px;
+            padding-left: 21px;
+            box-sizing: border-box;
             text-align: left;
+            font-size: 10px;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
+            word-break: break-word;
           }
 
 
           .profile-name-display {
             width: 100%;
             max-width: 100%;
-            justify-content: flex-start;
-            padding-left: 24px;
+            justify-content: space-between;
+            gap: 7px;
+            padding-left: 21px;
+            box-sizing: border-box;
           }
 
 
-          /*
-           * Mobile Full Name editor:
-           * label gets its own row, then the editor
-           * gets a completely separate row.
-           *
-           * This prevents the input from hiding
-           * the Full Name label or section content.
-           */
+          .profile-name-display strong {
+            min-width: 0;
+            flex: 1;
+            max-width: none;
+          }
+
+
+          .profile-name-edit {
+            min-height: 28px;
+            padding: 0 8px;
+            font-size: 9px;
+          }
+
 
           .profile-information-item-editing {
             gap: 8px;
@@ -3431,37 +3666,78 @@ const Profile = () => {
           .profile-name-editor {
             width: 100%;
             max-width: 100%;
-            padding-left: 24px;
+            padding-left: 21px;
             box-sizing: border-box;
             justify-content: flex-start;
             flex-wrap: wrap;
+            gap: 6px;
           }
 
 
           .profile-name-input {
             width: 100%;
-            flex: 1 1 100%;
             min-width: 0;
+            flex: 1 1 100%;
+            min-height: 34px;
+            font-size: 10px;
           }
 
 
           .profile-name-save {
-            flex: 0 0 auto;
+            min-height: 30px;
+            padding: 0 9px;
+            font-size: 9px;
           }
 
 
           .profile-name-cancel {
-            flex: 0 0 auto;
+            width: 30px;
+            height: 30px;
           }
 
 
           .profile-name-error {
-            padding-left: 36px;
+            padding: 7px 11px 7px 32px;
+            font-size: 9px;
+          }
+
+
+          .profile-role {
+            min-height: 24px;
+            padding: 0 8px;
+            font-size: 9px !important;
           }
 
 
           .profile-security {
+            margin-top: 14px;
+            padding: 11px;
             align-items: flex-start;
+            gap: 9px;
+            border-radius: 9px;
+          }
+
+
+          .profile-security-icon {
+            width: 29px;
+            height: 29px;
+            border-radius: 7px;
+          }
+
+
+          .profile-security-content {
+            gap: 3px;
+          }
+
+
+          .profile-security-content strong {
+            font-size: 10px;
+          }
+
+
+          .profile-security-content span {
+            font-size: 9px;
+            line-height: 1.45;
           }
 
 
@@ -3471,7 +3747,183 @@ const Profile = () => {
 
 
           .profile-danger-zone {
-            padding: 14px;
+            margin-top: 17px;
+            padding: 12px;
+            border-radius: 9px;
+          }
+
+
+          .profile-danger-header {
+            gap: 9px;
+          }
+
+
+          .profile-danger-icon {
+            width: 29px;
+            height: 29px;
+            border-radius: 7px;
+          }
+
+
+          .profile-danger-eyebrow {
+            margin-bottom: 2px;
+            font-size: 8px;
+            letter-spacing: 1.1px;
+          }
+
+
+          .profile-danger-header h3 {
+            font-size: 12px;
+          }
+
+
+          .profile-danger-header p {
+            margin-top: 3px;
+            font-size: 9px;
+            line-height: 1.45;
+          }
+
+
+          .profile-danger-content {
+            margin-top: 11px;
+            padding-top: 11px;
+            gap: 11px;
+          }
+
+
+          .profile-danger-copy {
+            gap: 3px;
+          }
+
+
+          .profile-danger-copy strong {
+            font-size: 9px;
+            line-height: 1.4;
+          }
+
+
+          .profile-danger-copy span {
+            font-size: 8px;
+            line-height: 1.5;
+          }
+
+
+          .profile-delete-button {
+            width: 100%;
+            min-height: 34px;
+            font-size: 9px;
+          }
+
+
+          .profile-delete-error {
+            margin-top: 9px;
+            padding: 8px 9px;
+            font-size: 8px;
+          }
+
+
+          .profile-loading {
+            min-height: 110px;
+            border-radius: 11px;
+            font-size: 10px;
+          }
+
+
+          .profile-error {
+            padding: 13px;
+            border-radius: 9px;
+            font-size: 10px;
+          }
+
+        }
+
+
+        /* =====================================
+           EXTRA SMALL MOBILE
+           ===================================== */
+
+        @media (max-width: 380px) {
+
+          .profile-page {
+            padding-left: 8px;
+            padding-right: 8px;
+          }
+
+
+          .profile-card {
+            padding-left: 9px;
+            padding-right: 9px;
+          }
+
+
+          .profile-card-header {
+            gap: 10px;
+            padding-left: 1px;
+            padding-right: 1px;
+          }
+
+
+          .profile-avatar-wrapper,
+          .profile-avatar-ring,
+          .profile-avatar-large,
+          .profile-avatar-image {
+            width: 50px;
+            height: 50px;
+          }
+
+
+          .profile-avatar-wrapper {
+            border-radius: 14px;
+          }
+
+
+          .profile-avatar-ring {
+            border-radius: 13px;
+          }
+
+
+          .profile-avatar-large {
+            font-size: 15px;
+          }
+
+
+          .profile-card-identity h2 {
+            font-size: 13px;
+          }
+
+
+          .profile-card-identity p {
+            font-size: 9px;
+          }
+
+
+          .profile-information-item {
+            padding: 9px 10px;
+          }
+
+
+          .profile-name-display {
+            padding-left: 21px;
+          }
+
+
+          .profile-name-edit {
+            padding: 0 7px;
+          }
+
+
+          .profile-name-editor {
+            padding-left: 21px;
+          }
+
+
+          .profile-section-heading p {
+            font-size: 8px;
+          }
+
+
+          .profile-image-buttons {
+            grid-template-columns: 1fr 1.25fr;
           }
 
         }
