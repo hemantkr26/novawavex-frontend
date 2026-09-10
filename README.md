@@ -133,6 +133,18 @@ The frontend integrates with the secured Spring Boot backend using:
 
 ---
 
+# 🏗️ System Architecture
+
+NovaWavex follows a full-stack architecture where the React frontend communicates with a Spring Boot REST API using authenticated HTTP requests.
+
+The backend handles business logic, authentication, authorization, workflow management, notifications, and database operations.
+
+### Architecture Diagram
+
+![NovaWavex System Architecture](public/images/novawavex-architecture.png)
+
+---
+
 ## 🏗️ Frontend Architecture
 
 The frontend follows a component-based React architecture.
@@ -227,6 +239,26 @@ The frontend stores the authenticated session information and uses the JWT when 
 
 ---
 
+# 🗄️ Database Design
+
+NovaWavex uses **PostgreSQL** as its relational database.
+
+The database design supports:
+
+* User accounts
+* Password reset tokens
+* Notifications
+* Workflows
+* Workflow executions
+* Workflow steps
+* Workflow step relationships
+
+### Database ER Diagram
+
+![NovaWavex Database ER Diagram](public/images/novawavex-database-erd.png)
+
+---
+
 ## 🚀 Running Locally
 
 ### 1. Clone the repository
@@ -304,14 +336,52 @@ https://novawavex-frontend.onrender.com
 
 ---
 
+# 📚 Project Documentation
+
+NovaWavex includes dedicated documentation for the major technical aspects of the project.
+
+### 🏗️ Architecture
+
+The system architecture diagram illustrates the relationship between the frontend, backend, authentication layer, and database.
+
+### 🗄️ Database
+
+The ER diagram documents the PostgreSQL database structure and relationships between the application's major entities.
+
+### 🔌 API Documentation
+
+Complete REST API documentation is available in:
+
+[`docs/API-DOCUMENTATION.md`](docs/API-DOCUMENTATION.md)
+
+The API documentation covers:
+
+* Authentication endpoints
+* User management endpoints
+* Profile management
+* Password management
+* Workflow endpoints
+* Notification endpoints
+* Request DTOs
+* Response DTOs
+* Validation rules
+* JWT authentication
+* HTTP status codes
+* Supported enum values
+
+---
+
 ## 📁 Project Structure
 
-The frontend is organized around reusable React components, application pages, authentication state, API services, and routing.
+The frontend is organized around reusable React components, application pages, authentication state, API services, routing, and project documentation.
 
 ```text
 NovaWavex Frontend
 │
 ├── public/
+│   └── images/
+│       ├── novawavex-architecture.png
+│       └── novawavex-database-erd.png
 │
 ├── src/
 │   ├── components/
@@ -320,6 +390,9 @@ NovaWavex Frontend
 │   ├── context/
 │   ├── routes/
 │   └── ...
+│
+├── docs/
+│   └── API-DOCUMENTATION.md
 │
 ├── package.json
 ├── vite.config.js
@@ -360,21 +433,6 @@ Sensitive values such as:
 are kept outside the source code.
 
 **Never commit secrets, passwords, API keys, or production credentials to GitHub.**
-
----
-
-## 📚 Documentation
-
-Additional project documentation will include:
-
-* System architecture diagram
-* Database ER diagram
-* API documentation
-* Application screenshots
-* Demo video
-* Deployment documentation
-
-These will be added as part of the NovaWavex portfolio documentation.
 
 ---
 
